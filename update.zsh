@@ -21,6 +21,9 @@
 set -o nounset                              # Treat unset variables as an error
 
 # Get general repository changes first
+
+export GIT_SSL_NO_VERIFY=true;
+
 git pull origin master;
 
 # Check if this is a first run or not
@@ -119,6 +122,7 @@ else
    
 fi
 
+unset $GIT_SSL_NO_VERIFY;
 
 echo "Done!";
 
