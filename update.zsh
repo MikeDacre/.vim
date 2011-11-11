@@ -1,9 +1,9 @@
-#!/bin/bash 
+#!/usr/bin/env zsh
 #===============================================================================
 #
-#          FILE:  update.sh
+#          FILE:  update.zsh
 # 
-#         USAGE:  ./update.sh 
+#         USAGE:  ./update.zsh 
 # 
 #   DESCRIPTION:  A script to update all submodules in this vim repository
 # 
