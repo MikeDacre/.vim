@@ -102,7 +102,7 @@ if [ -d ~/.vim/bundle ]; then
     git submodule foreach git submodule init;
     git submodule foreach git submodule update;
 
-    mv ~/.vimrc ~/vimrc_old;
+    mv -f ~/.vimrc ~/vimrc_old_`date "+%y%m%d%k%M"`;
     ln vimrc ~/.vimrc;
 
     # Deal with template files
