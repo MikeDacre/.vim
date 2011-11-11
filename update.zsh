@@ -100,21 +100,18 @@ if [ -d ~/.vim/bundle ]; then
     cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
     cd ~/.vim/bundle/bashsupport;
     git add .;
-    git add bash-support/templates/; 
     git commit -a -m "Synced template file";
 
     rm ~/.vim/bundle/csupport/c-support/templates/Templates;
     cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
     cd ~/.vim/bundle/csupport;
     git add .;
-    git add c-support/templates/;
     git commit -a -m "Synced template file";
 
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cd ~/.vim/bundle/perlsupport;
     git add .;
-    git add perl-support/templates/;
     git commit -a -m "Synced template file";
   
     cd ~/.vim;
@@ -123,25 +120,6 @@ if [ -d ~/.vim/bundle ]; then
     git commit -a -m "Created new repo in $HOST";
     git push origin master;
 
-    cd bundle;
-    for i in *;
-    do
-      cd $i;
-      git add .;
-      git commit -a -m "Syncing";
-      cd ..;
-    done;
-
-    echo "New bundle built! Rerunning update..."
-
-    cd ~/.vim;
-    ~/.vim/update.zsh;
-
-    echo "Second update done!"
-    git add .;
-    git commit -a -m "Bundle initiation for $HOST completed!";
-    git push;
-    
   fi
 else
   echo "Bundle directory absent, needs repair"
