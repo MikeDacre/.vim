@@ -51,17 +51,6 @@ if [ -d ~/.vim/bundle ]; then
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
 
-    cd bundle;
-
-    for i in *; do
-      cd $i;
-      git add .;
-      git commit -a -m "Syncing";
-      cd ..;
-    done
-
-    cd ..;
-  
     git add .;
     git commit -a -m "Updated" ;
     git push origin master;
