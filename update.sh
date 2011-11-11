@@ -78,6 +78,9 @@ else
   git submodule foreach git submodule init &>/dev/null;
   git submodule foreach git submodule update &>/dev/null;
 
+  mv ~/.vimrc ~/vimrc_old;
+  ln vimrc ~/.vimrc;
+
   git add . &>/dev/null;
   git commit -a -m "Created new repo in `hostname`"  &>/dev/null;
   git push origin master;
