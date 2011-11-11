@@ -46,18 +46,21 @@ if [ -d ~/.vim/bundle ]; then
     cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
     cd ~/.vim/bundle/bashsupport;
     git add .;
+    git add bash-support/templates/; 
     git commit -a -m "Synced template files";
 
     rm ~/.vim/bundle/csupport/c-support/templates/Templates;
     cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
     cd ~/.vim/bundle/csupport;
     git add .;
+    git add c-support/templates/;
     git commit -a -m "Synced template files";
 
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cd ~/.vim/bundle/perlsupport;
     git add .;
+    git add perl-support/templates/;
     git commit -a -m "Synced template files";
     cd ~/.vim;
   
@@ -110,18 +113,21 @@ if [ -d ~/.vim/bundle ]; then
     cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
     cd ~/.vim/bundle/bashsupport;
     git add .;
+    git add bash-support/templates/; 
     git commit -a -m "Synced template file";
 
     rm ~/.vim/bundle/csupport/c-support/templates/Templates;
     cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
     cd ~/.vim/bundle/csupport;
     git add .;
+    git add c-support/templates/;
     git commit -a -m "Synced template file";
 
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cd ~/.vim/bundle/perlsupport;
     git add .;
+    git add perl-support/templates/;
     git commit -a -m "Synced template file";
   
     cd ~/.vim;
