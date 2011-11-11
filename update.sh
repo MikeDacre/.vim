@@ -87,5 +87,14 @@ else
    
 fi
 
+rm ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
+cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
+
+rm ~/.vim/bundle/csupport/c-support/templates/Templates;
+cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
+
+rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
+cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
+
 echo "Done!";
 

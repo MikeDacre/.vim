@@ -1,0 +1,19 @@
+§
+§ =============================================================
+§ ========== USER MACROS ======================================
+§ =============================================================
+§
+|AUTHOR|    = Michael Dacre
+|AUTHORREF| = Mike
+|EMAIL|     = mike.dacre@gmail.com
+|COMPANY|   = Mike Dacre / Salk Institute / Stanford University
+|COPYRIGHT| = Copyright (c) |YEAR|, |AUTHOR|
+§
+§ =============================================================
+§ ========== FILE INCLUDES ====================================
+§ =============================================================
+§
+|includefile| = bash.comments.template
+|includefile| = bash.statements.template
+|includefile| = bash.paramsub.template
+§
