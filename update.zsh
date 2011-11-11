@@ -45,14 +45,20 @@ if [ -d ~/.vim/bundle ]; then
     rm ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
     cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
     cd ~/.vim/bundle/bashsupport;
+    git add .;
+    git commit -a -m;
 
     rm ~/.vim/bundle/csupport/c-support/templates/Templates;
     cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
     cd ~/.vim/bundle/csupport;
+    git add .;
+    git commit -a -m;
 
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cd ~/.vim/bundle/perlsupport;
+    git add .;
+    git commit -a -m;
     cd ~/.vim;
   
     git add .;
@@ -103,20 +109,44 @@ if [ -d ~/.vim/bundle ]; then
     rm ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
     cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
     cd ~/.vim/bundle/bashsupport;
+    git add .;
+    git commit -a -m;
 
     rm ~/.vim/bundle/csupport/c-support/templates/Templates;
     cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
     cd ~/.vim/bundle/csupport;
+    git add .;
+    git commit -a -m;
 
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cd ~/.vim/bundle/perlsupport;
+    git add .;
+    git commit -a -m;
   
     cd ~/.vim;
   
     git add .;
     git commit -a -m "Created new repo in `hostname`";
     git push origin master;
+
+    cd bundle;
+    for i in *;
+    do
+      cd $i;
+      git add .;
+      git commit -a -m "Syncing";
+      cd ..;
+    done;
+
+    echo "New bundle built! Rerunning update..."
+
+    ~/.vim/update.zsh;
+
+    echo "Second update done!"
+    git add .;
+    git commit -a -m "Bundle initiation for `hostname` completed!";
+    git push;
     
   fi
 else
