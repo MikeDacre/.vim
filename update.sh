@@ -41,22 +41,14 @@ if [ "$(ls -A bundle/nerdtree)" ]; then
   rm ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
   cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
   cd ~/.vim/bundle/bashsupport;
-  git add .;
-  git commit -a -m "Updated template";
-  cd ~/.vim;
 
   rm ~/.vim/bundle/csupport/c-support/templates/Templates;
   cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
   cd ~/.vim/bundle/csupport;
-  git add .;
-  git commit -a -m "Updated template";
-  cd ~/.vim;
 
   rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
   cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
   cd ~/.vim/bundle/perlsupport;
-  git add .;
-  git commit -a -m "Updated template";
   cd ~/.vim;
  
   git add .;
@@ -66,39 +58,39 @@ if [ "$(ls -A bundle/nerdtree)" ]; then
 else
   # If this is a first run, clone everything
   echo "Building new repo";
-  rm -rf bundle/* &>/dev/null;
-  git add . &>/dev/null;
-  git commit -a -m "Cleaning new repo" &>/dev/null;
+  rm -rf bundle/* &;
+  git add . &;
+  git commit -a -m "Cleaning new repo" &;
 
-  git submodule add https://github.com/scrooloose/nerdtree.git bundle/nerdtree &>/dev/null;
-  git submodule add https://github.com/tpope/vim-fugitive.git bundle/fugitive &>/dev/null;
-  git submodule add https://github.com/msanders/snipmate.vim.git bundle/snipmate &>/dev/null;
-  git submodule add https://github.com/tpope/vim-surround.git bundle/surround &>/dev/null;
-  git submodule add https://github.com/vim-scripts/bash-support.vim.git bundle/bashsupport &>/dev/null;
-  git submodule add https://github.com/vim-scripts/perl-support.vim.git bundle/perlsupport &>/dev/null;
-  git submodule add https://github.com/vim-scripts/c.vim.git bundle/csupport &>/dev/null;
-  git submodule add https://github.com/vim-scripts/Vim-R-plugin.git bundle/rplugin &>/dev/null;
-  git submodule add https://github.com/scrooloose/nerdcommenter.git bundle/commenter &>/dev/null;
-  git submodule add https://github.com/vim-scripts/bufexplorer.zip.git bundle/bufexplorer &>/dev/null;
-  git submodule add https://github.com/rson/vim-conque.git bundle/vimconque &>/dev/null;
-  git submodule add https://github.com/mirell/vim-matchit.git bundle/matchit &>/dev/null;
-  git submodule add https://github.com/vim-scripts/sessionman.vim.git bundle/sessionman &>/dev/null;
-  git submodule add https://github.com/superjudge/tasklist-pathogen.git bundle/tasklist &>/dev/null;
-  git submodule add https://github.com/vim-scripts/taglist.vim.git bundle/taglist &>/dev/null;
-  git submodule add https://github.com/tpope/vim-git.git bundle/vimgit &>/dev/null;
-  git submodule add https://github.com/ervandew/supertab.git bundle/superbtab &>/dev/null;
-  git submodule add https://github.com/vim-scripts/Command-T.git bundle/commandt &>/dev/null;
-  git submodule add https://github.com/sjl/gundo.vim.git bundle/gundo &>/dev/null;
-  git submodule add https://github.com/mileszs/ack.vim.git bundle/ack &>/dev/null;
-  git submodule add https://github.com/klen/python-mode.git bundle/pythonmode &>/dev/null;
-  git submodule add https://github.com/jcrocholl/pep8.git bundle/pep8 &>/dev/null;
-  git submodule add https://github.com/JoseBlanca/vim-for-python.git bundle/vimforpython  &>/dev/null;
+  git submodule add https://github.com/scrooloose/nerdtree.git bundle/nerdtree &;
+  git submodule add https://github.com/tpope/vim-fugitive.git bundle/fugitive &;
+  git submodule add https://github.com/msanders/snipmate.vim.git bundle/snipmate &;
+  git submodule add https://github.com/tpope/vim-surround.git bundle/surround &;
+  git submodule add https://github.com/vim-scripts/bash-support.vim.git bundle/bashsupport &;
+  git submodule add https://github.com/vim-scripts/perl-support.vim.git bundle/perlsupport &;
+  git submodule add https://github.com/vim-scripts/c.vim.git bundle/csupport &;
+  git submodule add https://github.com/vim-scripts/Vim-R-plugin.git bundle/rplugin &;
+  git submodule add https://github.com/scrooloose/nerdcommenter.git bundle/commenter &;
+  git submodule add https://github.com/vim-scripts/bufexplorer.zip.git bundle/bufexplorer &;
+  git submodule add https://github.com/rson/vim-conque.git bundle/vimconque &;
+  git submodule add https://github.com/mirell/vim-matchit.git bundle/matchit &;
+  git submodule add https://github.com/vim-scripts/sessionman.vim.git bundle/sessionman &;
+  git submodule add https://github.com/superjudge/tasklist-pathogen.git bundle/tasklist &;
+  git submodule add https://github.com/vim-scripts/taglist.vim.git bundle/taglist &;
+  git submodule add https://github.com/tpope/vim-git.git bundle/vimgit &;
+  git submodule add https://github.com/ervandew/supertab.git bundle/superbtab &;
+  git submodule add https://github.com/vim-scripts/Command-T.git bundle/commandt &;
+  git submodule add https://github.com/sjl/gundo.vim.git bundle/gundo &;
+  git submodule add https://github.com/mileszs/ack.vim.git bundle/ack &;
+  git submodule add https://github.com/klen/python-mode.git bundle/pythonmode &;
+  git submodule add https://github.com/jcrocholl/pep8.git bundle/pep8 &;
+  git submodule add https://github.com/JoseBlanca/vim-for-python.git bundle/vimforpython  &;
 
   # Sync all
-  git submodule init &>/dev/null;
-  git submodule update &>/dev/null;
-  git submodule foreach git submodule init &>/dev/null;
-  git submodule foreach git submodule update &>/dev/null;
+  git submodule init &;
+  git submodule update &;
+  git submodule foreach git submodule init &;
+  git submodule foreach git submodule update &;
 
   mv ~/.vimrc ~/vimrc_old;
   ln vimrc ~/.vimrc;
@@ -107,24 +99,16 @@ else
   rm ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
   cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
   cd ~/.vim/bundle/bashsupport;
-  git add .;
-  git commit -a -m "Updated template";
-  cd ~/.vim;
 
   rm ~/.vim/bundle/csupport/c-support/templates/Templates;
   cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
   cd ~/.vim/bundle/csupport;
-  git add .;
-  git commit -a -m "Updated template";
-  cd ~/.vim;
 
   rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
   cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
   cd ~/.vim/bundle/perlsupport;
-  git add .;
-  git commit -a -m "Updated template";
-  cd ~/.vim;
  
+  cd ~/.vim;
   git add .;
   git commit -a -m "Updated" ;
   git push origin master;
