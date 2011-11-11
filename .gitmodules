@@ -1,0 +1,78 @@
+[submodule "pathogensource"]
+	path = pathogensource
+	url = https://github.com/tpope/vim-pathogen.git
+[submodule "bundle/vimforpython"]
+	path = bundle/vimforpython
+	url = https://github.com/JoseBlanca/vim-for-python.git
+[submodule "bundle/nerdtree"]
+	path = bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "bundle/fugitive"]
+	path = bundle/fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "bundle/snipmate"]
+	path = bundle/snipmate
+	url = https://github.com/msanders/snipmate.vim.git
+[submodule "bundle/surround"]
+	path = bundle/surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "bash-support.vim"]
+	path = bash-support.vim
+	url = https://github.com/vim-scripts/bash-support.vim.git
+[submodule "bundle/bashsupport"]
+	path = bundle/bashsupport
+	url = https://github.com/vim-scripts/bash-support.vim.git
+[submodule "bundle/perlsupport"]
+	path = bundle/perlsupport
+	url = https://github.com/vim-scripts/perl-support.vim.git
+[submodule "bundle/csupport"]
+	path = bundle/csupport
+	url = https://github.com/vim-scripts/c.vim.git
+[submodule "bundle/rplugin"]
+	path = bundle/rplugin
+	url = https://github.com/vim-scripts/Vim-R-plugin.git
+[submodule "bundle/commenter"]
+	path = bundle/commenter
+	url = https://github.com/scrooloose/nerdcommenter.git
+[submodule "bundle/bufexplorer"]
+	path = bundle/bufexplorer
+	url = https://github.com/vim-scripts/bufexplorer.zip.git
+[submodule "bundle/vimconque"]
+	path = bundle/vimconque
+	url = https://github.com/rson/vim-conque.git
+[submodule "bundle/matchit"]
+	path = bundle/matchit
+	url = https://github.com/mirell/vim-matchit.git
+[submodule "bundle/sessionman"]
+	path = bundle/sessionman
+	url = https://github.com/vim-scripts/sessionman.vim.git
+[submodule "bundle/tasklist"]
+	path = bundle/tasklist
+	url = https://github.com/superjudge/tasklist-pathogen.git
+[submodule "bundle/taglist"]
+	path = bundle/taglist
+	url = https://github.com/vim-scripts/taglist.vim.git
+[submodule "bundle/vimgit"]
+	path = bundle/vimgit
+	url = https://github.com/tpope/vim-git.git
+[submodule "bundle/superbtab"]
+	path = bundle/superbtab
+	url = https://github.com/ervandew/supertab.git
+[submodule "bundle/commandt"]
+	path = bundle/commandt
+	url = https://github.com/vim-scripts/Command-T.git
+[submodule "bundle/pyflakes-vim"]
+	path = bundle/pyflakes-vim
+	url = https://github.com/kevinw/pyflakes-vim.git
+[submodule "bundle/gundo"]
+	path = bundle/gundo
+	url = https://github.com/sjl/gundo.vim.git
+[submodule "bundle/ack"]
+	path = bundle/ack
+	url = https://github.com/mileszs/ack.vim.git
+[submodule "bundle/pythonmode"]
+	path = bundle/pythonmode
+	url = https://github.com/klen/python-mode.git
+[submodule "bundle/pep8"]
+	path = bundle/pep8
+	url = https://github.com/jcrocholl/pep8.git
