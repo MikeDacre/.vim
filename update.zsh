@@ -46,19 +46,19 @@ if [ -d ~/.vim/bundle ]; then
     cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
     cd ~/.vim/bundle/bashsupport;
     git add .;
-    git commit -a -m;
+    git commit -a -m "Synced template files";
 
     rm ~/.vim/bundle/csupport/c-support/templates/Templates;
     cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
     cd ~/.vim/bundle/csupport;
     git add .;
-    git commit -a -m;
+    git commit -a -m "Synced template files";
 
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cd ~/.vim/bundle/perlsupport;
     git add .;
-    git commit -a -m;
+    git commit -a -m "Synced template files";
     cd ~/.vim;
   
     git add .;
@@ -110,24 +110,24 @@ if [ -d ~/.vim/bundle ]; then
     cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
     cd ~/.vim/bundle/bashsupport;
     git add .;
-    git commit -a -m;
+    git commit -a -m "Synced template file";
 
     rm ~/.vim/bundle/csupport/c-support/templates/Templates;
     cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
     cd ~/.vim/bundle/csupport;
     git add .;
-    git commit -a -m;
+    git commit -a -m "Synced template file";
 
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cd ~/.vim/bundle/perlsupport;
     git add .;
-    git commit -a -m;
+    git commit -a -m "Synced template file";
   
     cd ~/.vim;
   
     git add .;
-    git commit -a -m "Created new repo in `hostname`";
+    git commit -a -m "Created new repo in $HOST";
     git push origin master;
 
     cd bundle;
@@ -141,11 +141,12 @@ if [ -d ~/.vim/bundle ]; then
 
     echo "New bundle built! Rerunning update..."
 
+    cd ~/.vim;
     ~/.vim/update.zsh;
 
     echo "Second update done!"
     git add .;
-    git commit -a -m "Bundle initiation for `hostname` completed!";
+    git commit -a -m "Bundle initiation for $HOST completed!";
     git push;
     
   fi
