@@ -72,9 +72,9 @@ else
 
 fi
 
-`git add . `;
-`git commit -a -m "Updated"` ;
-`git push origin master`;
+git add .;
+git commit -a -m "Updated" ;
+git push origin master;
 
 echo "Done!";
 
