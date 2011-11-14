@@ -85,6 +85,7 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add https://github.com/klen/python-mode.git bundle/pythonmode;
     git submodule add https://github.com/jcrocholl/pep8.git bundle/pep8;
     git submodule add https://github.com/JoseBlanca/vim-for-python.git bundle/vimforpython ;
+    git submodule add https://github.com/rson/vim-conque.git bundle/conque ;
 
     # Sync all
     git submodule init;
