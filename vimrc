@@ -33,8 +33,10 @@ call pathogen#helptags()
 "General
 if has("gui_running") || &term == "xterm-256color"
   set t_Co=256
-  set selectmode=mouse,key
+  set selectmode=key
   colo wombat256mod
+else
+  let vimrplugin_conqueplugin = 0
 endif
 
 syntax enable
