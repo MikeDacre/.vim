@@ -82,3 +82,6 @@
 [submodule "bundle/pythonmenu"]
 	path = bundle/pythonmenu
 	url = git://github.com/vim-scripts/python.vim.git
+[submodule "bundle/pythonsyntax"]
+	path = bundle/pythonsyntax
+	url = git://github.com/vim-scripts/python.vim--Vasiliev.git
