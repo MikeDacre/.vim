@@ -1,0 +1,7 @@
+ if match( expand("<sfile>"), expand("$HOME") ) == 0
+		" USER INSTALLATION ASSUMED
+		let g:Perl_Installation				= 'local'
+		let s:plugin_dir  						= expand("<sfile>:p:h:h")
+		let s:Perl_LocalTemplateFile	= s:plugin_dir.'/perl-support/templates/Templates'
+		let s:Perl_LocalTemplateDir		= fnamemodify( s:Perl_LocalTemplateFile, ":p:h" ).'/'
+	e

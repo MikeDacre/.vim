@@ -1,0 +1,24 @@
+line 88
+   " ==========  Linux/Unix  ======================================================
+	"
+	"if match( expand("~/.vim/bundle/csupport/plugin/c.vim"), expand("$HOME") ) == 0
+		" USER INSTALLATION ASSUMED
+		let s:installation					= 'local'
+		let s:plugin_dir 						= $HOME.'/.vim/bundle/csupport/'
+		let s:C_LocalTemplateFile		= s:plugin_dir.'/c-support/templates/Templates'
+		let s:C_LocalTemplateDir		= fnamemodify( s:C_LocalTemplateFile, ":p:h" ).'/'
+	"else
+		"" SYSTEM WIDE INSTALLATION
+		"let s:installation					= 'system'
+		"let s:plugin_dir						= $VIM.'/vimfiles'
+		"let s:C_GlobalTemplateDir		= s:plugin_dir.'/c-support/templates'
+		"let s:C_GlobalTemplateFile  = s:C_GlobalTemplateDir.'/Templates'
+		"let s:C_LocalTemplateFile		= $HOME.'/.vim/c-support/templates/Templates'
+		"let s:C_LocalTemplateDir		= fnamemodify( s:C_LocalTemplateFile, ":p:h" ).'/'
+	"endif
+	"
+	let s:C_CodeSnippets  				= s:plugin_dir.'/c-support/codesnippets/'
+	let s:C_IndentErrorLog				= $HOME.'/.indent.errorlog'
+  let s:escfilename 						= ' \%#[]'
+	let s:C_Display								= $DISPLAY
+	" 

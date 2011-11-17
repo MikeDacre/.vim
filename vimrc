@@ -174,11 +174,44 @@ map <leader>ds :s/^\s\+<CR>
 " Make filename completion easier
 imap <C-F> <C-X><C-F>
 
+" Date inserting
+:nnoremap <leader>dd "=strftime("%d-%m-%y %H:%M:%S")<CR>P
+:inoremap <leader>dd <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR>
+
+:nnoremap <leader>ds "=strftime("%m/%d/%y")<CR>P
+:inoremap <leader>ds <C-R>=strftime("%m/%d/%y")<CR>
+
+:nnoremap <leader>dt "=strftime("%T")<CR>P
+:inoremap <leader>dt <C-R>=strftime("%T")<CR>
+
+:nnoremap <leader>dl "=strftime("%a %d %b %Y %X %Z")<CR>P
+:inoremap <leader>dl <C-R>=strftime("%c")<CR>
+
+" My tag
+:nnoremap <leader>me iMike Dacre 
+:inoremap <leader>me Mike Dacre 
+
+:function InsertCmd( cmd )
+:       let l = system( a:cmd )
+:       let l = substitute(l, '\n$', '', '')
+:       exe "normal a".l
+:       redraw!
+:endfunction
+
+:nnoremap <leader>my iMike Dacre (Salk @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> <ESC>
+:inoremap <leader>my Mike Dacre (Salk @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> 
+
+:nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
+:inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT> 
+
 " map Ctrl-Tab to switch window
 nnoremap <unique> <S-Up> <C-W><Up>
 nnoremap <unique> <S-Down> <C-W><Down>
 nnoremap <unique> <S-Left> <C-W><Left>
 nnoremap <unique> <S-Right> <C-W><Right>
+
+" Template for specific files
+au BufNewFile  *Process.txt	0r ~/.vim/templates/process.txt 
 
 " Add fasta syntax
 au! Syntax newlang source $VIM/syntax/fasta.vim
