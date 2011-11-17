@@ -43,19 +43,19 @@ if [ -d ~/.vim/bundle ]; then
     
     # Fix plugin bugs
     sed -e 's/if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~\/.vim\/bundle\/perlsupport\/plugin\/perl-support.vim"), expand("~") ) == 0/' ~/.vim/bundle/perlsupport/plugin/perl-support.vim > ~/.vim/bundle/perlsupport/plugin/perl-support2.vim
-    sed -e 's/let s:plugin_dir\s\+= expand("<sfile>:p:h:h")/let s:plugin_dir  						= $HOME\/.vim\/bundle\/perlsupport\//' ~/.vim/bundle/perlsupport/plugin/perl-support2.vim > ~/.vim/bundle/perlsupport/plugin/perl-support3.vim
+    sed -e 's/let s:plugin_dir\s\+= expand("<sfile>:p:h:h")/let s:plugin_dir  						= $HOME.\'\/.vim\/bundle\/perlsupport\/\'/' ~/.vim/bundle/perlsupport/plugin/perl-support2.vim > ~/.vim/bundle/perlsupport/plugin/perl-support3.vim
     rm ~/.vim/bundle/perlsupport/plugin/perl-support.vim
     rm ~/.vim/bundle/perlsupport/plugin/perl-support2.vim
     mv ~/.vim/bundle/perlsupport/plugin/perl-support3.vim ~/.vim/bundle/perlsupport/plugin/perl-support.vim
 
     sed -e 's/if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~\/.vim\/bundle\/csupport\/plugin\/c.vim"), expand("~") ) == 0/' ~/.vim/bundle/csupport/plugin/c.vim > ~/.vim/bundle/csupport/plugin/c2.vim
-    sed -e 's/let s:plugin_dir\s\+= expand("<sfile>:p:h:h")/let s:plugin_dir  						= $HOME\/.vim\/bundle\/csupport\//' ~/.vim/bundle/csupport/plugin/c2.vim > ~/.vim/bundle/csupport/plugin/c3.vim 
+    sed -e 's/let s:plugin_dir\s\+= expand("<sfile>:p:h:h")/let s:plugin_dir  						= $HOME.\'\/.vim\/bundle\/csupport\/\'/' ~/.vim/bundle/csupport/plugin/c2.vim > ~/.vim/bundle/csupport/plugin/c3.vim 
     rm ~/.vim/bundle/csupport/plugin/c.vim
     rm ~/.vim/bundle/csupport/plugin/c2.vim
     mv ~/.vim/bundle/csupport/plugin/c3.vim ~/.vim/bundle/csupport/plugin/c.vim
 
     sed -e 's/if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~\/.vim\/bundle\/bashsupport\/plugin\/bash-support.vim"), expand("~") ) == 0/' ~/.vim/bundle/bashsupport/plugin/bash-support.vim > ~/.vim/bundle/bashsupport/plugin/bash-support2.vim
-    sed -e 's/let s:plugin_dir\s\+= expand("<sfile>:p:h:h")/let s:plugin_dir  						= $HOME\/.vim\/bundle\/bashsupport\//' ~/.vim/bundle/bashsupport/plugin/bash-support2.vim > ~/.vim/bundle/bashsupport/plugin/bash-support3.vim  
+    sed -e 's/let s:plugin_dir\s\+= expand("<sfile>:p:h:h")/let s:plugin_dir  						= $HOME.\'\/.vim\/bundle\/bashsupport\/\'/' ~/.vim/bundle/bashsupport/plugin/bash-support2.vim > ~/.vim/bundle/bashsupport/plugin/bash-support3.vim  
     rm ~/.vim/bundle/bashsupport/plugin/bash-support.vim
     rm ~/.vim/bundle/bashsupport/plugin/bash-support2.vim
     mv ~/.vim/bundle/bashsupport/plugin/bash-support3.vim ~/.vim/bundle/bashsupport/plugin/bash-support.vim
