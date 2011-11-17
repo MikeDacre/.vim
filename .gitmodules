@@ -1,6 +1,6 @@
 [submodule "pathogensource"]
 	path = pathogensource
-	url = https://github.com/tpope/vim-pathogen.git
+	url = git://github.com/tpope/vim-pathogen.git
 [submodule "bundle/vimforpython"]
 	path = bundle/vimforpython
 	url = https://github.com/JoseBlanca/vim-for-python.git
