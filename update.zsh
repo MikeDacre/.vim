@@ -113,7 +113,7 @@ if [ -d ~/.vim/bundle ]; then
     git submodule foreach git submodule update;
 
     mv -f ~/.vimrc ~/vimrc_old_`date "+%y%m%d%k%M"`;
-    ln vimrc ~/.vimrc;
+    ln -s vimrc ~/.vimrc;
 
     # Fix plugin bugs
     sed -e 's/if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~\/.vim\/bundle\/perlsupport\/plugin\/perl-support.vim"), expand("~") ) == 0/' ~/.vim/bundle/perlsupport/plugin/perl-support.vim > ~/.vim/bundle/perlsupport/plugin/perl-support2.vim
