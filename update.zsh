@@ -7,15 +7,12 @@
 # 
 #   DESCRIPTION:  A script to update all submodules in this vim repository
 # 
-#       OPTIONS:  ---
-#  REQUIREMENTS:  ---
+#  REQUIREMENTS:  Access to primary git repository and git protocol access
 #          BUGS:  ---
-#         NOTES:  ---
-#        AUTHOR: YOUR NAME (), 
-#       LICENCE: Copyright (c) 2011, YOUR NAME
-#       COMPANY: 
+#        AUTHOR: Michael Dacre (BlackPhoenix), 
+#       LICENCE: Copyright (c) 2011, Michael Dacre
 #       CREATED: 11/10/2011 22:16:34 PST
-#      REVISION:  ---
+#      REVISION: 1.0
 #===============================================================================
 
 set -o nounset                              # Treat unset variables as an error
@@ -40,6 +37,9 @@ if [ -d ~/.vim/bundle ]; then
     cd ../pathogensource;
     git pull;
     cd ..;
+
+    rm autoload/pathogen.vim;
+    ln -s ~/.vim/pathogensource/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim
     
     # Fix plugin bugs
     sed -e 's/if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~\/.vim\/bundle\/perlsupport\/plugin\/perl-support.vim"), expand("~") ) == 0/' ~/.vim/bundle/perlsupport/plugin/perl-support.vim > ~/.vim/bundle/perlsupport/plugin/perl-support2.vim
