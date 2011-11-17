@@ -22,8 +22,6 @@ set -o nounset                              # Treat unset variables as an error
 
 # Get general repository changes first
 
-export GIT_SSL_NO_VERIFY=true;
-
 git pull origin master;
 
 # Check if this is a first run or not
@@ -39,6 +37,8 @@ if [ -d ~/.vim/bundle ]; then
       cd ..;
     done
     
+    cd ../pathogensource;
+    git pull;
     cd ..;
     
     # Fix plugin bugs
@@ -78,6 +78,8 @@ if [ -d ~/.vim/bundle ]; then
     # If this is a first run, clone everything
     echo "Building new repo";
     rm -rf bundle/*;
+    rm -rf pathogensource;
+
     git add .;
     git commit -a -m "Cleaning new repo";
 
@@ -104,13 +106,17 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/rson/vim-conque.git bundle/conque ;
     git submodule add git://github.com/vim-scripts/python.vim.git bundle/pythonmenu;
 
+    git submodule add git://github.com/tpope/vim-pathogen.git pathogensource;
+    rm autoload/pathogen.vim;
+    ln -s ~/.vim/pathogensource/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim;
+
     # Sync all
     git submodule init;
     git submodule update;
     git submodule foreach git submodule init;
     git submodule foreach git submodule update;
 
-    mv -f ~/.vimrc ~/vimrc_old_`date "+%y%m%d%k%M"`;
+    mv -f ~/.vimrc ~/vimrc_old_`date "+%y%m%d%k%M"` &>/dev/null;
     ln -s vimrc ~/.vimrc;
 
     # Fix plugin bugs
@@ -161,8 +167,6 @@ if [ -d ~/.vim/bundle ]; then
 else
   echo "Bundle directory absent, needs repair"
 fi
-
-unset $GIT_SSL_NO_VERIFY;
 
 echo "Done!";
 
