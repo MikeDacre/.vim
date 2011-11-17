@@ -211,7 +211,7 @@ nnoremap <unique> <S-Left> <C-W><Left>
 nnoremap <unique> <S-Right> <C-W><Right>
 
 " Template for specific files
-au BufNewFile  *Process.txt	0r ~/.vim/templates/process.txt 
+au BufNewFile  *Process.txt	0r ~/.vim/templates/process_TEMPLATE
 
 " Add fasta syntax
 au! Syntax newlang source $VIM/syntax/fasta.vim
