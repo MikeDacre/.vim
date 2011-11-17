@@ -1,1 +1,0 @@
-sed 'if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~/.vim/bundle/perlsupport/plugin/perl-support.vim"), expand("~") ) == 0/'
