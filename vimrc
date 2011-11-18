@@ -17,35 +17,19 @@ endif
 set backspace+=indent,eol,start
 
 "Macros
-let @f = ':%s/^/>/g
-:%s/\t/\r/g
-:set filetype=fasta
-'
-let @i = ':%s/^\([^_]*\)_\([^_]*\)_\([^_]*\)_\([^_]*\)_.*$/\4
-'
-let @k = ':%s/^\([^_]*\)_\([^_]*\)_\([^_]*\)_\([^_]*\)\S*\t\(.*\)$/\4\t\5
-:%s/\t/%$#/g
-:%s/%$#/\t
-'
-let @t = ':%s/^\([^\t]\+\)\t.*\t\(\S\+\)$/\1\t\2/g
-'
-let @l = 'ggdd:%s/.*\t
-:%s/%$#/\t/g
-'
-let @c = ':%s/\t/%$#/g
-:%s/%$#/\t
-'
-let @t = ':%s/^\(>.\+\)\n/\1\t
-:%s/\n//g
-:%s/[>\t]/\r/g
-set filetype=text
-ggdd'
+let @f = ':%s/^/>/g:%s/\t/\r/g:set filetype=fasta'
+let @i = ':%s/^\([^_]*\)_\([^_]*\)_\([^_]*\)_\([^_]*\)_.*$/\4'
+let @k = ':%s/^\([^_]*\)_\([^_]*\)_\([^_]*\)_\([^_]*\)\S*\t\(.*\)$/\4\t\5:%s/\t/%$#/g:%s/%$#/\t'
+let @t = ':%s/^\([^\t]\+\)\t.*\t\(\S\+\)$/\1\t\2/g'
+let @l = 'ggdd:%s/.*\t:%s/%$#/\t/g'
+let @c = ':%s/\t/%$#/g:%s/%$#/\t'
+let @t = ':%s/^\(>.\+\)\n/\1\t:%s/\n//g:%s/[>\t]/\r/gset filetype=textggdd' 
 
 " Pathogen
 filetype off
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
-
+ 
 "General
 if has("gui_running") || &term == "xterm-256color"
   set t_Co=256
@@ -83,10 +67,10 @@ autocmd BufReadPost *
   \   exe "normal! g`\"" |
   \ endif
 
-  let g:miniBufExplMapWindowNavVim = 1
-  let g:miniBufExplMapWindowNavArrows = 1
-  let g:miniBufExplMapCTabSwitchBufs = 1
-  let g:miniBufExplModSelTarget = 1
+  let g:miniBufExplMapWindowNavVim = 1 
+  let g:miniBufExplMapWindowNavArrows = 1 
+  let g:miniBufExplMapCTabSwitchBufs = 1 
+  let g:miniBufExplModSelTarget = 1 
 
 set tabstop=2
 set shiftwidth=2
@@ -212,8 +196,8 @@ imap <C-F> <C-X><C-F>
 :inoremap <leader>dl <C-R>=strftime("%c")<CR>
 
 " My tag
-:nnoremap <leader>me iMike Dacre
-:inoremap <leader>me Mike Dacre
+:nnoremap <leader>me iMike Dacre 
+:inoremap <leader>me Mike Dacre 
 
 :function InsertCmd( cmd )
 :       let l = system( a:cmd )
@@ -223,10 +207,10 @@ imap <C-F> <C-X><C-F>
 :endfunction
 
 :nnoremap <leader>my iMike Dacre (Salk @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> <ESC>
-:inoremap <leader>my Mike Dacre (Salk @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR>
+:inoremap <leader>my Mike Dacre (Salk @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> 
 
 :nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
-:inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
+:inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT> 
 
 " map Ctrl-Tab to switch window
 nnoremap <unique> <S-Up> <C-W><Up>
@@ -302,21 +286,6 @@ let g:ex_comment_lable_keyword = 'DELME TEMP MODIFY ADD KEEPME DISABLE TEST ' " 
 let g:ex_comment_lable_keyword .= 'ERROR DEBUG CRASH DUMMY UNUSED TESTME ' " for testing
 let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUPLICATE REDUNDANCY PATCH ' " for refactoring
 
-" Delete trailing whitespace in files on save
-autocmd BufWritePre *.pl :%s/\s\+$//e
-
-" Show tabs
-set list
-
-set listchars=tab:^^
-
-" PHP Specific Settings
-
-" Reads the skeleton php file
-" Note: The normal command afterwards deletes an ugly pending line and moves
-" the cursor to the middle of the file.
-autocmd BufNewFile *.php 0r ~/.vim/skeleton.php | normal Gdda
-
 " Python
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType perl set omnifunc=perlcomplete#Complete
@@ -338,5 +307,5 @@ map <leader>be :BufExplorer<CR>
 
 
 " Buffer Explorer
-let g:bufExplorerFindActive=1
+let g:bufExplorerFindActive=1 
 
