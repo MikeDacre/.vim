@@ -286,6 +286,14 @@ let g:ex_comment_lable_keyword = 'DELME TEMP MODIFY ADD KEEPME DISABLE TEST ' " 
 let g:ex_comment_lable_keyword .= 'ERROR DEBUG CRASH DUMMY UNUSED TESTME ' " for testing
 let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUPLICATE REDUNDANCY PATCH ' " for refactoring
 
+" Delete trailing whitespace in files on save
+autocmd BufWritePre *.pl :%s/\s\+$//e
+
+" Show tabs
+set list
+
+set listchars=tab:^^
+
 " PHP Specific Settings
 
 " Reads the skeleton php file
