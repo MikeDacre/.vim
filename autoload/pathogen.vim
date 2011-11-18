@@ -1,1 +1,1 @@
-/Users/mike/.vim/pathogensource/autoload/pathogen.vim
+/Users/Mike/.vim/pathogensource/autoload/pathogen.vim
