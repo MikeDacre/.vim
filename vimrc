@@ -112,10 +112,18 @@ set wrapscan
 set nowrap
 set showcmd
 
+" Set backup and undo
+:if !isdirectory($HOME . "/.temp")
+:  call mkdir($HOME . "/.temp", "")
+:  call mkdir($HOME . "/.swap", "")
+:  call mkdir($HOME . "/.backup", "")
+:  call mkdir($HOME . "/.undo", "")
+:endif
+
 set directory=$HOME/.temp/swap
 set backupdir=$HOME/.temp/backup
 
-set undodir=$HOME/.vim/undo
+set undodir=$HOME/.temp/undo
 set undofile
 set undolevels=1000
 set undoreload=50000
