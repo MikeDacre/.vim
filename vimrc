@@ -80,6 +80,9 @@ set cindent shiftwidth=2
 set nrformats=octal,hex,alpha
 set expandtab
 
+set list!
+set listchars=tab:^^
+
 " Use F10 to toggle 'paste' mode
 set pastetoggle=<F10>
 
