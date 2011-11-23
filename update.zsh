@@ -43,6 +43,8 @@ if [ -d ~/.vim/bundle ]; then
     
     cd ../pathogensource;
     git pull;
+    git add .;
+    git commit -a -m "Syncing";
     cd ..;
 
     rm autoload/pathogen.vim;
