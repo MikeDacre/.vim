@@ -83,6 +83,10 @@ set expandtab
 set list!
 set listchars=tab:^^
 
+" Enable git branch in bottom line
+set laststatus=2 " Enables the status line at the bottom of Vim
+set statusline=%{GitBranch()}
+
 " Use F10 to toggle 'paste' mode
 set pastetoggle=<F10>
 
