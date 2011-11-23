@@ -64,3 +64,6 @@
 [submodule "bundle/pythonsyntax"]
 	path = bundle/pythonsyntax
 	url = git://github.com/vim-scripts/python.vim--Vasiliev.git
+[submodule "bundle/gitvim"]
+	path = bundle/gitvim
+	url = git://github.com/motemen/git-vim.git
