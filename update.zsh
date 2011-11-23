@@ -12,7 +12,8 @@
 #        AUTHOR: Michael Dacre (BlackPhoenix), 
 #       LICENCE: Copyright (c) 2011, Michael Dacre
 #       CREATED: 11/10/2011 22:16:34 PST
-#      REVISION: 1.0
+#      REVISION: 1.1
+#       REVISED: 23-11-11 10:26:44
 #===============================================================================
 
 set -o nounset                              # Treat unset variables as an error
@@ -24,6 +25,12 @@ git pull origin master;
 # Check if this is a first run or not
 if [ -d ~/.vim/bundle ]; then
   if [ "$(ls -A bundle/nerdtree)" ]; then
+
+    # Do generic update stuff first
+    git submodule update;
+    git submodule foreach git submodule init;
+    git submodule foreach git submodule update;
+
     # If not, just update all plugins
     cd bundle;
 
@@ -105,6 +112,7 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/vim-scripts/python.vim--Vasiliev.git bundle/pythonsyntax;
     git submodule add git://github.com/rson/vim-conque.git bundle/conque ;
     git submodule add git://github.com/vim-scripts/python.vim.git bundle/pythonmenu;
+    git submodule add git://github.com/motemen/git-vim.git bundle/gitvim;
 
     git submodule add git://github.com/tpope/vim-pathogen.git pathogensource;
     rm autoload/pathogen.vim;
