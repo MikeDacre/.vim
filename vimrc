@@ -86,7 +86,7 @@ set listchars=tab:^^
 " Show way cooler status line
 
 set laststatus=2 
-set statusline=%<%F%h%m%r%h%w%y\ %=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
+set statusline=%<%F%h%m%r%h%w%y\ %{fugitive#statusline()}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
 "set statusline=%F%m%r%h%w\ %{GitBranch()}(%{&ff}){%Y}[%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}\ [B:%{BatteryLife()}]
 
 " Use F10 to toggle 'paste' mode
