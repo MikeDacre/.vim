@@ -83,9 +83,11 @@ set expandtab
 set list!
 set listchars=tab:^^
 
-" Enable git branch in bottom line
-set laststatus=2 " Enables the status line at the bottom of Vim
-set statusline=%{GitBranch()}
+" Show way cooler status line
+
+set laststatus=2 
+set statusline=%<%F%h%m%r%h%w%y\ %{GitBranch()}%=\ col:%c%V\ pos:%o\ lin:%l\,%L\ %P
+"set statusline=%F%m%r%h%w\ %{GitBranch()}(%{&ff}){%Y}[%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}\ [B:%{BatteryLife()}]
 
 " Use F10 to toggle 'paste' mode
 set pastetoggle=<F10>
@@ -297,6 +299,9 @@ let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUP
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType perl set omnifunc=perlcomplete#Complete
 
+" Super Tab
+let g:SuperTabMappingForward = '<c-space>'
+let g:SuperTabMappingBackward = '<s-c-space>'
 let g:SuperTabDefaultCompletionType = "context"
 let g:pep8_map='<leader>8'
 
