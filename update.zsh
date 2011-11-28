@@ -112,7 +112,6 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/vim-scripts/python.vim--Vasiliev.git bundle/pythonsyntax;
     git submodule add git://github.com/rson/vim-conque.git bundle/conque ;
     git submodule add git://github.com/vim-scripts/python.vim.git bundle/pythonmenu;
-    git submodule add git://github.com/motemen/git-vim.git bundle/gitvim;
 
     git submodule add git://github.com/tpope/vim-pathogen.git pathogensource;
     rm autoload/pathogen.vim;
