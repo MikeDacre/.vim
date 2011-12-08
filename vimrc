@@ -123,9 +123,9 @@ set showcmd
 " Set backup and undo
 :if !isdirectory($HOME . "/.temp")
 :  call mkdir($HOME . "/.temp", "")
-:  call mkdir($HOME . "/.swap", "")
-:  call mkdir($HOME . "/.backup", "")
-:  call mkdir($HOME . "/.undo", "")
+:  call mkdir($HOME . "/.temp/swap", "")
+:  call mkdir($HOME . "/.temp/backup", "")
+:  call mkdir($HOME . "/.temp/undo", "")
 :endif
 
 set directory=$HOME/.temp/swap
