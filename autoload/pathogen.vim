@@ -1,1 +1,1 @@
-/home/mike/.vim/pathogensource/autoload/pathogen.vim
+/var/root/.vim/pathogensource/autoload/pathogen.vim
