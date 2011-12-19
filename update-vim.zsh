@@ -24,11 +24,7 @@ hg clone https://vim.googlecode.com/hg/ vim-program;
 
 cd vim-program;
 
-if [[ "$VENDOR" == 'apple' ]]; then
-  ./configure --prefix=/usr/local --enable-perlinterp=yes --enable-rubyinterp --enable-pythoninterp=yes --enable-python3interp=yes --enable-cscope --enable-gui=no --with-compiledby=Mike --enable-multibyte;
-elif [[ "$VENDOR" == 'unknown' ]]; then
-  ./configure --prefix=/usr --enable-perlinterp=yes --enable-rubyinterp --enable-pythoninterp=yes --enable-python3interp=yes --enable-cscope --enable-gui=no --with-compiledby=Mike --enable-multibyte;
-fi
+./configure --enable-features=huge --prefix=/usr/local --enable-perlinterp=yes --enable-rubyinterp --enable-pythoninterp=yes --enable-python3interp=yes --enable-cscope --enable-gui=no --with-compiledby=Mike --enable-multibyte;
 make;
 
 sudo make install;
