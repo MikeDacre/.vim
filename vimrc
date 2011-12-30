@@ -142,10 +142,10 @@ set wildmode=list:longest,full
 set scrolloff=8
 
 
-if has("gui")
+"if has("gui")
   " MacVim Fullscreen
-  set fuopt+=maxhorz
-endif
+  "set fuopt+=maxhorz
+"endif
 
 " Set Number format to null(default is octal) , when press CTRL-A on number
 " like 007, it would not become 010
