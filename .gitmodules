@@ -64,3 +64,6 @@
 [submodule "bundle/vim-git"]
 	path = bundle/vim-git
 	url = git://github.com/tpope/vim-git.git
+[submodule "bundle/csupport"]
+	path = bundle/csupport
+	url = git://github.com/vim-scripts/c.vim.git
