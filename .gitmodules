@@ -67,3 +67,6 @@
 [submodule "bundle/csupport"]
 	path = bundle/csupport
 	url = git://github.com/vim-scripts/c.vim.git
+[submodule "bundle/screen"]
+	path = bundle/screen
+	url = git://github.com/ervandew/screen.git
