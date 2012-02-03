@@ -26,10 +26,6 @@ git pull origin master;
 if [ -d ~/.vim/bundle ]; then
   if [ "$(ls -A bundle/nerdtree)" ]; then
 
-    # Do generic update stuff first
-    git submodule update;
-    git submodule foreach git submodule init;
-    git submodule foreach git submodule update;
 
     # If not, just update all plugins
     cd bundle;
@@ -47,6 +43,11 @@ if [ -d ~/.vim/bundle ]; then
     git pull;
     cd ..;
 
+    # Do generic update stuff first
+    git submodule update;
+    git submodule foreach git submodule init;
+    git submodule foreach git submodule update;
+    
     rm autoload/pathogen.vim;
     ln -s ~/.vim/pathogensource/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim
     
