@@ -52,9 +52,6 @@
 [submodule "bundle/pep8"]
 	path = bundle/pep8
 	url = git://github.com/jcrocholl/pep8.git
-[submodule "bundle/conque"]
-	path = bundle/conque
-	url = git://github.com/rson/vim-conque.git
 [submodule "bundle/pythonmenu"]
 	path = bundle/pythonmenu
 	url = git://github.com/vim-scripts/python.vim.git
