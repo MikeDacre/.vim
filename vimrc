@@ -320,3 +320,5 @@ map <leader>be :BufExplorer<CR>
 " Buffer Explorer
 let g:bufExplorerFindActive=1 
 
+" R Plugin
+let g:vimrplugin_notmuxconf = 1
