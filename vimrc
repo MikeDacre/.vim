@@ -36,7 +36,8 @@ if has("gui_running") || &term == "xterm-256color"
   set selectmode=key
   colo wombat256mod
 else
-  let vimrplugin_conqueplugin = 0
+  let vimrplugin_screenplugin = 0
+  let vimrplugin_conqueplugin = 1 
 endif
 
 syntax enable
