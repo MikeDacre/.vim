@@ -19,9 +19,6 @@
 [submodule "bundle/perlsupport"]
 	path = bundle/perlsupport
 	url = git://github.com/vim-scripts/perl-support.vim.git
-[submodule "bundle/rplugin"]
-	path = bundle/rplugin
-	url = git://github.com/vim-scripts/Vim-R-plugin.git
 [submodule "bundle/commenter"]
 	path = bundle/commenter
 	url = git://github.com/scrooloose/nerdcommenter.git
