@@ -94,13 +94,13 @@ if [ -d ~/.vim/bundle ]; then
     git commit -a -m "Cleaning new repo";
 
     git submodule add git://github.com/scrooloose/nerdtree.git bundle/nerdtree;
+    git submodule add git://github.com/jcfaria/Vim-R-plugin.git bundle/rplugin;
     git submodule add git://github.com/tpope/vim-fugitive.git bundle/fugitive;
     git submodule add git://github.com/msanders/snipmate.vim.git bundle/snipmate;
     git submodule add git://github.com/tpope/vim-surround.git bundle/surround;
     git submodule add git://github.com/vim-scripts/bash-support.vim.git bundle/bashsupport;
     git submodule add git://github.com/vim-scripts/perl-support.vim.git bundle/perlsupport;
     git submodule add git://github.com/vim-scripts/c.vim.git bundle/csupport;
-    git submodule add git://github.com/vim-scripts/Vim-R-plugin.git bundle/rplugin;
     git submodule add git://github.com/scrooloose/nerdcommenter.git bundle/commenter;
     git submodule add git://github.com/vim-scripts/bufexplorer.zip.git bundle/bufexplorer;
     git submodule add git://github.com/mirell/vim-matchit.git bundle/matchit;
