@@ -76,3 +76,6 @@
 [submodule "bundle/dbext"]
 	path = bundle/dbext
 	url = git://github.com/vim-scripts/dbext.vim.git
+[submodule "bundle/minbufexplorer"]
+	path = bundle/minbufexplorer
+	url = git://github.com/fholgado/minibufexpl.vim.git
