@@ -157,13 +157,17 @@ if $VIM_CRONTAB == "true"
   set nowritebackup
 endif
 
-noremap <F5> :TlistToggle<CR>
-noremap <F6> :NERDTree<CR>
+noremap <F5> :NERDTree<CR>
+noremap <F6> :TlistToggle<CR>
 
+" NERDtree
+let g:NERDTreeWinPos = "right"
+
+" Tag List
 let Tlist_GainFocus_On_ToggleOpen = 1
-let Tlist_Use_Right_Window = 1
+let Tlist_Use_Right_Window = 0
 "let Tlist_Use_Horiz_Window = 1
-let Tlist_Ctags_Cmd = "/usr/local/bin/ctags"
+"let Tlist_Ctags_Cmd = "/usr/local/bin/ctags"
 let Tlist_Process_file_Always = 1
 let tlist_php_settings = 'php;c:class;d:constant;f:function'
 
