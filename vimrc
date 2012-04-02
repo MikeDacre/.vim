@@ -320,10 +320,13 @@ map <leader>g :GundoToggle<CR>
 set sessionoptions=blank,buffers,curdir,folds,globals,help,localoptions,options,resize,tabpages,winsize,winpos
 
 map <leader>be :BufExplorer<CR>
-
+map <leader>bm :MiniBufExplorer<CR>
 
 " Buffer Explorer
 let g:bufExplorerFindActive=1 
+
+" Mini Buf Explorer
+let g:miniBufExplMaxSize = 4
 
 " R Plugin
 let g:vimrplugin_notmuxconf = 1
