@@ -79,3 +79,6 @@
 [submodule "bundle/minbufexplorer"]
 	path = bundle/minbufexplorer
 	url = git://github.com/fholgado/minibufexpl.vim.git
+[submodule "bundle/pgsql_syntax"]
+	path = bundle/pgsql_syntax
+	url = git://github.com/exu/pgsql.vim.git
