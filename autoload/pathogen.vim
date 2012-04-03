@@ -1,1 +1,1 @@
-/Users/BiX/.vim/pathogensource/autoload/pathogen.vim
+/root/.vim/pathogensource/autoload/pathogen.vim
