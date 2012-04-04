@@ -9,6 +9,7 @@ set nocompatible
 set viminfo='10,\"100,:20,%,n~/.viminfo"'
 
 " In many terminal emulators the mouse works just fine, thus enable it.
+set ttymouse=xterm2
 if has('mouse')
   set mouse=a
 endif
