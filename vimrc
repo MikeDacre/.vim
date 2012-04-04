@@ -247,6 +247,9 @@ let php_htmlInStrings=1
 let php_noShortTags=1
 let php_folding=1
 
+" PgSQL
+au BufNewFile,BufRead *.pgsql                   setf pgsql
+
 " VimTip 329: A map for swapping words
 " http://vim.sourceforge.net/tip_view.php?tip_id=
 " Then when you put the cursor on or in a word, press "\sw", and

@@ -1,0 +1,1 @@
+../bundle/pgsql_syntax/syntax/pgsql.vim
