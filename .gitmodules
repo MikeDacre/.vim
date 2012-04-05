@@ -79,3 +79,6 @@
 [submodule "bundle/pgsql_syntax"]
 	path = bundle/pgsql_syntax
 	url = git://github.com/exu/pgsql.vim.git
+[submodule "bundle/autocomplpopup"]
+	path = bundle/autocomplpopup
+	url = git://github.com/vim-scripts/AutoComplPop.git
