@@ -193,8 +193,19 @@ map <leader>l  "*
 " Delete starting whitespace
 map <leader>ds :s/^\s\+<CR>
 
-" Make filename completion easier
-imap <C-F> <C-X><C-F>
+" Make completion easier
+
+set completeopt=menuone,longest,preview
+
+inoremap <C-F> <C-X><C-F>
+
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 " Date inserting
 :nnoremap <leader>dd "=strftime("%d-%m-%y %H:%M:%S")<CR>P
@@ -220,8 +231,8 @@ imap <C-F> <C-X><C-F>
 :       redraw!
 :endfunction
 
-:nnoremap <leader>my iMike Dacre (Salk @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> <ESC>
-:inoremap <leader>my Mike Dacre (Salk @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> 
+:nnoremap <leader>my iMike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> <ESC>
+:inoremap <leader>my Mike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> 
 
 :nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
 :inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT> 
@@ -313,7 +324,6 @@ let g:SuperTabMappingBackward = '<s-c-space>'
 let g:SuperTabDefaultCompletionType = "context"
 let g:pep8_map='<leader>8'
 
-set completeopt=menuone,longest,preview
 
 " Searching
 nmap <leader>a <Esc>:Ack!
