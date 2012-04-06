@@ -117,7 +117,7 @@ set history=50000
 set updatetime=1000
 set backup
 set incsearch
-set hlsearch
+set nohlsearch
 set wrapscan
 set nowrap
 set showcmd
