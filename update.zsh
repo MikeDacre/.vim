@@ -49,7 +49,10 @@ if [ -d ~/.vim/bundle ]; then
     git submodule foreach git submodule update;
     
     rm autoload/pathogen.vim;
-    ln -s ~/.vim/pathogensource/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim
+    mkdir -p autoload;
+    cd autoload;
+    ln -s ../pathogensource/autoload/pathogen.vim .;
+    cd ..;
     
     # Fix plugin bugs
     sed -e 's/if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~\/.vim\/bundle\/perlsupport\/plugin\/perl-support.vim"), expand("~") ) == 0/' ~/.vim/bundle/perlsupport/plugin/perl-support.vim > ~/.vim/bundle/perlsupport/plugin/perl-support2.vim
