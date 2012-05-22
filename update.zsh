@@ -125,7 +125,10 @@ if [ -d ~/.vim/bundle ]; then
 
     git submodule add git://github.com/tpope/vim-pathogen.git pathogensource;
     rm autoload/pathogen.vim;
-    ln -s ~/.vim/pathogensource/autoload/pathogen.vim ~/.vim/autoload/pathogen.vim;
+    mkdir -p autoload;
+    cd autoload;
+    ln -s ../pathogensource/autoload/pathogen.vim .;
+    cd ..;
 
     # Sync all
     git submodule init;
