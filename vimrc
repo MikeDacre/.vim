@@ -267,7 +267,7 @@ let php_folding=1
 au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Python
-au BufRead,BufNewFile *.py set filetype=python
+"au BufRead,BufNewFile *.py set filetype=python
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 let g:pep8_map='<leader>8'
 " Execute the tests
@@ -335,8 +335,8 @@ let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUP
 autocmd FileType perl set omnifunc=perlcomplete#Complete
 
 " Super Tab
-let g:SuperTabMappingForward = '<c-space>'
-let g:SuperTabMappingBackward = '<s-c-space>'
+"let g:SuperTabMappingForward = '<c-space>'
+"let g:SuperTabMappingBackward = '<s-c-space>'
 let g:SuperTabDefaultCompletionType = "context"
 let g:pep8_map='<leader>8'
 
