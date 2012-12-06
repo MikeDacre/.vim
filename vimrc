@@ -267,7 +267,7 @@ let php_folding=1
 au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Python
-au BufRead,BufNewFile *.py set filetype=python3
+au BufRead,BufNewFile *.py set filetype=python
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 let g:pep8_map='<leader>8'
 " Execute the tests
