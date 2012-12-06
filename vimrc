@@ -181,6 +181,9 @@ map <leader>tm :tabmove
 " Task List
 map <leader>tl <Plug>TaskList
 
+" Gundo
+map <leader>g :GundoToggle<CR>
+
 " Pasting Mode
 map <leader>pp :set paste<CR>:set noexpandtab<CR>
 map <leader>PP :set nopaste<CR>:set expandtab<CR>
@@ -245,6 +248,7 @@ nnoremap <unique> <S-Right> <C-W><Right>
 
 " Template for specific files
 au BufNewFile  *Process.txt	0r ~/.vim/templates/process_TEMPLATE
+au BufNewFile * silent! 0r ~/.vim/templates/tmpl.%:e
 
 " Add fasta syntax
 au! Syntax newlang source $VIM/syntax/fasta.vim
@@ -261,6 +265,18 @@ let php_folding=1
 
 " PgSQL
 au BufNewFile,BufRead *.pgsql                   setf pgsql
+
+" Python
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+let g:pep8_map='<leader>8'
+" Execute the tests
+nmap <silent><Leader>tf <Esc>:Pytest file<CR>
+nmap <silent><Leader>tc <Esc>:Pytest class<CR>
+nmap <silent><Leader>tm <Esc>:Pytest method<CR>
+" cycle through test errors
+nmap <silent><Leader>tn <Esc>:Pytest next<CR>
+nmap <silent><Leader>tp <Esc>:Pytest previous<CR>
+nmap <silent><Leader>te <Esc>:Pytest error<CR>
 
 " VimTip 329: A map for swapping words
 " http://vim.sourceforge.net/tip_view.php?tip_id=
@@ -314,8 +330,7 @@ let g:ex_comment_lable_keyword = 'DELME TEMP MODIFY ADD KEEPME DISABLE TEST ' " 
 let g:ex_comment_lable_keyword .= 'ERROR DEBUG CRASH DUMMY UNUSED TESTME ' " for testing
 let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUPLICATE REDUNDANCY PATCH ' " for refactoring
 
-" Python
-autocmd FileType python set omnifunc=pythoncomplete#Complete
+" Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
 
 " Super Tab
@@ -327,7 +342,6 @@ let g:pep8_map='<leader>8'
 
 " Searching
 nmap <leader>a <Esc>:Ack!
-map <leader>g :GundoToggle<CR>
 
 " Sessions
 

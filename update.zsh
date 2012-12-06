@@ -99,6 +99,7 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/scrooloose/nerdtree.git bundle/nerdtree;
     git submodule add git://github.com/jcfaria/Vim-R-plugin.git bundle/rplugin;
     git submodule add git://github.com/tpope/vim-fugitive.git bundle/fugitive;
+    git submodule add git://github.com/sjl/gundo.vim.git bundle/gundo;
     git submodule add git://github.com/msanders/snipmate.vim.git bundle/snipmate;
     git submodule add git://github.com/tpope/vim-surround.git bundle/surround;
     git submodule add git://github.com/vim-scripts/bash-support.vim.git bundle/bashsupport;
@@ -117,7 +118,12 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/jcrocholl/pep8.git bundle/pep8;
     git submodule add git://github.com/ervandew/screen.git bundle/screen;
     git submodule add git://github.com/vim-scripts/python.vim--Vasiliev.git bundle/pythonsyntax;
+    git submodule add git://github.com/klen/python-mode.git bundle/python-mode;
+    git submodule add git://github.com/mitechie/pyflakes-pathogen.git bundle/pyflakes;
+    git submodule add git://github.com/fs111/pydoc.vim.git bundle/pydoc;
+    git submodule add git://github.com/vim-scripts/pep8.git bundle/pep8;
     git submodule add git://github.com/vim-scripts/python.vim.git bundle/pythonmenu;
+    git submodule add git://github.com/alfredodeza/pytest.vim.git bundle/pytest;
     git submodule add git://github.com/rson/vim-conque.git bundle/conque;
     git submodule add git://github.com/vim-scripts/dbext.vim.git bundle/dbext;
     git submodule add git://github.com/exu/pgsql.vim.git bundle/pgsql_syntax;
