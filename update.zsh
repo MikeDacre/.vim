@@ -123,7 +123,6 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/fs111/pydoc.vim.git bundle/pydoc;
     git submodule add git://github.com/vim-scripts/pep8.git bundle/pep8;
     git submodule add git://github.com/vim-scripts/python.vim.git bundle/pythonmenu;
-    git submodule add git://github.com/alfredodeza/pytest.vim.git bundle/pytest;
     git submodule add git://github.com/rson/vim-conque.git bundle/conque;
     git submodule add git://github.com/vim-scripts/dbext.vim.git bundle/dbext;
     git submodule add git://github.com/exu/pgsql.vim.git bundle/pgsql_syntax;
