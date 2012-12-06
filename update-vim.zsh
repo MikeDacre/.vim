@@ -24,7 +24,7 @@ hg clone https://vim.googlecode.com/hg/ vim-program;
 
 cd vim-program;
 
-./configure --with-features=huge --prefix=/usr/local --enable-perlinterp=yes --enable-rubyinterp --enable-pythoninterp=yes --enable-python3interp=yes --enable-cscope --enable-gui=auto --with-x --with-compiledby=Mike --enable-multibyte;
+./configure --with-features=huge --prefix=/usr/local --enable-perlinterp=yes --enable-rubyinterp --enable-pythoninterp=yes --enable-python3interp=yes --enable-cscope --enable-gui=none --without-x --with-compiledby=Mike --enable-multibyte;
 make;
 
 sudo make install;
