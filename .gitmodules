@@ -82,18 +82,9 @@
 [submodule "bundle/autocomplpopup"]
 	path = bundle/autocomplpopup
 	url = git://github.com/vim-scripts/AutoComplPop.git
-[submodule "bundle/python-mode"]
-	path = bundle/python-mode
-	url = git://github.com/klen/python-mode.git
-[submodule "bundle/pyflakes"]
-	path = bundle/pyflakes
-	url = git://github.com/mitechie/pyflakes-pathogen.git
 [submodule "bundle/pydoc"]
 	path = bundle/pydoc
 	url = git://github.com/fs111/pydoc.vim.git
 [submodule "bundle/pytest"]
 	path = bundle/pytest
 	url = git://github.com/alfredodeza/pytest.vim.git
-[submodule "bundle/ropevim"]
-	path = bundle/ropevim
-	url = git://github.com/peplin/ropevim.git
