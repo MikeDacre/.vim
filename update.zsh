@@ -112,7 +112,6 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/superjudge/tasklist-pathogen.git bundle/tasklist;
     git submodule add git://github.com/vim-scripts/taglist.vim.git bundle/taglist;
     git submodule add git://github.com/tpope/vim-git.git bundle/vim-git;
-    git submodule add git://github.com/ervandew/supertab.git bundle/superbtab;
     git submodule add git://github.com/sjl/gundo.vim.git bundle/gundo;
     git submodule add git://github.com/mileszs/ack.vim.git bundle/ack;
     git submodule add git://github.com/jcrocholl/pep8.git bundle/pep8;

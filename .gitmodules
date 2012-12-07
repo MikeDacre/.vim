@@ -37,9 +37,6 @@
 [submodule "bundle/taglist"]
 	path = bundle/taglist
 	url = git://github.com/vim-scripts/taglist.vim.git
-[submodule "bundle/superbtab"]
-	path = bundle/superbtab
-	url = git://github.com/ervandew/supertab.git
 [submodule "bundle/gundo"]
 	path = bundle/gundo
 	url = git://github.com/sjl/gundo.vim.git

@@ -338,7 +338,7 @@ autocmd FileType perl set omnifunc=perlcomplete#Complete
 " Super Tab
 "let g:SuperTabMappingForward = '<c-space>'
 "let g:SuperTabMappingBackward = '<s-c-space>'
-let g:SuperTabDefaultCompletionType = "context"
+"let g:SuperTabDefaultCompletionType = "context"
 let g:pep8_map='<leader>8'
 
 
