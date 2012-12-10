@@ -35,7 +35,7 @@ call pathogen#helptags()
 if has("gui_running") || &term == "xterm-256color"
   set t_Co=256
   set selectmode=key
-  colo wombat256mod
+  colo wombatmikemod
 else
   colo wombat
   let vimrplugin_screenplugin = 0
@@ -45,7 +45,6 @@ endif
 syntax enable
 syntax on
 syntax sync fromstart
-
 
 filetype plugin on
 filetype indent on
@@ -124,20 +123,22 @@ set nowrap
 set showcmd
 
 " Set backup and undo
-:if !isdirectory($HOME . "/.temp")
-:  call mkdir($HOME . "/.temp", "")
-:  call mkdir($HOME . "/.temp/swap", "")
-:  call mkdir($HOME . "/.temp/backup", "")
-:  call mkdir($HOME . "/.temp/undo", "")
-:endif
+if version > 730
+  :if !isdirectory($HOME . "/.temp")
+  :  call mkdir($HOME . "/.temp", "")
+  :  call mkdir($HOME . "/.temp/swap", "")
+  :  call mkdir($HOME . "/.temp/backup", "")
+  :  call mkdir($HOME . "/.temp/undo", "")
+  :endif
 
-set directory=$HOME/.temp/swap
-set backupdir=$HOME/.temp/backup
+  set directory=$HOME/.temp/swap
+  set backupdir=$HOME/.temp/backup
 
-set undodir=$HOME/.temp/undo
-set undofile
-set undolevels=1000
-set undoreload=50000
+  set undodir=$HOME/.temp/undo
+  set undofile
+  set undolevels=1000
+  set undoreload=50000
+endif
 
 set wildmenu
 set wildmode=list:longest,full
