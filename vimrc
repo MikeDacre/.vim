@@ -122,8 +122,33 @@ set wrapscan
 set nowrap
 set showcmd
 
+autocmd FileType tex setlocal textwidth=80
+autocmd BufNewFile,BufRead *.txt setlocal textwidth=80
+
+"if version >= 700
+    "autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
+    "autocmd FileType tex setlocal spell spelllang=en_us
+"endif
+
+" Highlight trailing whitespace
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd BufRead,InsertLeave * match ExtraWhitespace /\s\+$/
+
+" Autoremove trailing spaces when saving the buffer
+autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd BufWritePre <buffer> :%s/\s\+$//e
+
+" Highlight too-long lines
+autocmd BufRead,InsertEnter,InsertLeave * 2match LineLengthError /\%126v.*/
+highlight LineLengthError ctermbg=black guibg=black
+autocmd ColorScheme * highlight LineLengthError ctermbg=black guibg=black
+
+" Set up highlight group & retain through colorscheme changes
+highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+
+
 " Set backup and undo
-if version > 730
+if version > 703
   :if !isdirectory($HOME . "/.temp")
   :  call mkdir($HOME . "/.temp", "")
   :  call mkdir($HOME . "/.temp/swap", "")
@@ -160,13 +185,21 @@ if $VIM_CRONTAB == "true"
   set nowritebackup
 endif
 
-noremap <F5> :NERDTree<CR>
-noremap <F6> :TlistToggle<CR>
-
 " NERDtree
+noremap <F5> :NERDTree<CR>
 let g:NERDTreeWinPos = "right"
 
+" Vimux
+map <silent> <LocalLeader>rl :wa<CR> :VimuxRunLastCommand<CR>
+map <silent> <LocalLeader>vi :wa<CR> :VimuxInspectRunner<CR>
+map <silent> <LocalLeader>vk :wa<CR> :VimuxInterruptRunner<CR>
+map <silent> <LocalLeader>vx :wa<CR> :VimuxClosePanes<CR>
+map <silent> <LocalLeader>vp :VimuxPromptCommand<CR>
+vmap <silent> <LocalLeader>vs "vy :call VimuxRunCommand(@v)<CR>
+nmap <silent> <LocalLeader>vs vip<LocalLeader>vs<CR>
+
 " Tag List
+noremap <F6> :TlistToggle<CR>
 let Tlist_GainFocus_On_ToggleOpen = 1
 let Tlist_Use_Right_Window = 0
 "let Tlist_Use_Horiz_Window = 1

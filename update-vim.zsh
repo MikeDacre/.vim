@@ -1,19 +1,19 @@
-#!/usr/bin/env zsh 
+#!/usr/bin/env zsh
 #===============================================================================
 #
 #          FILE:  update-vim.zsh
-# 
-#         USAGE:  ./update-vim.zsh 
-# 
+#
+#         USAGE:  ./update-vim.zsh
+#
 #   DESCRIPTION:  Simple script to update vim
-# 
+#
 #       OPTIONS:  ---
 #  REQUIREMENTS:  ---
 #          BUGS:  ---
 #         NOTES:  ---
 #        AUTHOR: Mike Dacre
 #       LICENCE: Copyright (c) 2011, Mike Dacre
-#       COMPANY: 
+#       COMPANY:
 #       CREATED: 11/11/2011 12:00:40 PM PST
 #      REVISION:  ---
 #===============================================================================

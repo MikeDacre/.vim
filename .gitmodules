@@ -49,15 +49,9 @@
 [submodule "bundle/pythonsyntax"]
 	path = bundle/pythonsyntax
 	url = git://github.com/vim-scripts/python.vim--Vasiliev.git
-[submodule "bundle/vim-git"]
-	path = bundle/vim-git
-	url = git://github.com/tpope/vim-git.git
 [submodule "bundle/csupport"]
 	path = bundle/csupport
 	url = git://github.com/vim-scripts/c.vim.git
-[submodule "bundle/screen"]
-	path = bundle/screen
-	url = git://github.com/ervandew/screen.git
 [submodule "bundle/conque"]
 	path = bundle/conque
 	url = git://github.com/rson/vim-conque.git
@@ -85,3 +79,6 @@
 [submodule "bundle/pythonmode"]
 	path = bundle/pythonmode
 	url = git://github.com/codito/python-mode.git
+[submodule "bundle/vimux"]
+	path = bundle/vimux
+	url = git://github.com/benmills/vimux.git
