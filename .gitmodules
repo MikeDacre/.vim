@@ -43,9 +43,6 @@
 [submodule "bundle/ack"]
 	path = bundle/ack
 	url = git://github.com/mileszs/ack.vim.git
-[submodule "bundle/pep8"]
-	path = bundle/pep8
-	url = git://github.com/jcrocholl/pep8.git
 [submodule "bundle/pythonmenu"]
 	path = bundle/pythonmenu
 	url = git://github.com/vim-scripts/python.vim.git
@@ -85,3 +82,6 @@
 [submodule "bundle/pytest"]
 	path = bundle/pytest
 	url = git://github.com/alfredodeza/pytest.vim.git
+[submodule "bundle/pythonmode"]
+	path = bundle/pythonmode
+	url = git://github.com/codito/python-mode.git
