@@ -16,14 +16,14 @@ if version > 580
 	endif
 endif
 
-let colors_name = "wombat256mod"
+let colors_name = "wombatmikemod"
 
 
 " General colors
 hi Normal		ctermfg=252		ctermbg=none   	cterm=none		guifg=#e3e0d7	guibg=#242424	gui=none
 hi Cursor		ctermfg=234		ctermbg=228		cterm=none		guifg=#242424	guibg=#eae788	gui=none
 hi Visual		ctermfg=251		ctermbg=239		cterm=none		guifg=#c3c6ca	guibg=#554d4b	gui=none
-hi VisualNOS	ctermfg=251		ctermbg=236		cterm=none		guifg=#c3c6ca	guibg=#303030	gui=none
+hi VisualNOS	ctermfg=251		ctermbg=none		cterm=none		guifg=#c3c6ca	guibg=#303030	gui=none
 hi Search		ctermfg=177		ctermbg=241		cterm=none		guifg=#d787ff	guibg=#636066	gui=none
 hi Folded		ctermfg=103		ctermbg=none   	cterm=none		guifg=#a0a8b0	guibg=#3a4046	gui=none
 hi Title		ctermfg=230						cterm=bold		guifg=#ffffd7					gui=bold

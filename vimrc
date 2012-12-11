@@ -24,13 +24,13 @@ let @k = ':%s/^\([^_]*\)_\([^_]*\)_\([^_]*\)_\([^_]*\)\S*\t\(.*\)$/\4\t\5:%s/\t
 let @t = ':%s/^\([^\t]\+\)\t.*\t\(\S\+\)$/\1\t\2/g'
 let @l = 'ggdd:%s/.*\t:%s/%$#/\t/g'
 let @c = ':%s/\t/%$#/g:%s/%$#/\t'
-let @t = ':%s/^\(>.\+\)\n/\1\t:%s/\n//g:%s/[>\t]/\r/gset filetype=textggdd' 
+let @t = ':%s/^\(>.\+\)\n/\1\t:%s/\n//g:%s/[>\t]/\r/gset filetype=textggdd'
 
 " Pathogen
 filetype off
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
- 
+
 "General
 if has("gui_running") || &term == "xterm-256color"
   set t_Co=256
@@ -39,7 +39,7 @@ if has("gui_running") || &term == "xterm-256color"
 else
   colo wombat
   let vimrplugin_screenplugin = 0
-  let vimrplugin_conqueplugin = 1 
+  let vimrplugin_conqueplugin = 1
 endif
 
 syntax enable
@@ -69,10 +69,10 @@ autocmd BufReadPost *
   \   exe "normal! g`\"" |
   \ endif
 
-  let g:miniBufExplMapWindowNavVim = 1 
-  let g:miniBufExplMapWindowNavArrows = 1 
-  let g:miniBufExplMapCTabSwitchBufs = 1 
-  let g:miniBufExplModSelTarget = 1 
+  let g:miniBufExplMapWindowNavVim = 1
+  let g:miniBufExplMapWindowNavArrows = 1
+  let g:miniBufExplMapCTabSwitchBufs = 1
+  let g:miniBufExplModSelTarget = 1
 
 set tabstop=2
 set shiftwidth=2
@@ -87,7 +87,7 @@ set listchars=tab:^^
 
 " Show way cooler status line
 
-set laststatus=2 
+set laststatus=2
 set statusline=%<%F\ %h%m%r%h%w%y\ %{fugitive#statusline()}%=\ col:%c%V\ %P
 
 " Use F10 to toggle 'paste' mode
@@ -121,13 +121,14 @@ set nohlsearch
 set wrapscan
 set nowrap
 set showcmd
+set wildignore+=*.pyc,*.o,*.class
 
 autocmd FileType tex setlocal textwidth=80
 autocmd BufNewFile,BufRead *.txt setlocal textwidth=80
 
 "if version >= 700
-    "autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
-    "autocmd FileType tex setlocal spell spelllang=en_us
+  "autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
+  "autocmd FileType tex setlocal spell spelllang=en_us
 "endif
 
 " Highlight trailing whitespace
@@ -146,9 +147,10 @@ autocmd ColorScheme * highlight LineLengthError ctermbg=black guibg=black
 highlight ExtraWhitespace ctermbg=red guibg=red
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 
+map <silent> <LocalLeader>ws :highlight clear ExtraWhitespace<CR>
 
 " Set backup and undo
-if version > 703
+if v:version >= 703
   :if !isdirectory($HOME . "/.temp")
   :  call mkdir($HOME . "/.temp", "")
   :  call mkdir($HOME . "/.temp/swap", "")
@@ -161,9 +163,9 @@ if version > 703
 
   set undodir=$HOME/.temp/undo
   set undofile
-  set undolevels=1000
   set undoreload=50000
 endif
+set undolevels=1000
 
 set wildmenu
 set wildmode=list:longest,full
@@ -213,6 +215,9 @@ map <leader>te :tabedit
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
 
+" Conque
+let g:ConqueTerm_TERM = 'xterm-256color'
+
 " Task List
 map <leader>tl <Plug>TaskList
 
@@ -259,8 +264,8 @@ inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
 :inoremap <leader>dl <C-R>=strftime("%c")<CR>
 
 " My tag
-:nnoremap <leader>me iMike Dacre 
-:inoremap <leader>me Mike Dacre 
+:nnoremap <leader>me iMike Dacre
+:inoremap <leader>me Mike Dacre
 
 :function InsertCmd( cmd )
 :       let l = system( a:cmd )
@@ -270,10 +275,10 @@ inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
 :endfunction
 
 :nnoremap <leader>my iMike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> <ESC>
-:inoremap <leader>my Mike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> 
+:inoremap <leader>my Mike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR>
 
 :nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
-:inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT> 
+:inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
 
 " map Ctrl-Tab to switch window
 nnoremap <unique> <S-Up> <C-W><Up>
@@ -302,8 +307,11 @@ let php_folding=1
 au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Python
-"au BufRead,BufNewFile *.py set filetype=python
+au BufRead,BufNewFile *.py set filetype=python3
 autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
+" Disable pylint checking every save
+let g:pymode_lint_write = 0
 let g:pep8_map='<leader>8'
 " Execute the tests
 nmap <silent><Leader>tf <Esc>:Pytest file<CR>
@@ -387,7 +395,7 @@ map <leader>be :BufExplorer<CR>
 map <leader>bm :MiniBufExplorer<CR>
 
 " Buffer Explorer
-let g:bufExplorerFindActive=1 
+let g:bufExplorerFindActive=1
 
 " Mini Buf Explorer
 let g:miniBufExplMaxSize = 4
