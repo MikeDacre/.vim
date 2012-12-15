@@ -110,7 +110,7 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/vim-scripts/bufexplorer.zip.git bundle/bufexplorer;
     git submodule add git://github.com/vim-scripts/taglist.vim.git bundle/taglist;
     git submodule add git://github.com/vim-scripts/python.vim--Vasiliev.git bundle/pythonsyntax;
-    git submodule add git@github.com:MikeDacre/python-mode.git bundle/pythonmode;
+    #git submodule add git@github.com:MikeDacre/python-mode.git bundle/pythonmode;
     git submodule add git://github.com/scrooloose/nerdcommenter.git bundle/commenter;
     git submodule add git://github.com/mirell/vim-matchit.git bundle/matchit;
     git submodule add git://github.com/superjudge/tasklist-pathogen.git bundle/tasklist;
@@ -130,9 +130,9 @@ if [ -d ~/.vim/bundle ]; then
     cd ..;
 
     # Make python mode python 3 compatible
-    cd bundle/pythonmode/;
-    git checkout -b python3 origin/python3;
-    cd ../..;
+    #cd bundle/pythonmode/;
+    #git checkout -b python3 origin/python3;
+    #cd ../..;
 
     # Sync all
     git submodule init;
