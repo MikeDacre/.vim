@@ -131,31 +131,6 @@ autocmd BufNewFile,BufRead *.txt setlocal textwidth=80
   "autocmd FileType tex setlocal spell spelllang=en_us
 "endif
 
-" Highlight NOTE
-autocmd InsertEnter * match NoteComment / NOTE /
-autocmd BufRead,InsertLeave * match NoteComment / NOTE /
-
-" Highlight trailing whitespace
-autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd BufRead,InsertLeave * match ExtraWhitespace /\s\+$/
-
-" Highlight too-long lines
-autocmd BufRead,InsertEnter,InsertLeave * 2match LineLengthError /\%126v.*/
-
-" Set up highlight group & retain through colorscheme changes
-highlight ExtraWhitespace ctermbg=red guibg=red
-autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-highlight NoteComment ctermbg=yellow guibg=yellow
-autocmd ColorScheme * highlight NoteComment ctermbg=yellow guibg=yellow
-highlight LineLengthError ctermbg=black guibg=black
-autocmd ColorScheme * highlight LineLengthError ctermbg=black guibg=black
-
-" Autoremove trailing spaces when saving the buffer
-autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd BufWritePre <buffer> :%s/\s\+$//e
-
-" Command to clear whitespace highlighting (it can be annoying)
-map <silent> <LocalLeader>ws :highlight clear ExtraWhitespace<CR>
-
 " Set backup and undo
 if v:version >= 703
   :if !isdirectory($HOME . "/.temp")
@@ -200,19 +175,21 @@ let g:NERDTreeWinPos = "right"
 
 " Session
 noremap <leader>ss :SessionSave<CR>
+noremap <leader>so :SessionOpen  
 
 " Vimux
-map <silent> <LocalLeader>rl :wa<CR> :VimuxRunLastCommand<CR>
-map <silent> <LocalLeader>vi :wa<CR> :VimuxInspectRunner<CR>
-map <silent> <LocalLeader>vk :wa<CR> :VimuxInterruptRunner<CR>
-map <silent> <LocalLeader>vx :wa<CR> :VimuxClosePanes<CR>
-map <silent> <LocalLeader>vp :VimuxPromptCommand<CR>
+noremap <silent> <leader>vp :VimuxPromptCommand<CR>
+noremap <silent> <leader>vr :VimuxRunLastCommand<CR>
+noremap <silent> <leader>vi :VimuxInspectRunner<CR>
+noremap <silent> <leader>vk :VimuxInterruptRunner<CR>
+noremap <silent> <leader>vx :VimuxClosePanes<CR>
 vmap <silent> <LocalLeader>vs "vy :call VimuxRunCommand(@v)<CR>
 nmap <silent> <LocalLeader>vs vip<LocalLeader>vs<CR>
 
 " Tag List
 noremap <F6> :TlistToggle<CR>
-map <leader>ts :TlistSessionLoad .tlist<cr>
+map <leader>to :TlistSessionLoad .tlist<cr>
+map <leader>ts :TlistSessionSave .tlist<cr>y<cr>
 let Tlist_GainFocus_On_ToggleOpen = 0
 let Tlist_Use_Right_Window = 0
 let Tlist_Process_file_Always = 1

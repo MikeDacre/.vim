@@ -85,3 +85,6 @@
 [submodule "vim-bundle"]
 	path = vim-bundle
 	url = git://github.com/benmills/vim-bundle.git
+[submodule "bundle/vim-highlight"]
+	path = bundle/vim-highlight
+	url = git@github.com:MikeDacre/vim-highlight.git
