@@ -131,7 +131,7 @@ if [ -d ~/.vim/bundle ]; then
 
     # Make python mode python 3 compatible
     cd bundle/pythonmode/;
-    git checkout python3;
+    git checkout origin/python3;
     cd ../..;
 
     # Sync all

@@ -131,22 +131,29 @@ autocmd BufNewFile,BufRead *.txt setlocal textwidth=80
   "autocmd FileType tex setlocal spell spelllang=en_us
 "endif
 
+" Highlight NOTE
+autocmd InsertEnter * match NoteComment / NOTE /
+autocmd BufRead,InsertLeave * match NoteComment / NOTE /
+
 " Highlight trailing whitespace
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd BufRead,InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd BufRead,InsertLeave * match ExtraWhitespace /\s\+$/
+
+" Highlight too-long lines
+autocmd BufRead,InsertEnter,InsertLeave * 2match LineLengthError /\%126v.*/
+
+" Set up highlight group & retain through colorscheme changes
+highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+highlight NoteComment ctermbg=yellow guibg=yellow
+autocmd ColorScheme * highlight NoteComment ctermbg=yellow guibg=yellow
+highlight LineLengthError ctermbg=black guibg=black
+autocmd ColorScheme * highlight LineLengthError ctermbg=black guibg=black
 
 " Autoremove trailing spaces when saving the buffer
 autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd BufWritePre <buffer> :%s/\s\+$//e
 
-" Highlight too-long lines
-autocmd BufRead,InsertEnter,InsertLeave * 2match LineLengthError /\%126v.*/
-highlight LineLengthError ctermbg=black guibg=black
-autocmd ColorScheme * highlight LineLengthError ctermbg=black guibg=black
-
-" Set up highlight group & retain through colorscheme changes
-highlight ExtraWhitespace ctermbg=red guibg=red
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-
+" Command to clear whitespace highlighting (it can be annoying)
 map <silent> <LocalLeader>ws :highlight clear ExtraWhitespace<CR>
 
 " Set backup and undo
@@ -191,6 +198,9 @@ endif
 noremap <F5> :NERDTree<CR>
 let g:NERDTreeWinPos = "right"
 
+" Session
+noremap <leader>ss :SessionSave<CR>
+
 " Vimux
 map <silent> <LocalLeader>rl :wa<CR> :VimuxRunLastCommand<CR>
 map <silent> <LocalLeader>vi :wa<CR> :VimuxInspectRunner<CR>
@@ -202,10 +212,9 @@ nmap <silent> <LocalLeader>vs vip<LocalLeader>vs<CR>
 
 " Tag List
 noremap <F6> :TlistToggle<CR>
-let Tlist_GainFocus_On_ToggleOpen = 1
+map <leader>ts :TlistSessionLoad .tlist<cr>
+let Tlist_GainFocus_On_ToggleOpen = 0
 let Tlist_Use_Right_Window = 0
-"let Tlist_Use_Horiz_Window = 1
-"let Tlist_Ctags_Cmd = "/usr/local/bin/ctags"
 let Tlist_Process_file_Always = 1
 let tlist_php_settings = 'php;c:class;d:constant;f:function'
 
@@ -311,6 +320,7 @@ au BufRead,BufNewFile *.py set filetype=python3
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 " Disable pylint checking every save
+let g:pymode_py3k = 1
 let g:pymode_lint_write = 0
 let g:pep8_map='<leader>8'
 " Execute the tests
@@ -399,6 +409,9 @@ let g:bufExplorerFindActive=1
 
 " Mini Buf Explorer
 let g:miniBufExplMaxSize = 4
+let g:miniBufExplModSelTarget = 1
+let g:miniBufExplUseSingleClick = 1
+let g:miniBufExplForceSyntaxEnable = 1
 
 " R Plugin
 let g:vimrplugin_notmuxconf = 1
