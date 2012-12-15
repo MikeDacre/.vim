@@ -78,7 +78,7 @@
 	url = git://github.com/alfredodeza/pytest.vim.git
 [submodule "bundle/pythonmode"]
 	path = bundle/pythonmode
-	url = git://github.com/codito/python-mode.git
+	url = git@github.com:MikeDacre/python-mode.git
 [submodule "bundle/vimux"]
 	path = bundle/vimux
 	url = git://github.com/benmills/vimux.git
