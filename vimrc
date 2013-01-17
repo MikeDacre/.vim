@@ -32,7 +32,7 @@ call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
 "General
-if has("gui_running") || &term == "xterm-256color"
+if has("gui_running") || &term == "xterm-256color" || $term == "screen-256color"
   set t_Co=256
   set selectmode=key
   colo wombatmikemod
