@@ -237,8 +237,8 @@ inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 " Date inserting
-:nnoremap <leader>dd "=strftime("%d-%m-%y %H:%M:%S")<CR>P
-:inoremap <leader>dd <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR>
+:nnoremap <leader>dd "=strftime("%Y-%m-%d %H:%M:%S")<CR>P
+:inoremap <leader>dd <C-R>=strftime("%Y-%m-%d %H:%M:%S")<CR>
 
 :nnoremap <leader>ds "=strftime("%m/%d/%y")<CR>P
 :inoremap <leader>ds <C-R>=strftime("%m/%d/%y")<CR>
