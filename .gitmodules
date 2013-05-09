@@ -88,3 +88,6 @@
 [submodule "bundle/pythonmode"]
 	path = bundle/pythonmode
 	url = git@github.com:MikeDacre/pythonmode.git
+[submodule "bundle/screen"]
+	path = bundle/screen
+	url = git://github.com/ervandew/screen.git

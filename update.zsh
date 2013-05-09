@@ -121,6 +121,7 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/benmills/vimux.git bundle/vimux;
     git submodule add git://github.com/vim-scripts/dbext.vim.git bundle/dbext;
     git submodule add git://github.com/exu/pgsql.vim.git bundle/pgsql_syntax;
+    git submodule add git://github.com/ervandew/screen.git bundle/screen;
 
     git submodule add git://github.com/tpope/vim-pathogen.git pathogensource;
     rm autoload/pathogen.vim;
