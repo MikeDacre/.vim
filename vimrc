@@ -392,3 +392,5 @@ let g:miniBufExplForceSyntaxEnable = 1
 
 " R Plugin
 let g:vimrplugin_notmuxconf = 1
+let g:vimrplugin_screenvsplit = 1
+let g:ScreenImpl = 'Tmux'
