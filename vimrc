@@ -278,7 +278,7 @@ fun LastMod()
     let l = line("$")
   endif
   exe "1," . l . "g/Last modified: /s/Last modified: .*/Last modified: " .
-  \ strftime("%y-%m-%d %H:%M:%S")
+  \ strftime("%Y-%m-%d %H:%M")
 endfun
 
 " Add cmdlst syntax
@@ -294,7 +294,6 @@ fun ExecLine()
   redraw!
 endfun
 
-au BufNewFile *.cmdlst exe 'TemplateLoad template.cmdlst'
 au BufRead,BufNewFile *.cmdlst set filetype=sh
 noremap <leader>el :call ExecLine()<CR>
 

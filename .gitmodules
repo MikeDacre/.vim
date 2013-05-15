@@ -88,3 +88,6 @@
 [submodule "bundle/screen"]
 	path = bundle/screen
 	url = git://github.com/ervandew/screen.git
+[submodule "bundle/template"]
+	path = bundle/template
+	url = git://github.com/aperezdc/vim-template.git
