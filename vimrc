@@ -286,6 +286,9 @@ au BufRead,BufNewFile *.fasta set filetype=fasta
 au BufRead,BufNewFile *.afa set filetype=fasta
 au BufRead,BufNewFile *.pep set filetype=fasta
 
+" Add cmdlst syntax
+au BufRead,BufNewFile *.cmdlst set filetype=sh
+
 " PHP Syntax
 let php_sql_query=1
 let php_htmlInStrings=1
