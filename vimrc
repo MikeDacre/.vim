@@ -169,9 +169,6 @@ if $VIM_CRONTAB == "true"
   set nowritebackup
 endif
 
-" Execute current line in shell
-noremap <leader>el yyo###<ESC>p!!zsh<CR><Esc>
-
 " NERDtree
 noremap <F5> :NERDTree<CR>
 let g:NERDTreeWinPos = "right"
@@ -240,34 +237,66 @@ inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 " Date inserting
-:nnoremap <leader>dd "=strftime("%Y-%m-%d %H:%M:%S")<CR>P
-:inoremap <leader>dd <C-R>=strftime("%Y-%m-%d %H:%M:%S")<CR>
+nnoremap <leader>dd "=strftime("%Y-%m-%d %H:%M:%S")<CR>P
+inoremap <leader>dd <C-R>=strftime("%Y-%m-%d %H:%M:%S")<CR>
 
-:nnoremap <leader>ds "=strftime("%m/%d/%y")<CR>P
-:inoremap <leader>ds <C-R>=strftime("%m/%d/%y")<CR>
+nnoremap <leader>ds "=strftime("%m/%d/%y")<CR>P
+inoremap <leader>ds <C-R>=strftime("%m/%d/%y")<CR>
 
-:nnoremap <leader>dt "=strftime("%T")<CR>P
-:inoremap <leader>dt <C-R>=strftime("%T")<CR>
+nnoremap <leader>dt "=strftime("%T")<CR>P
+inoremap <leader>dt <C-R>=strftime("%T")<CR>
 
-:nnoremap <leader>dl "=strftime("%a %d %b %Y %X %Z")<CR>P
-:inoremap <leader>dl <C-R>=strftime("%c")<CR>
+nnoremap <leader>dl "=strftime("%a %d %b %Y %X %Z")<CR>P
+inoremap <leader>dl <C-R>=strftime("%c")<CR>
 
 " My tag
-:nnoremap <leader>me iMike Dacre
-:inoremap <leader>me Mike Dacre
+nnoremap <leader>me iMike Dacre
+inoremap <leader>me Mike Dacre
 
-:function InsertCmd( cmd )
-:       let l = system( a:cmd )
-:       let l = substitute(l, '\n$', '', '')
-:       exe "normal a".l
-:       redraw!
-:endfunction
+fun InsertCmd( cmd )
+       let l = system( a:cmd )
+       let l = substitute(l, '\n$', '', '')
+       exe "normal a".l
+       redraw!
+endfun
 
-:nnoremap <leader>my iMike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> <ESC>
-:inoremap <leader>my Mike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR>
+nnoremap <leader>my iMike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> <ESC>
+inoremap <leader>my Mike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR>
 
-:nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
-:inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
+nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
+inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
+
+" Templates
+let g:template_basedir = "~/.vim/templates"
+
+" Last Modified function
+autocmd BufWritePre,FileWritePre *   ks|call LastMod()|'s
+fun LastMod()
+  if line("$") > 20
+    let l = 20
+  else
+    let l = line("$")
+  endif
+  exe "1," . l . "g/Last modified: /s/Last modified: .*/Last modified: " .
+  \ strftime("%y-%m-%d %H:%M:%S")
+endfun
+
+" Add cmdlst syntax
+fun ExecLine()
+  let l = getline('.')
+  exe "normal a :::"
+  exe "normal o###"
+  let c = system( l )
+  let c = substitute(c, '^', '# ', 'g')
+  let c = substitute(c, '\n', '\r# ', 'g')
+  exe "normal o".c
+  exe "normal o###"
+  redraw!
+endfun
+
+au BufNewFile *.cmdlst exe 'TemplateLoad template.cmdlst'
+au BufRead,BufNewFile *.cmdlst set filetype=sh
+noremap <leader>el :call ExecLine()<CR>
 
 " map Ctrl-Tab to switch window
 nnoremap <unique> <S-Up> <C-W><Up>
@@ -285,9 +314,6 @@ au BufRead,BufNewFile *.fa set filetype=fasta
 au BufRead,BufNewFile *.fasta set filetype=fasta
 au BufRead,BufNewFile *.afa set filetype=fasta
 au BufRead,BufNewFile *.pep set filetype=fasta
-
-" Add cmdlst syntax
-au BufRead,BufNewFile *.cmdlst set filetype=sh
 
 " PHP Syntax
 let php_sql_query=1
