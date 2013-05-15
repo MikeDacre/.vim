@@ -143,6 +143,14 @@ if [ -d ~/.vim/bundle ]; then
     mv -f ~/.vimrc ~/vimrc_old_`date "+%y%m%d%k%M"` &>/dev/null;
     ln -s ~/.vim/vimrc ~/.vimrc;
 
+    # Remove duplicate templates
+    rm ~/.vim/bundle/template/templates/template.{c,sh,h,pl}
+
+    # Link new templates
+    cd ~/.vim/bundle/template/templates 
+    ln -s ~/.vim/templates/template.* .
+    ce ~/.vim
+
     # Fix plugin bugs
     sed -e 's/if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~\/.vim\/bundle\/perlsupport\/plugin\/perl-support.vim"), expand("~") ) == 0/' ~/.vim/bundle/perlsupport/plugin/perl-support.vim > ~/.vim/bundle/perlsupport/plugin/perl-support2.vim
     sed -e 's/let s:plugin_dir\s\+= expand("<sfile>:p:h:h")/let s:plugin_dir  						= $HOME."\/.vim\/bundle\/perlsupport\/"/' ~/.vim/bundle/perlsupport/plugin/perl-support2.vim > ~/.vim/bundle/perlsupport/plugin/perl-support3.vim
