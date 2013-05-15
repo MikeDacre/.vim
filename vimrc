@@ -169,6 +169,9 @@ if $VIM_CRONTAB == "true"
   set nowritebackup
 endif
 
+" Execute current line in shell
+noremap <leader>el yyo###<ESC>p!!zsh<CR><Esc>
+
 " NERDtree
 noremap <F5> :NERDTree<CR>
 let g:NERDTreeWinPos = "right"
