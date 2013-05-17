@@ -170,21 +170,30 @@ if [ -d ~/.vim/bundle ]; then
     rm ~/.vim/bundle/bashsupport/plugin/bash-support2.vim
     mv ~/.vim/bundle/bashsupport/plugin/bash-support3.vim ~/.vim/bundle/bashsupport/plugin/bash-support.vim
 
+    # Add snippets
+    cat ~/.vim/snippets/mike-python >> ~/.vim/bundle/snipmate/snippets/python.snippets
+
     # Deal with template files
     rm ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
+    rm ~/.vim/bundle/bashsupport/bash-support/templates/bash.comments.template;
     cp ~/.vim/templates/bash-support-TEMPLATE ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
+    cp ~/.vim/templates/bash.comments.template ~/.vim/bundle/bashsupport/bash-support/templates/;
     cd ~/.vim/bundle/bashsupport;
     git add .;
     git commit -a -m "Synced template file";
 
     rm ~/.vim/bundle/csupport/c-support/templates/Templates;
+    rm ~/.vim/bundle/csupport/c-support/templates/c.comments.template;
     cp ~/.vim/templates/c-support-TEMPLATE ~/.vim/bundle/csupport/c-support/templates/Templates;
+    cp ~/.vim/templates/c.comments.template ~/.vim/bundle/csupport/c-support/templates/;
     cd ~/.vim/bundle/csupport;
     git add .;
     git commit -a -m "Synced template file";
 
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
+    rm ~/.vim/bundle/perlsupport/perl-support/templates/comments.templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
+    cp ~/.vim/templates/perl.comments.templates ~/.vim/bundle/perlsupport/perl-support/templates/comments.templates;
     cd ~/.vim/bundle/perlsupport;
     git add .;
     git commit -a -m "Synced template file";

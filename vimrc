@@ -177,6 +177,9 @@ let g:NERDTreeWinPos = "right"
 noremap <leader>ss :SessionSave<CR>
 noremap <leader>so :SessionOpen  
 
+" SnipMate
+let g:snips_author = 'Mike Dacre'
+
 " Vimux
 noremap <silent> <leader>vp :VimuxPromptCommand<CR>
 noremap <silent> <leader>vr :VimuxRunLastCommand<CR>
@@ -284,7 +287,7 @@ endfun
 " Add cmdlst syntax
 fun ExecLine()
   let l = getline('.')
-  exe "normal a :::"
+  exe "normal $ a :::"
   exe "normal o###"
   let c = system( l )
   let c = substitute(c, '^', '# ', 'g')
