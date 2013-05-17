@@ -2,7 +2,7 @@ snippet stdarg
 	import argparse, sys
 
 	# Get command line arguments
-	parser = argparse.ArgumentParser(description="""\
+	parser = argparse.ArgumentParser(description=helptext)
 
 	# Optional Arguments
 

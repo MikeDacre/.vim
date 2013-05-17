@@ -171,7 +171,8 @@ if [ -d ~/.vim/bundle ]; then
     mv ~/.vim/bundle/bashsupport/plugin/bash-support3.vim ~/.vim/bundle/bashsupport/plugin/bash-support.vim
 
     # Add snippets
-    cat ~/.vim/snippets/mike-python >> ~/.vim/bundle/snipmate/snippets/python.snippets
+    rm ~/.vim/bundle/snipmate/snippets/python*
+    ln ~/.vim/snippets/python*  ~/.vim/bundle/snipmate/snippets/
 
     # Deal with template files
     rm ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
