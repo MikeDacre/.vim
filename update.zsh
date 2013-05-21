@@ -172,7 +172,9 @@ if [ -d ~/.vim/bundle ]; then
 
     # Add snippets
     rm ~/.vim/bundle/snipmate/snippets/python*
+    rm ~/.vim/bundle/snipmate/snippets/sh.snippets
     ln ~/.vim/snippets/python*  ~/.vim/bundle/snipmate/snippets/
+    ln ~/.vim/snippets/sh.snippets  ~/.vim/bundle/snipmate/snippets/
 
     # Deal with template files
     rm ~/.vim/bundle/bashsupport/bash-support/templates/Templates;
