@@ -287,7 +287,7 @@ endfun
 " Add cmdlst syntax
 fun ExecLine()
   let l = getline('.')
-  exe "normal $ a :::"
+  "exe \"normal $ a :::\"
   exe "normal o###"
   let c = system( l )
   let c = substitute(c, '^', '# ', 'g')
