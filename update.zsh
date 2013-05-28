@@ -106,7 +106,7 @@ if [ -d ~/.vim/bundle ]; then
     git submodule add git://github.com/vim-scripts/dbext.vim.git bundle/dbext;
     git submodule add git://github.com/tpope/vim-fugitive.git bundle/fugitive;
     git submodule add git://github.com/sjl/gundo.vim.git bundle/gundo;
-    git submodule add git://github.com/mirell/vim-matchit.git bundle/matchit;
+    git submodule add git://github.com/Spaceghost/vim-matchit.git bundle/matchit;
     git submodule add git://github.com/scrooloose/nerdtree.git bundle/nerdtree;
     git submodule add git://github.com/vim-scripts/perl-support.vim.git bundle/perlsupport;
     git submodule add git://github.com/exu/pgsql.vim.git bundle/pgsql_syntax;

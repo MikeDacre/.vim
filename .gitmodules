@@ -27,7 +27,7 @@
 	url = git://github.com/vim-scripts/bufexplorer.zip.git
 [submodule "bundle/matchit"]
 	path = bundle/matchit
-	url = git://github.com/mirell/vim-matchit.git
+	url = git://github.com/Spaceghost/vim-matchit.git
 [submodule "bundle/sessionman"]
 	path = bundle/sessionman
 	url = git://github.com/vim-scripts/sessionman.vim.git
