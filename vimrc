@@ -287,12 +287,13 @@ endfun
 " Add cmdlst syntax
 fun ExecLine()
   let l = getline('.')
-  "exe \"normal $ a :::\"
   exe "normal o###"
+  exe "normal o# Run start: ".strftime("%y-%m-%d %H:%M:%S")
   let c = system( l )
   let c = substitute(c, '^', '# ', 'g')
   let c = substitute(c, '\n', '\r# ', 'g')
   exe "normal o".c
+  exe "normal o# Run end ".strftime("%y-%m-%d %H:%M:%S")
   exe "normal o###"
   redraw!
 endfun
