@@ -98,6 +98,7 @@ if [ -d ~/.vim/bundle ]; then
 
     git submodule add git://github.com/mileszs/ack.vim.git bundle/ack;
     git submodule add git://github.com/vim-scripts/AutoComplPop.git bundle/autocomplpopup;
+    git submodule add git://github.com/rodjek/vim-puppet.git  bundle/puppet;
     git submodule add git://github.com/vim-scripts/bash-support.vim.git bundle/bashsupport;
     git submodule add git://github.com/vim-scripts/bufexplorer.zip.git bundle/bufexplorer;
     git submodule add git://github.com/scrooloose/nerdcommenter.git bundle/commenter;
