@@ -148,9 +148,8 @@ if [ -d ~/.vim/bundle ]; then
     rm ~/.vim/bundle/template/templates/template.{c,sh,h,pl}
 
     # Link new templates
-    cd ~/.vim/bundle/template/templates 
-    ln -s ~/.vim/templates/template.* .
-    ce ~/.vim
+    ln -s ~/.vim/templates/template.* ~/.vim/bundle/template/templates 
+    cd ~/.vim
 
     # Fix plugin bugs
     sed -e 's/if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~\/.vim\/bundle\/perlsupport\/plugin\/perl-support.vim"), expand("~") ) == 0/' ~/.vim/bundle/perlsupport/plugin/perl-support.vim > ~/.vim/bundle/perlsupport/plugin/perl-support2.vim
