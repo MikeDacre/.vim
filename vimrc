@@ -299,6 +299,7 @@ fun ExecLine()
 endfun
 
 au BufRead,BufNewFile *.cmdlst set filetype=sh
+au BufRead,BufNewFile *.pbs set filetype=sh
 noremap <leader>el :call ExecLine()<CR>
 
 " map Ctrl-Tab to switch window
