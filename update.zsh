@@ -145,11 +145,12 @@ if [ -d ~/.vim/bundle ]; then
     ln -s ~/.vim/vimrc ~/.vimrc;
 
     # Remove duplicate templates
-    rm ~/.vim/bundle/template/templates/template.{c,sh,h,pl}
+    rm ~/.vim/bundle/template/templates/template.{c,sh,h,pl,py}
 
     # Link new templates
     ln -s ~/.vim/templates/template.* ~/.vim/bundle/template/templates 
     cd ~/.vim
+    find -L bundle -type l -delete
 
     # Fix plugin bugs
     sed -e 's/if match( expand("<sfile>"), expand("$HOME") ) == 0/if match( expand("~\/.vim\/bundle\/perlsupport\/plugin\/perl-support.vim"), expand("~") ) == 0/' ~/.vim/bundle/perlsupport/plugin/perl-support.vim > ~/.vim/bundle/perlsupport/plugin/perl-support2.vim
