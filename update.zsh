@@ -83,6 +83,13 @@ if [ -d ~/.vim/bundle ]; then
     rm ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
     cp ~/.vim/templates/perl-support-TEMPLATE ~/.vim/bundle/perlsupport/perl-support/templates/Templates;
 
+    # Link new templates
+    for i in ~/.vim/templates/template.*; do
+      ln -f -s $i ~/.vim/bundle/template/templates/ 
+    done
+    cd ~/.vim
+    find -L bundle -type l -delete
+
     git add .;
     git commit -a -m "Updated" ;
     git push origin master;
