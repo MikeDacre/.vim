@@ -1,6 +1,16 @@
 #!/bin/bash
+#
+#  %FFILE%
+# 
+#  This file is a single pbs job for submission qith qsub
+#
+#  Created by:    Michael Dacre
+#  Date Created:  %FDATE%
+#  Last modified: 
+#
 #PBS -S /bin/bash
 #PBS -m ae
 #PBS -l nodes=1:ppn=1 -l pmem=2gb -l mem=2gb
 cd $PBS_O_WORKDIR
 
+%HERE%
