@@ -148,7 +148,9 @@ if [ -d ~/.vim/bundle ]; then
     rm ~/.vim/bundle/template/templates/template.{c,sh,h,pl,py}
 
     # Link new templates
-    ln -s ~/.vim/templates/template.* ~/.vim/bundle/template/templates 
+    for i in ~/.vim/templates/template.*; do
+      ln -f -s $i ~/.vim/bundle/template/templates/ 
+    done
     cd ~/.vim
     find -L bundle -type l -delete
 
