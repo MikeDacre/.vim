@@ -6,7 +6,7 @@ See helptext variable for more info:
 print(%FILE%.helptext)
 """
 helptext="""
-#===============================================================================
+#====================================================================================
 #
 #          FILE: %FILE% (python)
 #        AUTHOR: Michael D Dacre, mike.dacre@gmail.com
@@ -16,10 +16,10 @@ helptext="""
 #       CREATED: %FDATE%
 # Last modified:   
 #
-#         USAGE: ./%FFILE%
+#         USAGE: Run as a script or import as a module.  See '-h' or 'help' for usage
 #   DESCRIPTION: 
 #
-#===============================================================================
+#====================================================================================
 """
 
 

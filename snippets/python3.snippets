@@ -101,9 +101,9 @@ snippet stdarg
 		#                    help="${4:Required file}")
 		
 		# Optional Files
-		parser.add_argument('-i', '--infile', nargs='?', type=argparse.FileType('w'),
+		parser.add_argument('-i', '--infile', nargs='?', type=argparse.FileType('r'),
 		                    default=sys.stdin, help="Input file, Default STDOUT")
-		parser.add_argument('-o', '--outfile', nargs='?', type=argparse.FileType('r'),
+		parser.add_argument('-o', '--outfile', nargs='?', type=argparse.FileType('w'),
 		                    default=sys.stdout, help="Output file, Default STDIN")
 		parser.add_argument('-l', '--logfile', nargs='?', type=argparse.FileType('a'),
 		                    default=sys.stderr, help="Log File, Default STDERR (append mode)")
