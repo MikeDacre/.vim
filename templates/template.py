@@ -1,6 +1,10 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
-# vim:fenc=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4
+"""
+%HERE%
+See helptext variable for more info:
+print(%FILE%.helptext)
+"""
 helptext="""
 #===============================================================================
 #
@@ -10,11 +14,13 @@ helptext="""
 #       LICENSE: CC BY-NC-SA - Creative Commons Attribution-NonCommercial-ShareAlike
 #       VERSION: 0.1
 #       CREATED: %FDATE%
-# Last modified: 
+# Last modified:   
 #
 #         USAGE: ./%FFILE%
-#   DESCRIPTION: %HERE%
+#   DESCRIPTION: 
 #
 #===============================================================================
 """
 
+
+# vim:fenc=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4

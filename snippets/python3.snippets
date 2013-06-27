@@ -87,23 +87,34 @@ snippet _
 snippet stdarg
 	import argparse, sys
 	
-	# Get command line arguments
-	parser = argparse.ArgumentParser(${1:description=helptext},
-	                                formatter_class=argparse.RawDescriptionHelpFormatter)
+	def get_args():
+		# Get command line arguments
+		parser = argparse.ArgumentParser(
+		             description=helptext,
+		             formatter_class=argparse.RawDescriptionHelpFormatter)
+		
+		# Optional Arguments
+		#parser.add_argument('${1:-r}', help="${2:Optional argument}")
+		
+		# Required Files
+		#parser.add_argument('${3:file}', nargs='1', type=argparse.FileType('o'),
+		#                    help="${4:Required file}")
+		
+		# Optional Files
+		parser.add_argument('-i', '--infile', nargs='?', type=argparse.FileType('w'),
+		                    default=sys.stdin, help="Input file, Default STDOUT")
+		parser.add_argument('-o', '--outfile', nargs='?', type=argparse.FileType('r'),
+		                    default=sys.stdout, help="Output file, Default STDIN")
+		parser.add_argument('-l', '--logfile', nargs='?', type=argparse.FileType('a'),
+		                    default=sys.stderr, help="Log File, Default STDERR (append mode)")
+		
+		return parser
 	
-	# Optional Arguments
-	#${2:parser.add_argument()}
-	
-	# Required Files
-	#${3:parser.add_argument()}
-	
-	# Optional Files
-	parser.add_argument('logfile', nargs='?', type=argparse.FileType('a'),
-	                    default=sys.stderr, help="Log File, Default STDERR (append mode)")
-	parser.add_argument('infile', nargs='?', type=argparse.FileType('w'),
-	                     default=sys.stdout, help="Output file, Default STDOUT")
-	parser.add_argument('outfile', nargs='?', type=argparse.FileType('r'),
-	                     default=sys.stdin, help="Output file, Default STDIN")
-	 
-	args = parser.parse_args()
-	
+	# Main function for direct running
+	if __name__ == '__main__':
+			# Get commandline arguments
+			parser = get_args()
+			args = parser.parse_args()
+
+			# ${5:Do Stuff}
+			${6}
