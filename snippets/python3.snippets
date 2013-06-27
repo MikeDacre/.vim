@@ -90,21 +90,21 @@ snippet stdarg
 	def get_args():
 		# Get command line arguments
 		parser = argparse.ArgumentParser(
-		             description=helptext,
+		             description=__doc__,
 		             formatter_class=argparse.RawDescriptionHelpFormatter)
 		
 		# Optional Arguments
 		#parser.add_argument('${1:-r}', help="${2:Optional argument}")
 		
 		# Required Files
-		#parser.add_argument('${3:file}', nargs='1', type=argparse.FileType('o'),
+		#parser.add_argument('${3:file}', nargs='1', type=argparse.FileType('r'),
 		#                    help="${4:Required file}")
 		
 		# Optional Files
 		parser.add_argument('-i', '--infile', nargs='?', type=argparse.FileType('r'),
-		                    default=sys.stdin, help="Input file, Default STDOUT")
+		                    default=sys.stdin, help="${5:Input file, Default STDIN}")
 		parser.add_argument('-o', '--outfile', nargs='?', type=argparse.FileType('w'),
-		                    default=sys.stdout, help="Output file, Default STDIN")
+		                    default=sys.stdout, help="Output file, Default STDOUT")
 		parser.add_argument('-l', '--logfile', nargs='?', type=argparse.FileType('a'),
 		                    default=sys.stderr, help="Log File, Default STDERR (append mode)")
 		
@@ -116,5 +116,5 @@ snippet stdarg
 			parser = get_args()
 			args = parser.parse_args()
 
-			# ${5:Do Stuff}
-			${6}
+			# ${6:Do Stuff}
+			${7}
