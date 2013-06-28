@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
-"""
+# vim:fenc=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4
 """
 #====================================================================================
 #
@@ -12,11 +12,10 @@
 #       CREATED: %FDATE%
 # Last modified:   
 #
-#         USAGE: Run as a script or import as a module.  See '-h' or 'help' for usage
 #   DESCRIPTION: %HERE%
+#
+#         USAGE: Run as a script or import as a module.  See '-h' or 'help' for usage
 #
 #====================================================================================
 """
 
-
-# vim:fenc=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4
