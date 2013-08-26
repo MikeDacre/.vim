@@ -96,6 +96,11 @@ snippet ifwith
 	else:
 		${7:$5}(${8:$1})
 snippet stdarg
+	def my_main(infile, outfile):
+		"""Actually operate on files"""
+		for line in infile:
+		outfile.write(line)
+	
 	def _get_args():
 		"""Command Line Argument Parsing"""
 		import argparse, sys
@@ -105,10 +110,10 @@ snippet stdarg
 		             formatter_class=argparse.RawDescriptionHelpFormatter)
 		
 		# Optional Arguments
-		#parser.add_argument('${1:-r}', help="${2:Optional argument}")
+		#parser.add_argument('${1:-v}', help="${2:Verbose output}")
 		
 		# Required Files
-		#parser.add_argument('${3:file}', nargs='1', 
+		#parser.add_argument('${3:file}', nargs=1, 
 		#                    help="${4:Required file}")
 		
 		# Optional Files
@@ -117,15 +122,29 @@ snippet stdarg
 		parser.add_argument('-o', '--outfile', nargs='?', default=sys.stdout, 
 		                    help="Output file, Default STDOUT")
 		parser.add_argument('-l', '--logfile', nargs='?', default=sys.stderr, 
+		                    type=argparse.FileType('a'),
 		                    help="Log File, Default STDERR (append mode)")
 		
 		return parser
 	
 	# Main function for direct running
 	if __name__ == '__main__':
-			# Get commandline arguments
-			parser = _get_args()
-			args = parser.parse_args()
-
-			# ${6:Do Stuff}
+		# Get commandline arguments
+		parser = _get_args()
+		args = parser.parse_args()
+	
+		# ${6:Do Stuff}
+		if infile_string:
+			with open(args.infile, 'r') as infile:
+				if outfile_string:
+					with open(args.outfile, 'w') as outfile:
+						my_main(infile, outfile)
+				else:
+					my_main(infile, args.outfile)
+		else:
+			if outfile_string:
+				with open(args.outfile, 'w') as outfile:
+					my_main(args.infile, outfile)
+			else:
+				my_main(args.infile, args.outfile)
 			${7}
