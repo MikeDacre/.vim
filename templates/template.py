@@ -1,6 +1,10 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4
+#
+# Copyright © Mike Dacre <mike.dacre@gmail.com>
+#
+# Distributed under terms of the MIT license
 """
 #====================================================================================
 #
@@ -10,7 +14,7 @@
 #       LICENSE: CC BY-NC-SA - Creative Commons Attribution-NonCommercial-ShareAlike
 #       VERSION: 0.1
 #       CREATED: %FDATE%
-# Last modified:   
+# Last modified: 
 #
 #   DESCRIPTION: %HERE%
 #

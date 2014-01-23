@@ -96,11 +96,6 @@ snippet ifwith
 	else:
 		${7:$5}(${8:$1})
 snippet stdarg
-	def my_main(infile, outfile):
-		"""Actually operate on files"""
-		for line in infile:
-		outfile.write(line)
-	
 	def _get_args():
 		"""Command Line Argument Parsing"""
 		import argparse, sys
@@ -128,23 +123,38 @@ snippet stdarg
 		return parser
 	
 	# Main function for direct running
-	if __name__ == '__main__':
+	def main():
+		"""Run directly"""
 		# Get commandline arguments
 		parser = _get_args()
 		args = parser.parse_args()
 	
 		# ${6:Do Stuff}
+		if isinstance(args.infile, str):
+			infile_string = True
+		else:
+			infile_string = False
+		
+		if isinstance(args.outfile, str):
+			outfile_string = True
+		else:
+			outfile_string = False
+		
 		if infile_string:
 			with open(args.infile, 'r') as infile:
 				if outfile_string:
 					with open(args.outfile, 'w') as outfile:
-						my_main(infile, outfile)
+						do_something(infile, outfile)
 				else:
-					my_main(infile, args.outfile)
+					do_something(infile, args.outfile)
 		else:
 			if outfile_string:
 				with open(args.outfile, 'w') as outfile:
-					my_main(args.infile, outfile)
+					do_something(args.infile, outfile)
 			else:
-				my_main(args.infile, args.outfile)
+				do_something(args.infile, args.outfile)
 			${7}
+	
+	# The end
+	if __name__ == '__main__':
+		main()

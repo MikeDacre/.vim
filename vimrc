@@ -330,7 +330,7 @@ au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Python
 au BufRead,BufNewFile *.py set filetype=python3
-autocmd FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 " Disable pylint checking every save
 let g:pymode_py3k = 1
