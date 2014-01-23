@@ -18,13 +18,6 @@ endif
 set backspace+=indent,eol,start
 
 "Macros
-let @f = ':%s/^/>/g:%s/\t/\r/g:set filetype=fasta'
-let @i = ':%s/^\([^_]*\)_\([^_]*\)_\([^_]*\)_\([^_]*\)_.*$/\4'
-let @k = ':%s/^\([^_]*\)_\([^_]*\)_\([^_]*\)_\([^_]*\)\S*\t\(.*\)$/\4\t\5:%s/\t/%$#/g:%s/%$#/\t'
-let @t = ':%s/^\([^\t]\+\)\t.*\t\(\S\+\)$/\1\t\2/g'
-let @l = 'ggdd:%s/.*\t:%s/%$#/\t/g'
-let @c = ':%s/\t/%$#/g:%s/%$#/\t'
-let @t = ':%s/^\(>.\+\)\n/\1\t:%s/\n//g:%s/[>\t]/\r/gset filetype=textggdd'
 
 " Pathogen
 filetype off
