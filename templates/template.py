@@ -11,10 +11,10 @@
 #          FILE: %FILE% (python 3)
 #        AUTHOR: Michael D Dacre, mike.dacre@gmail.com
 #  ORGANIZATION: Stanford University
-#       LICENSE: CC BY-NC-SA - Creative Commons Attribution-NonCommercial-ShareAlike
+#       LICENSE: MIT License, Property of Stanford, Use as you wish
 #       VERSION: 0.1
 #       CREATED: %FDATE%
-# Last modified: 
+# Last modified: 2014-01-23 08:14
 #
 #   DESCRIPTION: %HERE%
 #
