@@ -361,6 +361,7 @@ let Tlist_GainFocus_On_ToggleOpen = 0
 let Tlist_Use_Right_Window = 0
 let Tlist_Process_file_Always = 1
 let tlist_php_settings = 'php;c:class;d:constant;f:function'
+let tlist_python3_settings = 'Python;c:classes;f:functions;m:class_members;v:variables;i:imports'
 
 " Task List
 map <leader>tl <Plug>TaskList
