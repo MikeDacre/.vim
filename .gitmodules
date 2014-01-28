@@ -1,6 +1,9 @@
 [submodule "pathogensource"]
 	path = pathogensource
 	url = git://github.com/tpope/vim-pathogen.git
+[submodule "vim-bundle"]
+	path = vim-bundle
+	url = git://github.com/benmills/vim-bundle.git
 [submodule "bundle/nerdtree"]
 	path = bundle/nerdtree
 	url = git://github.com/scrooloose/nerdtree.git
@@ -10,9 +13,6 @@
 [submodule "bundle/snipmate"]
 	path = bundle/snipmate
 	url = git://github.com/msanders/snipmate.vim.git
-[submodule "bundle/surround"]
-	path = bundle/surround
-	url = git://github.com/tpope/vim-surround.git
 [submodule "bundle/bashsupport"]
 	path = bundle/bashsupport
 	url = git://github.com/vim-scripts/bash-support.vim.git
@@ -25,9 +25,6 @@
 [submodule "bundle/bufexplorer"]
 	path = bundle/bufexplorer
 	url = git://github.com/vim-scripts/bufexplorer.zip.git
-[submodule "bundle/matchit"]
-	path = bundle/matchit
-	url = git://github.com/Spaceghost/vim-matchit.git
 [submodule "bundle/sessionman"]
 	path = bundle/sessionman
 	url = git://github.com/vim-scripts/sessionman.vim.git
@@ -40,9 +37,6 @@
 [submodule "bundle/gundo"]
 	path = bundle/gundo
 	url = git://github.com/sjl/gundo.vim.git
-[submodule "bundle/ack"]
-	path = bundle/ack
-	url = git://github.com/mileszs/ack.vim.git
 [submodule "bundle/pythonmenu"]
 	path = bundle/pythonmenu
 	url = git://github.com/vim-scripts/python.vim.git
@@ -52,15 +46,9 @@
 [submodule "bundle/csupport"]
 	path = bundle/csupport
 	url = git://github.com/vim-scripts/c.vim.git
-[submodule "bundle/rplugin"]
-	path = bundle/rplugin
+[submodule "bundle/Vim-R-plugin"]
+	path = bundle/Vim-R-plugin
 	url = git://github.com/jcfaria/Vim-R-plugin.git
-[submodule "dbext.vim"]
-	path = dbext.vim
-	url = git://github.com/vim-scripts/dbext.vim.git
-[submodule "bundle/dbext"]
-	path = bundle/dbext
-	url = git://github.com/vim-scripts/dbext.vim.git
 [submodule "bundle/pgsql_syntax"]
 	path = bundle/pgsql_syntax
 	url = git://github.com/exu/pgsql.vim.git
@@ -70,27 +58,12 @@
 [submodule "bundle/pydoc"]
 	path = bundle/pydoc
 	url = git://github.com/fs111/pydoc.vim.git
-[submodule "bundle/pytest"]
-	path = bundle/pytest
-	url = git://github.com/alfredodeza/pytest.vim.git
 [submodule "bundle/vimux"]
 	path = bundle/vimux
 	url = git://github.com/benmills/vimux.git
-[submodule "vim-bundle"]
-	path = vim-bundle
-	url = git://github.com/benmills/vim-bundle.git
-[submodule "bundle/vim-highlight"]
-	path = bundle/vim-highlight
-	url = git@github.com:MikeDacre/vim-highlight.git
-[submodule "bundle/pythonmode"]
-	path = bundle/pythonmode
-	url = git@github.com:MikeDacre/pythonmode.git
 [submodule "bundle/screen"]
 	path = bundle/screen
 	url = git://github.com/ervandew/screen.git
 [submodule "bundle/template"]
 	path = bundle/template
 	url = git://github.com/aperezdc/vim-template.git
-[submodule "bundle/puppet"]
-	path = bundle/puppet
-	url = git://github.com/rodjek/vim-puppet.git

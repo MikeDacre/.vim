@@ -124,8 +124,8 @@ autocmd FileType tex setlocal textwidth=80
 autocmd BufNewFile,BufRead *.txt setlocal textwidth=80
 
 if version >= 700
-  autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
-  autocmd FileType tex setlocal spell spelllang=en_us
+  "autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en_us
+  "autocmd FileType tex setlocal spell spelllang=en_us
 endif
 
 " Set backup and undo
@@ -238,11 +238,6 @@ inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
 " Pasting Mode
 map <leader>pp :set paste<CR>:set noexpandtab<CR>
 map <leader>PP :set nopaste<CR>:set expandtab<CR>
-
-" Copy line to clipboard
-map <leader>ll "*y$
-map <leader>lp "*p
-map <leader>l  "*
 
 " Delete starting whitespace
 map <leader>ds :s/^\s\+<CR>
@@ -375,14 +370,11 @@ let g:ex_comment_lable_keyword = 'DELME TEMP MODIFY ADD KEEPME DISABLE TEST ' " 
 let g:ex_comment_lable_keyword .= 'ERROR DEBUG CRASH DUMMY UNUSED TESTME ' " for testing
 let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUPLICATE REDUNDANCY PATCH ' " for refactoring
 
-" Searching
-nmap <leader>a <Esc>:Ack!
-
 " Buffer Explorer
 let g:bufExplorerFindActive=1
 map <leader>be :BufExplorer<CR>
 
 " R Plugin
 let g:vimrplugin_notmuxconf = 1
-let g:vimrplugin_screenvsplit = 1
+let g:vimrplugin_vsplit = 1
 let g:ScreenImpl = 'Tmux'
