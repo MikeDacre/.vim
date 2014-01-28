@@ -3,10 +3,10 @@ $ =============================================================
 $ ========== USER MACROS ======================================
 $ =============================================================
 $
-|AUTHOR|    = YOUR NAME 
-|AUTHORREF| = 
-|EMAIL|     = 
-|COMPANY|   = 
+|AUTHOR|    = Michael Dacre
+|AUTHORREF| = Mike
+|EMAIL|     = mike.dacre@gmail.com
+|COMPANY|   = Mike Dacre / Salk Institute / Stanford
 |COPYRIGHT| = Copyright (c) |YEAR|, |AUTHOR|
 |STYLE|     = default
 $

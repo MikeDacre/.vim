@@ -14,7 +14,6 @@ tpope/vim-fugitive
 tpope/vim-pathogen
 tpope/vim-surround
 vim-scripts/AutoComplPop
-vim-scripts/bash-support.vim
 vim-scripts/bufexplorer.zip
 vim-scripts/c.vim
 vim-scripts/perl-support.vim
