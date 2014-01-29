@@ -8,9 +8,12 @@ feel free to use it however you please though!
 Use
 ---
 
-Clone repo: ```https://github.com/MikeDacre/my-vim.git ~/.vim```
+Clone repo: ```git clone --recursive https://github.com/MikeDacre/my-vim.git ~/.vim```
+
 Create vimrc symlink: ```ln -s ~/.vim/vimrc ~/.vimrc```
+
 Update all plugins: ```~/.vim/update.sh```
+
 
 To add new plugins just add the reference to your plugin to ```~/.vim/plugin-list```
 To remove, remove the bundle file, and remove the entry in ```~/.vim/plugin-list```
