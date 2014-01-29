@@ -318,6 +318,12 @@ au BufRead,BufNewFile *.py set filetype=python3
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 " Disable pylint checking every save
+let g:pymode_lint_checkers = ['pep8', 'mccabe']
+let g:pymode_lint_ignore = "E501,E221,E126,E401"
+let g:pymode_rope_rename_bind = '<leader>rr'
+let g:pymode_lint_unmodified = 0
+let g:pymode_lint_on_write = 0
+let g:pymode_rope = 0
 let g:pymode_py3k = 1
 let g:pymode_lint_write = 0
 let g:pep8_map='<leader>8'
