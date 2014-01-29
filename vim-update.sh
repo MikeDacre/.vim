@@ -1,21 +1,8 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 #===============================================================================
 #
-#          FILE:  update-vim.zsh
+#   DESCRIPTION:  Update vim in /usr/local - no GUI
 #
-#         USAGE:  ./update-vim.zsh
-#
-#   DESCRIPTION:  Simple script to update vim
-#
-#       OPTIONS:  ---
-#  REQUIREMENTS:  ---
-#          BUGS:  ---
-#         NOTES:  ---
-#        AUTHOR: Mike Dacre
-#       LICENCE: Copyright (c) 2011, Mike Dacre
-#       COMPANY:
-#       CREATED: 11/11/2011 12:00:40 PM PST
-#      REVISION:  ---
 #===============================================================================
 
 set -o nounset                              # Treat unset variables as an error
