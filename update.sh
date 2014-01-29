@@ -13,7 +13,7 @@
 #       LICENCE: Open Source
 #       CREATED: 11/10/2011 22:16:34 PST
 #      REVISION: 1.1
-# Last modified: 2014-01-28 15:55
+# Last modified: 2014-01-28 16:20
 #===============================================================================
 
 VIM_HOME="$HOME/.vim"
@@ -44,31 +44,36 @@ fix_plugin_bugs () {
     ln -f -s $i $VIM_HOME/bundle/vim-template/templates/
   done
   cd $VIM_HOME
+
+  # Delete broken links
   find -L bundle -type l -delete
 }
 
 # Check that bundle folder exists
 if [ -d $VIM_HOME/bundle ]; then
+  # Go to vim folder
+  cd $VIM_HOME
+
   # Update pathogen
-  cd ./vim-pathogen
+  cd $VIM_HOME/vim-pathogen
   git checkout master
   git pull
-  cd ..
-  rm autoload/pathogen.vim
+  cd $VIM_HOME
+  rm $VIM_HOME/autoload/pathogen.vim
   mkdir -p autoload
   cd autoload
   ln -s ../vim-pathogen/autoload/pathogen.vim .
   cd ..
 
   # Update vim-bundle
-  cd ./vim-bundle
+  cd $VIM_HOME/vim-bundle
   git checkout master
   git pull
-  cd ..
+  cd $VIM_HOME
 
   # Update every module
   while read p; do
-    vim-bundle update $p
+    $VIM_HOME/vim-bundle/vim-bundle update $p
   done < plugin-list
 
   # Do my stuff to bundles
