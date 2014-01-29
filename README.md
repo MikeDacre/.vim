@@ -1,5 +1,5 @@
-my-vim
-======
+Mike's Vim Folder
+=================
 
 My personal .vim folder.  Uses vim-bundle and pathogen to manage plugins.
 Not intended for public use, there are better .vimrc files out there; 
@@ -8,7 +8,7 @@ feel free to use it however you please though!
 Use
 ---
 
-Clone repo: ```git clone --recursive https://github.com/MikeDacre/my-vim.git ~/.vim```
+Clone repo: ```git clone --recursive https://github.com/MikeDacre/.vim.git $HOME/.vim```
 
 Create vimrc symlink: ```ln -s ~/.vim/vimrc ~/.vimrc```
 
