@@ -4,6 +4,7 @@ ervandew/screen
 jcfaria/Vim-R-plugin
 klen/python-mode
 msanders/snipmate.vim
+othree/html5.vim
 scrooloose/nerdcommenter
 scrooloose/nerdtree
 scrooloose/syntastic
