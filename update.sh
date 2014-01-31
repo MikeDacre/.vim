@@ -13,7 +13,7 @@
 #       LICENCE: Open Source
 #       CREATED: 11/10/2011 22:16:34 PST
 #      REVISION: 1.1
-# Last modified: 2014-01-28 16:20
+# Last modified: 2014-01-31 15:00
 #===============================================================================
 
 VIM_HOME="$HOME/.vim"
@@ -35,13 +35,18 @@ fix_plugin_bugs () {
   cp $VIM_HOME/templates/c.comments.template $VIM_HOME/bundle/c.vim/c-support/templates/
 
   # Remove builtin snippets that I have replaces
-  rm $VIM_HOME/bundle/snipmate.vim/snippets/python*  2>/dev/null
-  rm $VIM_HOME/bundle/snipmate.vim/snippets/perl.snippets  2>/dev/null
-  rm $VIM_HOME/bundle/snipmate.vim/snippets/sh.snippets  2>/dev/null
+  cd $VIM_HOME/snippets
+  for i in *; do
+    rm $VIM_HOME/bundle/snipmate.vim/snippets/$i 2>/dev/null
+  done
+  cd $VIM_HOME
 
   # Link new templates
-  for i in $VIM_HOME/templates/template.*; do
-    ln -f -s $i $VIM_HOME/bundle/vim-template/templates/
+  cd $VIM_HOME/templates
+  for i in template.*; do
+    cd $VIM_HOME/bundle/vim-template/templates/
+    rm $i 2>/dev/null 
+    ln -f -s $VIM_HOME/templates/$i $i
   done
   cd $VIM_HOME
 
