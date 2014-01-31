@@ -188,21 +188,45 @@ map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
         
 " Add cmdlst syntax
+fun CaptureLine()
+  let l = getline('.')
+  let c = system( l )
+  set paste
+  set noexpandtab
+  exe "normal o".c
+  set nopaste
+  set expandtab
+  "redraw!
+endfun
+
 fun ExecLine()
   let l = getline('.')
+  set paste
+  set noexpandtab
   exe "normal o###"
+  exe "normal o# "
   exe "normal o# Run start: ".strftime("%y-%m-%d %H:%M:%S")
+  exe "normal o# "
+  exe "normal o###"
+  exe "normal o# Output:::"
+  exe "normal o# "
   let c = system( l )
   let c = substitute(c, '^', '# ', 'g')
   let c = substitute(c, '\n', '\r# ', 'g')
   exe "normal o".c
-  exe "normal o# Run end ".strftime("%y-%m-%d %H:%M:%S")
   exe "normal o###"
+  exe "normal o# "
+  exe "normal o# Run end ".strftime("%y-%m-%d %H:%M:%S")
+  exe "normal o# "
+  exe "normal o###"
+  set nopaste
+  set expandtab
   redraw!
 endfun
-
+ 
 au BufRead,BufNewFile *.cmdlst set filetype=sh
 au BufRead,BufNewFile *.pbs set filetype=sh
+noremap <leader>il :call CaptureLine()<CR>
 noremap <leader>el :call ExecLine()<CR>
  
 " Date inserting
