@@ -22,17 +22,9 @@ fix_plugin_bugs () {
   # Fix plugin bugs
   echo "Fixing plugin bugs"
 
-  # Remove conflicting templates for perl and C
-  rm $VIM_HOME/bundle/vim-template/templates/{template.c,template.c++,template.cc,template.cpp,template.cxx,template.h} 2>/dev/null
-  rm $VIM_HOME/bundle/c.vim/c-support/templates/Templates   2>/dev/null
-  cp $VIM_HOME/templates/c-support-TEMPLATE $VIM_HOME/bundle/c.vim/c-support/templates/Templates
-
+  # Remove conflicting templates for perl
   rm $VIM_HOME/bundle/perl-support.vim/perl-support/templates/Templates  2>/dev/null
   cp $VIM_HOME/templates/perl-support-TEMPLATE $VIM_HOME/bundle/perl-support.vim/perl-support/templates/Templates
-  rm $VIM_HOME/bundle/c.vim/c-support/templates/Templates  2>/dev/null
-  rm $VIM_HOME/bundle/c.vim/c-support/templates/c.comments.template  2>/dev/null
-  cp $VIM_HOME/templates/c-support-TEMPLATE $VIM_HOME/bundle/c.vim/c-support/templates/Templates
-  cp $VIM_HOME/templates/c.comments.template $VIM_HOME/bundle/c.vim/c-support/templates/
 
   # Remove builtin snippets that I have replaces
   cd $VIM_HOME/snippets
