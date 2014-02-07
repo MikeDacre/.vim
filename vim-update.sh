@@ -8,6 +8,10 @@
 VIMLOCATION=$HOME
 
 mkdir -p $VIMLOCATION
+if [ !"$?" ] ; then
+  echo "Install location $VIMLOCATION doesn't exist and cannot be created. Maybe change the $VIMLOCATION variable in this script?"
+  exit
+fi
 
 hg clone https://vim.googlecode.com/hg/ vim-program
 if [ !"$?" ] ; then
