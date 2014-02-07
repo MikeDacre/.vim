@@ -5,19 +5,49 @@
 #
 #===============================================================================
 
-set -o nounset                              # Treat unset variables as an error
+VIMLOCATION=$HOME
 
-hg clone https://vim.googlecode.com/hg/ vim-program;
+mkdir -p $VIMLOCATION
 
-cd vim-program;
+hg clone https://vim.googlecode.com/hg/ vim-program
+if [ !"$?" ] ; then
+  echo "Download failed"
+  exit
+fi
 
-./configure --with-features=huge --prefix=/usr/local --enable-perlinterp=yes --enable-rubyinterp --enable-pythoninterp --enable-cscope --disable-gui --without-x --with-compiledby=Mike --enable-multibyte;
-make;
+cd vim-program
+if [ !"$?" ] ; then
+  echo "Couldn't enter download directory"
+  exit
+fi
 
-sudo make install;
+./configure --with-features=huge --prefix=$VIMLOCATION --enable-perlinterp=yes --enable-rubyinterp --enable-pythoninterp --enable-cscope --disable-gui --without-x --with-compiledby=Mike --enable-multibyte
+if [ !"$?" ] ; then
+  echo "Configure failed"
+  cd ..
+  exit
+fi
 
-cd ..;
-rm -rf vim-program;
+make
+if [ !"$?" ] ; then
+  echo "Make failed"
+  cd ..
+  exit
+fi
 
-echo "Done!";
+make install
+if [ !"$?" ] ; then
+  echo "Make install failed"
+  cd ..
+  exit
+fi
 
+cd ..
+rm -rf vim-program
+if [ !"$?" ] ; then
+  echo "Couldn't remove download directory"
+  cd ..
+  exit
+fi
+
+echo "Done!"
