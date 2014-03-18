@@ -7,6 +7,7 @@ set nocompatible
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files
 set viminfo='10,\"100,:20,%,n~/.viminfo"'
+set nofoldenable
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 set ttymouse=xterm2
@@ -318,7 +319,10 @@ nnoremap <unique> <silent><leader>sw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/
 """ Language and Plugin Config
  
 " Template for specific files
-au BufNewFile  *Process.txt	0r ~/.vim/templates/process_TEMPLATE
+au BufNewFile  *Process.txt 0r ~/.vim/templates/process_TEMPLATE
+au BufRead,BufNewFile *.txt set filetype=pandoc
+au BufRead,BufNewFile *.md set filetype=mmd
+au BufRead,BufNewFile *.rst set filetype=rst
 au BufNewFile * silent! 0r ~/.vim/templates/tmpl.%:e
 
 " Add fasta syntax
