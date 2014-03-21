@@ -321,6 +321,7 @@ nnoremap <unique> <silent><leader>sw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/
 " Template for specific files
 au BufNewFile  *Process.txt 0r ~/.vim/templates/process_TEMPLATE
 au BufRead,BufNewFile *.txt set filetype=pandoc
+au FileType pandoc setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 au BufRead,BufNewFile *.md set filetype=mmd
 au BufRead,BufNewFile *.rst set filetype=rst
 au BufNewFile * silent! 0r ~/.vim/templates/tmpl.%:e
@@ -359,6 +360,13 @@ let g:pep8_map='<leader>8'
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
              
+" Table Mode
+let g:table_mode_fillchar = '='
+let g:table_mode_separator = '#'
+let g:table_mode_toggle_map = '<leader>tb'
+let g:pandoc_no_folding = 1
+let g:pandoc_bibfiles = ['/Users/dacre/bib/Altitude.bib']
+
 " NERDtree
 noremap <F5> :NERDTree<CR>
 let g:NERDTreeWinPos = "right"
