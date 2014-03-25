@@ -1,13 +1,10 @@
----
-title:         %FFILE%
+%FFILE%
 
-author: 
-- name:        Michael Dacre
-date:          %FDATE%
-Last modified: 2014-03-18 00:39
-...
+:Author: %USER%
+:Email: %MAIL%
+:Date: %FDATE%
 
 %HERE%
 
 
-<!--vim: expandtab filetype=pandoc shiftwidth=4 tabstop=4-->
+.. vim: expandtab filetype=rst shiftwidth=4 tabstop=4

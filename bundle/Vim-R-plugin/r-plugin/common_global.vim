@@ -64,6 +64,12 @@ function RWarningMsgInp(wmsg)
     let &shortmess = savedsm
 endfunction
 
+if v:version < 704
+    call RWarningMsgInp("The Vim-R-plugin requires Vim >= 7.4.")
+    let g:rplugin_failed = 1
+    finish
+endif
+
 " Set default value of some variables:
 function RSetDefaultValue(var, val)
     if !exists(a:var)
@@ -1228,6 +1234,26 @@ function RInsert(cmd)
     endif
 endfunction
 
+function SendLineToRAndInsertOutput()
+  let line = getline(".")
+  call RInsert("print(" . line . ")")
+  if g:rplugin_lastrpl == "R is busy." || g:rplugin_lastrpl == "UNKNOWN" || g:rplugin_lastrpl =~ "^Error" || g:rplugin_lastrpl == "INVALID" || g:rplugin_lastrpl == "ERROR" || g:rplugin_lastrpl == "EMPTY" || g:rplugin_lastrpl == "No reply"
+    return
+  else
+    " comment the output
+    let lastLine = line("$")
+    let line = getline(".")
+    let i = line(".")
+    call cursor(i, 1)
+    while strlen(line) > 0 && i <= lastLine
+      call RSimpleCommentLine("normal", "c")
+      let i = line(".") + 1
+      call cursor(i, 1)
+      let line = substitute(getline("."), '^\s*', "", "")
+    endwhile
+  endif
+endfunction
+
 " Function to send commands
 " return 0 on failure and 1 on success
 function SendCmdToR_fake(cmd)
@@ -1413,7 +1439,7 @@ function SendMBlockToR(e, m)
         let lineB -= 1
     endif
     let lines = getline(lineA, lineB)
-    let ok = RSourceLines(lines, a:e)
+    let ok = b:SourceLines(lines, a:e)
     if ok == 0
         return
     endif
@@ -1482,7 +1508,7 @@ function SendFunctionToR(e, m)
     endif
 
     let lines = getline(firstline, lastline)
-    let ok = RSourceLines(lines, a:e)
+    let ok = b:SourceLines(lines, a:e)
     if  ok == 0
         return
     endif
@@ -1543,7 +1569,7 @@ function SendSelectionToR(e, m)
         let lines[llen] = strpart(lines[llen], 0, j)
     endif
 
-    let ok = RSourceLines(lines, a:e)
+    let ok = b:SourceLines(lines, a:e)
     if ok == 0
         return
     endif
@@ -1578,7 +1604,7 @@ function SendParagraphToR(e, m)
         endif
     endwhile
     let lines = getline(i, j)
-    let ok = RSourceLines(lines, a:e)
+    let ok = b:SourceLines(lines, a:e)
     if ok == 0
         return
     endif
@@ -1625,7 +1651,7 @@ function SendFHChunkToR()
             let idx += 1
         endif
     endwhile
-    call RSourceLines(codelines, "silent")
+    call b:SourceLines(codelines, "silent")
 endfunction
 
 " Send current line to R.
@@ -1932,18 +1958,16 @@ function RFillLibList()
         call RUpdateFunSyntax(0)
         if &filetype != "r"
             silent exe "set filetype=" . &filetype
+            " Avoid E341 (Erro interno: lalloc(0, ))
+            if mode() == "n"
+                call feedkeys(":\<Esc>")
+            endif
         endif
     endif
 endfunction
 
 function SetRTextWidth()
     if !bufloaded(s:rdoctitle) || g:vimrplugin_newsize == 1
-        " Bug fix for Vim < 7.2.318
-        if !(has("win32") || has("win64"))
-            let curlang = v:lang
-            language C
-        endif
-
         let g:vimrplugin_newsize = 0
 
         " s:vimpager is used to calculate the width of the R help documentation
@@ -1982,9 +2006,6 @@ function SetRTextWidth()
         let htw = printf("%f", htwf)
         let g:rplugin_htw = substitute(htw, "\\..*", "", "")
         let g:rplugin_htw = g:rplugin_htw - (&number || &relativenumber) * &numberwidth
-        if !(has("win32") || has("win64"))
-            exe "language " . curlang
-        endif
     endif
 endfunction
 
@@ -2597,6 +2618,7 @@ function MakeRMenu()
     menu R.Send.-Sep6- <nul>
     call RCreateMenuItem("ni0", 'Send.Line', '<Plug>RSendLine', 'l', ':call SendLineToR("stay")')
     call RCreateMenuItem("ni0", 'Send.Line\ (and\ down)', '<Plug>RDSendLine', 'd', ':call SendLineToR("down")')
+    call RCreateMenuItem("ni0", 'Send.Line\ (and\ insert\ output)', '<Plug>RDSendLineAndInsertOutput', 'o', ':call SendLineToRAndInsertOutput()')
     call RCreateMenuItem("i", 'Send.Line\ (and\ new\ one)', '<Plug>RSendLAndOpenNewOne', 'q', ':call SendLineToR("newline")')
     call RCreateMenuItem("n", 'Send.Left\ part\ of\ line\ (cur)', '<Plug>RNLeftPart', 'r<Left>', ':call RSendPartOfLine("left", 0)')
     call RCreateMenuItem("n", 'Send.Right\ part\ of\ line\ (cur)', '<Plug>RNRightPart', 'r<Right>', ':call RSendPartOfLine("right", 0)')
@@ -2924,6 +2946,7 @@ function RCreateSendMaps()
     "-------------------------------------
     call RCreateMaps("ni", '<Plug>RSendLine', 'l', ':call SendLineToR("stay")')
     call RCreateMaps('ni0', '<Plug>RDSendLine', 'd', ':call SendLineToR("down")')
+    call RCreateMaps('ni0', '<Plug>RDSendLineAndInsertOutput', 'o', ':call SendLineToRAndInsertOutput()')
     call RCreateMaps('i', '<Plug>RSendLAndOpenNewOne', 'q', ':call SendLineToR("newline")')
     nmap <LocalLeader>r<Left> :call RSendPartOfLine("left", 0)<CR>
     nmap <LocalLeader>r<Right> :call RSendPartOfLine("right", 0)<CR>
@@ -3027,9 +3050,6 @@ command -nargs=? -complete=customlist,RLisObjs Rhelp :call RAskHelp(<q-args>)
 command -nargs=? -complete=dir RSourceDir :call RSourceDirectory(<q-args>)
 command RpluginConfig :runtime r-plugin/vimrconfig.vim
 
-" TODO: Delete these two commands (Nov 2013):
-command RUpdateObjList :call RWarningMsg("This command is deprecated. Now the list of objects is automatically updated by the R package vimcom.plus.")
-command -nargs=? RAddLibToList :call RWarningMsg("This command is deprecated. Now the list of objects is automatically updated by the R package vimcom.plus.")
 
 "==========================================================================
 " Global variables
@@ -3093,7 +3113,8 @@ endif
 
 " Old name of vimrplugin_assign option
 if exists("g:vimrplugin_underscore")
-    let g:vimrplugin_assign = g:vimrplugin_underscore
+    " 07/mar/2014:
+    call RWarningMsgInp("The option vimrplugin_underscore is deprecated. Use vimrplugin_assign instead.")
 endif
 
 " Variables whose default value is fixed
@@ -3126,6 +3147,7 @@ call RSetDefaultValue("g:vimrplugin_show_args",         0)
 call RSetDefaultValue("g:vimrplugin_never_unmake_menu", 0)
 call RSetDefaultValue("g:vimrplugin_insert_mode_cmds",  1)
 call RSetDefaultValue("g:vimrplugin_indent_commented",  1)
+call RSetDefaultValue("g:vimrplugin_source",         "''")
 call RSetDefaultValue("g:vimrplugin_rcomment_string", "'# '")
 call RSetDefaultValue("g:vimrplugin_vimpager",        "'tab'")
 call RSetDefaultValue("g:vimrplugin_objbr_place",     "'script,right'")
@@ -3155,18 +3177,13 @@ endfor
 unlet objbrplace
 unlet obpllen
 
-
-
-" python has priority over python3
+" python3 has priority over python
 if has("python3")
     command! -nargs=+ Py :py3 <args>
     command! -nargs=+ PyFile :py3file <args>
 elseif has("python")
     command! -nargs=+ Py :py <args>
     command! -nargs=+ PyFile :pyfile <args>
-elseif has("python3")
-    command! -nargs=+ Py :py3 <args>
-    command! -nargs=+ PyFile :py3file <args>
 else
     command! -nargs=+ Py :
     command! -nargs=+ PyFile :
@@ -3235,7 +3252,7 @@ endif
 
 " Check whether Tmux is OK
 if !has("win32") && !has("win64") && !has("gui_win32") && !has("gui_win64") && g:vimrplugin_applescript == 0
-    if !executable('tmux')
+    if !executable('tmux') && g:vimrplugin_source !~ "screenR"
         call RWarningMsgInp("Please, install the 'Tmux' application to enable the Vim-R-plugin.")
         let g:rplugin_failed = 1
         finish
@@ -3246,7 +3263,7 @@ if !has("win32") && !has("win64") && !has("gui_win32") && !has("gui_win64") && g
     if strlen(s:tmuxversion) != 3
         let s:tmuxversion = "1.0"
     endif
-    if s:tmuxversion < "1.5"
+    if s:tmuxversion < "1.5" && g:vimrplugin_source !~ "screenR"
         call RWarningMsgInp("Vim-R-plugin requires Tmux >= 1.5")
         let g:rplugin_failed = 1
         finish
@@ -3365,26 +3382,10 @@ if g:rplugin_home != g:rplugin_uservimfiles
     endif
 endif
 
-" If there is no functions.vim, copy the default one
-if !filereadable(g:rplugin_uservimfiles . "/r-plugin/functions.vim")
-    if filereadable("/usr/share/vim/addons/r-plugin/functions.vim")
-        let ffile = readfile("/usr/share/vim/addons/r-plugin/functions.vim")
-        call writefile(ffile, g:rplugin_uservimfiles . "/r-plugin/functions.vim")
-        unlet ffile
-    else
-        if g:rplugin_home != g:rplugin_uservimfiles && filereadable(g:rplugin_home . "/r-plugin/functions.vim")
-            let ffile = readfile(g:rplugin_home . "/r-plugin/functions.vim")
-            call writefile(ffile, g:rplugin_uservimfiles . "/r-plugin/functions.vim")
-            unlet ffile
-        endif
-    endif
-endif
-
 " Minimum width for the Object Browser
 if g:vimrplugin_objbr_w < 10
     let g:vimrplugin_objbr_w = 10
 endif
-
 
 " Control the menu 'R' and the tool bar buttons
 if !exists("g:rplugin_hasmenu")
@@ -3469,15 +3470,11 @@ autocmd BufLeave * if exists("b:rsource") | call delete(b:rsource) | endif
 
 let g:rplugin_firstbuffer = expand("%:p")
 let g:rplugin_running_objbr = 0
-let g:rplugin_has_new_lib = 0
-let g:rplugin_has_new_obj = 0
 let g:rplugin_ob_warn_shown = 0
 let g:rplugin_vimcomport = 0
 let g:rplugin_vimcom_pkg = "vimcom"
 let g:rplugin_lastrpl = ""
-let g:rplugin_ob_busy = 0
 let g:rplugin_hasRSFbutton = 0
-let g:rplugin_errlist = []
 let g:rplugin_tmuxsname = substitute("vimrplugin-" . g:rplugin_userlogin . localtime() . g:rplugin_firstbuffer, '\W', '', 'g')
 
 " If this is the Object Browser running in a Tmux pane, $VIMINSTANCEID is
@@ -3514,16 +3511,3 @@ else
     let g:rplugin_has_icons = len(globpath(&rtp, "bitmaps/RStart.png")) > 0
 endif
 
-" Compatibility with old versions (August 2013):
-if exists("g:vimrplugin_tmux")
-    call RWarningMsg("The option vimrplugin_tmux is deprecated and will be ignored.")
-endif
-if exists("g:vimrplugin_noscreenrc")
-    call RWarningMsg("The option vimrplugin_noscreenrc is deprecated and will be ignored.")
-endif
-if exists("g:vimrplugin_screenplugin")
-    call RWarningMsg("The option vimrplugin_screenplugin is deprecated and will be ignored.")
-endif
-if exists("g:vimrplugin_screenvsplit")
-    call RWarningMsg("The option vimrplugin_screenvsplit is deprecated. Please use vimrplugin_vsplit instead.")
-endif

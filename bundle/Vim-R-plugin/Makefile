@@ -14,15 +14,15 @@
 
 
 ###########################################################
-#   This script builds both the zip and the deb files of  #
-#   released versions of the plugin. The files are        #
-#   created at the /tmp directory.                        #
+#   This script builds both the Vimball and the deb       #
+#   files of released versions of the plugin. The files   #
+#   are created at the /tmp directory.                    #
 ###########################################################
 
 
 
 PLUGINHOME=`pwd`
-PLUGINVERSION=0.9.9.9
+PLUGINVERSION=1.0
 DEBIANTIME=`date -R`
 PLUGINRELEASEDATE=`date +"%Y-%m-%d"`
 VIM2HTML=/usr/local/share/vim/vim74/doc/vim2html.pl 
@@ -59,12 +59,17 @@ deb:
 	  - doc/r-plugin.txt\n\
 	  - ftdetect/r.vim\n\
 	  - ftplugin/r.vim\n\
+	  - ftplugin/r_rplugin.vim\n\
 	  - ftplugin/rbrowser.vim\n\
 	  - ftplugin/rdoc.vim\n\
 	  - ftplugin/rhelp.vim\n\
+	  - ftplugin/rhelp_rplugin.vim\n\
 	  - ftplugin/rnoweb.vim\n\
+	  - ftplugin/rnoweb_rplugin.vim\n\
 	  - ftplugin/rmd.vim\n\
+	  - ftplugin/rmd_rplugin.vim\n\
 	  - ftplugin/rrst.vim\n\
+	  - ftplugin/rrst_rplugin.vim\n\
 	  - indent/r.vim\n\
 	  - indent/rnoweb.vim\n\
 	  - indent/rhelp.vim\n\
@@ -76,6 +81,7 @@ deb:
 	  - r-plugin/global_r_plugin.vim\n\
 	  - r-plugin/tex_indent.vim\n\
 	  - r-plugin/vimrconfig.vim\n\
+	  - r-plugin/functions.vim\n\
 	  - syntax/r.vim\n\
 	  - syntax/rdoc.vim\n\
 	  - syntax/rout.vim\n\
@@ -176,5 +182,5 @@ htmldoc:
 	    sed -i -e 's/<\/pre><hr><pre>/  --------------------------------------------------------\n/' r-plugin.html ;\
 	    mv r-plugin.html vim-stylesheet.css /tmp )
 
-all: zip deb htmldoc
+all: vimball deb htmldoc
 

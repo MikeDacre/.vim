@@ -19,7 +19,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_python_frosted_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'post_args': '-vb' })
+    let makeprg = self.makeprgBuild({ 'args_after': '-vb' })
 
     let errorformat =
         \ '%f:%l:%c:%m,' .
@@ -39,7 +39,7 @@ function! SyntaxCheckers_python_frosted_GetLocList() dict
         if len(parts) >= 4
             let e["type"] = parts[1][0]
             let e["text"] = parts[3] . ' [' . parts[1] . ']'
-            let e["hl"] = '\V' . parts[2]
+            let e["hl"] = '\V' . escape(parts[2], '\')
         elseif e["text"] =~? '\v^I\d+:'
             let e["valid"] = 0
         else

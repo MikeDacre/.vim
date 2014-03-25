@@ -316,7 +316,7 @@ call s:WithConceal("definition", 'syn match pandocDefinitionBlockMark /^\s*[:~]/
 "
 " Unordered lists 
 syn match pandocUListItem /^\s*[*+-]\s\+/he=e-1
-"call s:WithConceal("list", 'syn match pandocUListItemBullet /[*+-]/ contained containedin=pandocUListItem', 'conceal cchar='.s:cchars["li"])
+call s:WithConceal("list", 'syn match pandocUListItemBullet /[*+-]/ contained containedin=pandocUListItem', 'conceal cchar='.s:cchars["li"])
 " Ordered lists
 syn match pandocListItem /^\s*\(\((*\d\+[.)]\+\)\|\((*\l[.)]\+\)\)\s\+/he=e-1
 syn match pandocListItem /^\s*(*\u[.)]\+\s\{2,}/he=e-1
