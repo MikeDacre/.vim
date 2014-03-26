@@ -22,7 +22,7 @@ set backspace+=indent,eol,start
 
 " Pathogen
 filetype off
-call pathogen#incubate()
+call pathogen#infect('bundle/{}')
 call pathogen#helptags()
 
 "General
