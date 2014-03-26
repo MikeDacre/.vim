@@ -1,0 +1,4 @@
+/doc/tags
+*.pyc
+*.swp
+/plugin/pantondoc/.ropeproject/*
