@@ -20,6 +20,7 @@ superjudge/tasklist-pathogen
 tpope/vim-fugitive
 tpope/vim-pathogen
 tpope/vim-surround
+vim-pandoc/vim-pandoc-after
 vim-pandoc/vim-pantondoc
 vim-pandoc/vim-pandoc-syntax
 vim-scripts/AutoComplPop
