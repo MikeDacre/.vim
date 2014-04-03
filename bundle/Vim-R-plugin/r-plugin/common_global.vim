@@ -925,9 +925,8 @@ function StartObjBrowser_Tmux()
                 \ 'if has("clientserver") && v:servername != ""',
                 \ "   exe 'Py SendToVimCom(" . '"\007' . "' . v:servername . '" . '")' . "'",
                 \ 'endif',
-                \ 'Py SendToVimCom("\003GlobalEnv [OB init]")',
+                \ 'Py SendToVimCom("\001Update OB [OB init TMUX]")',
                 \ 'sleep 50m',
-                \ 'Py SendToVimCom("\004Libraries [OB init]")',
                 \ 'if v:servername == ""',
                 \ '    sleep 100m',
                 \ '    call UpdateOB("GlobalEnv")',
@@ -1052,8 +1051,8 @@ function StartObjBrowser_Vim()
         unlet g:tmp_tmuxsname
         unlet g:tmp_curbufname
         exe "PyFile " . substitute(g:rplugin_home, " ", '\\ ', "g") . "/r-plugin/vimcom.py"
-        Py SendToVimCom("\003GlobalEnv [StartObjBrowser_Vim]")
-        Py SendToVimCom("\004Libraries [StartObjBrowser_Vim]")
+        Py SendToVimCom("\001Update OB [OB init GVIM]")
+        sleep 50m
         call UpdateOB("GlobalEnv")
     endif
     if wmsg != ""
@@ -1235,23 +1234,20 @@ function RInsert(cmd)
 endfunction
 
 function SendLineToRAndInsertOutput()
-  let line = getline(".")
-  call RInsert("print(" . line . ")")
-  if g:rplugin_lastrpl == "R is busy." || g:rplugin_lastrpl == "UNKNOWN" || g:rplugin_lastrpl =~ "^Error" || g:rplugin_lastrpl == "INVALID" || g:rplugin_lastrpl == "ERROR" || g:rplugin_lastrpl == "EMPTY" || g:rplugin_lastrpl == "No reply"
-    return
-  else
-    " comment the output
-    let lastLine = line("$")
-    let line = getline(".")
-    let i = line(".")
-    call cursor(i, 1)
-    while strlen(line) > 0 && i <= lastLine
-      call RSimpleCommentLine("normal", "c")
-      let i = line(".") + 1
-      call cursor(i, 1)
-      let line = substitute(getline("."), '^\s*', "", "")
-    endwhile
-  endif
+    let lin = getline(".")
+    call RInsert("print(" . lin . ")")
+    if g:rplugin_lastrpl == "R is busy." || g:rplugin_lastrpl == "UNKNOWN" || g:rplugin_lastrpl =~ "^Error" || g:rplugin_lastrpl == "INVALID" || g:rplugin_lastrpl == "ERROR" || g:rplugin_lastrpl == "EMPTY" || g:rplugin_lastrpl == "No reply"
+        return
+    else
+        let curpos = getpos(".")
+        " comment the output
+        let ilines = readfile(g:rplugin_esc_tmpdir . "/Rinsert")
+        for iln in ilines
+            call RSimpleCommentLine("normal", "c")
+            normal! j
+        endfor
+        call setpos(".", curpos)
+    endif
 endfunction
 
 " Function to send commands
@@ -1933,9 +1929,25 @@ function RAddToLibList(nlib, verbose)
     endif
 endfunction
 
+function RCheckLibList()
+    if g:rplugin_newliblist
+        call RealRFillLibList()
+        let g:rplugin_newliblist = 0
+    endif
+endfunction
+
 " This function is called by the R package vimcom.plus whenever a library is
 " loaded.
 function RFillLibList()
+    if &filetype == "r"
+        call RealRFillLibList()
+    else
+        " Avoid E341 (Internal error: lalloc(0, ))
+        let g:rplugin_newliblist = 1
+    endif
+endfunction
+
+function RealRFillLibList()
     " Update the list of objects for omnicompletion
     if filereadable($VIMRPLUGIN_TMPDIR . "/libnames_" . $VIMINSTANCEID)
         let newls = readfile($VIMRPLUGIN_TMPDIR . "/libnames_" . $VIMINSTANCEID)
@@ -1958,10 +1970,6 @@ function RFillLibList()
         call RUpdateFunSyntax(0)
         if &filetype != "r"
             silent exe "set filetype=" . &filetype
-            " Avoid E341 (Erro interno: lalloc(0, ))
-            if mode() == "n"
-                call feedkeys(":\<Esc>")
-            endif
         endif
     endif
 endfunction
@@ -3470,6 +3478,7 @@ autocmd BufLeave * if exists("b:rsource") | call delete(b:rsource) | endif
 
 let g:rplugin_firstbuffer = expand("%:p")
 let g:rplugin_running_objbr = 0
+let g:rplugin_newliblist = 0
 let g:rplugin_ob_warn_shown = 0
 let g:rplugin_vimcomport = 0
 let g:rplugin_vimcom_pkg = "vimcom"
