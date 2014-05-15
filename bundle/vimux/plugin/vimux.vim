@@ -12,6 +12,7 @@ command VimuxScrollDownInspect :call VimuxScrollDownInspect()
 command VimuxInterruptRunner :call VimuxInterruptRunner()
 command VimuxPromptCommand :call VimuxPromptCommand()
 command VimuxClearRunnerHistory :call VimuxClearRunnerHistory()
+command VimuxTogglePane :call VimuxTogglePane()
 
 function! VimuxRunLastCommand()
   if exists("g:VimuxRunnerIndex")
@@ -80,10 +81,25 @@ function! VimuxCloseRunner()
   endif
 endfunction
 
+function! VimuxTogglePane()
+  if exists("g:VimuxRunnerIndex")
+    if _VimuxRunnerType() == "window"
+        call system("tmux join-pane -d -s ".g:VimuxRunnerIndex." -p "._VimuxOption("g:VimuxHeight", 20))
+        let g:VimuxRunnerType = "pane"
+    elseif _VimuxRunnerType() == "pane"
+		let g:VimuxRunnerIndex=substitute(system("tmux break-pane -d -t ".g:VimuxRunnerIndex." -P -F '#{window_index}'"), "\n", "", "")
+        let g:VimuxRunnerType = "window"
+    endif
+  endif
+endfunction
+
 function! VimuxZoomRunner()
-  if exists("g:VimuxRunnerPaneIndex")
-    call system("tmux resize-pane -Z -t ".g:VimuxRunnerPaneIndex)
-    unlet g:VimuxRunnerPaneIndex
+  if exists("g:VimuxRunnerIndex")
+    if _VimuxRunnerType() == "pane"
+      call system("tmux resize-pane -Z -t ".g:VimuxRunnerIndex)
+    elseif _VimuxRunnerType() == "window"
+      call system("tmux select-window -t ".g:VimuxRunnerIndex)
+    endif
   endif
 endfunction
 
@@ -120,7 +136,7 @@ function! VimuxPromptCommand()
 endfunction
 
 function! _VimuxTmuxSession()
-  return _VimuxTmuxProperty("S")
+  return _VimuxTmuxProperty("#S")
 endfunction
 
 function! _VimuxTmuxIndex()
@@ -132,19 +148,19 @@ function! _VimuxTmuxIndex()
 endfunction
 
 function! _VimuxTmuxPaneIndex()
-    return _VimuxTmuxProperty("P")
+  return _VimuxTmuxProperty("#I.#P")
 endfunction
 
 function! _VimuxTmuxWindowIndex()
-  return _VimuxTmuxProperty("I")
+  return _VimuxTmuxProperty("#I")
 endfunction
 
 function! _VimuxNearestIndex()
-  let panes = split(system("tmux list-"._VimuxRunnerType()."s"), "\n")
+  let views = split(system("tmux list-"._VimuxRunnerType()."s"), "\n")
 
-  for pane in panes
-    if match(pane, "(active)") == -1
-      return split(pane, ":")[0]
+  for view in views
+    if match(view, "(active)") == -1
+      return split(view, ":")[0]
     endif
   endfor
 
@@ -164,9 +180,9 @@ function! _VimuxOption(option, default)
 endfunction
 
 function! _VimuxTmuxProperty(property)
-    return substitute(system("tmux display -p '#".a:property."'"), '\n$', '', '')
+    return substitute(system("tmux display -p '".a:property."'"), '\n$', '', '')
 endfunction
 
 function! _VimuxHasRunner(index)
-  return match(system("tmux list-"._VimuxRunnerType()."s"), a:index.":")
+  return match(system("tmux list-"._VimuxRunnerType()."s -a"), a:index.":")
 endfunction

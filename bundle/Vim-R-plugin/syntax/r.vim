@@ -3,7 +3,7 @@
 " Maintainer:	      Jakson Aquino <jalvesaq@gmail.com>
 " Former Maintainers: Vaidotas Zemlys <zemlys@gmail.com>
 " 		      Tom Payne <tom@tompayne.org>
-" Last Change:	      Sun Feb 23, 2014  08:53AM
+" Last Change:	      Wed May 07, 2014  11:18AM
 " Filenames:	      *.R *.r *.Rhistory *.Rt
 " 
 " NOTE: The highlighting of R functions is defined in the
@@ -38,7 +38,7 @@ syn match rOKeyword contained "@\(param\|return\|name\|rdname\|examples\|include
 syn match rOKeyword contained "@\(S3method\|TODO\|aliases\|alias\|assignee\|author\|callGraphDepth\|callGraph\)"
 syn match rOKeyword contained "@\(callGraphPrimitives\|concept\|exportClass\|exportMethod\|exportPattern\|export\|formals\)"
 syn match rOKeyword contained "@\(format\|importClassesFrom\|importFrom\|importMethodsFrom\|import\|keywords\)"
-syn match rOKeyword contained "@\(method\|nord\|note\|references\|seealso\|setClass\|slot\|source\|title\|usage\)"
+syn match rOKeyword contained "@\(method\|noRd\|note\|references\|seealso\|setClass\|slot\|source\|title\|usage\)"
 syn match rOComment contains=@Spell,rOKeyword "#'.*"
 
 
@@ -120,7 +120,7 @@ if &filetype != "rmd" && &filetype != "rrst"
 else
     syn match rOperator    "[|!<>^~`/:]"
 endif
-syn match rOperator    "%\{2}\|%\S*%"
+syn match rOperator    "%\{2}\|%\S\{-}%"
 syn match rOpError  '\*\{3}'
 syn match rOpError  '//'
 syn match rOpError  '&&&'
