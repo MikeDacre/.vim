@@ -23,7 +23,9 @@ r-plugin/common_global.vim
 r-plugin/global_r_plugin.vim
 r-plugin/objlist/README
 r-plugin/r.snippets
-r-plugin/tex_indent.vim
+r-plugin/nvimcom.py
+r-plugin/nvimserver.py
+r-plugin/timer.sh
 r-plugin/vimcom.py
 r-plugin/vimrconfig.vim
 r-plugin/windows.py
