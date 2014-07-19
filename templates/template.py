@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8 tabstop=4 expandtab shiftwidth=4 softtabstop=4
 #
@@ -14,7 +14,7 @@
 #       LICENSE: MIT License, Property of Stanford, Use as you wish
 #       VERSION: 0.1
 #       CREATED: %FDATE%
-# Last modified: 2014-01-23 08:14
+# Last modified: 2014-07-18 14:51
 #
 #   DESCRIPTION: %HERE%
 #
