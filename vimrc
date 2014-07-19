@@ -8,6 +8,7 @@ set nocompatible
 "  n... :  where to save the viminfo files
 set viminfo='10,\"100,:20,%,n~/.viminfo"'
 set nofoldenable
+set foldmethod=manual
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 set ttymouse=xterm2
@@ -320,7 +321,7 @@ nnoremap <unique> <silent><leader>sw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/
  
 " Template for specific files
 au BufNewFile  *Process.txt 0r ~/.vim/templates/process_TEMPLATE
-au BufRead,BufNewFile *.txt set filetype=pandoc
+"au BufRead,BufNewFile *.txt set filetype=pandoc
 au FileType pandoc setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 au BufRead,BufNewFile *.md set filetype=mmd
 au BufRead,BufNewFile *.rst set filetype=rst
