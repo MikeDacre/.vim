@@ -50,24 +50,11 @@ function! s:TableEchoCell() "{{{1
   endif
 endfunction
 
-function! s:EnableTableSyntax() "{{{1
-  exec 'syntax match Table'
-        \ '/' . tablemode#table#StartExpr() . '\zs|.\+|\ze' . tablemode#table#EndExpr() . '/'
-        \ 'contains=TableBorder,TableSeparator,TableColumnAlign containedin=ALL'
-  syntax match TableSeparator /|/ contained
-  syntax match TableColumnAlign /:/ contained
-  syntax match TableBorder /[\-+]\+/ contained
-endfunction
-
 augroup TableMode
   au!
 
-  autocmd Syntax * call <SID>EnableTableSyntax()
+  autocmd Syntax * if tablemode#IsActive() | call tablemode#SyntaxEnable() | endif
 augroup END
-
-hi! link TableBorder Delimiter
-hi! link TableSeparator Delimiter
-hi! link TableColumnAlign Type
 
 " Define Commands & Mappings {{{1
 if !g:table_mode_always_active "{{{2
@@ -92,6 +79,10 @@ command! TableAddFormula call tablemode#spreadsheet#formula#Add()
 command! TableModeRealign call tablemode#table#Realign('.')
 command! TableEvalFormulaLine call tablemode#spreadsheet#formula#EvaluateFormulaLine()
 
+" '|' is a special character, we need to map <Bar> instead
+"if g:table_mode_separator ==# '|' | let separator_map = '<Bar>' | endif
+"execute 'inoremap <silent> <Plug>(table-mode-tableize)' separator_map . '<Esc>:call tablemode#TableizeInsertMode()<CR>a'
+
 nnoremap <silent> <Plug>(table-mode-tableize) :Tableize<CR>
 xnoremap <silent> <Plug>(table-mode-tableize) :Tableize<CR>
 xnoremap <silent> <Plug>(table-mode-tableize-delimiter) :<C-U>call tablemode#TableizeByDelimiter()<CR>
@@ -105,6 +96,8 @@ nnoremap <silent> <Plug>(table-mode-motion-right) :<C-U>call tablemode#spreadshe
 
 onoremap <silent> <Plug>(table-mode-cell-text-object-a) :<C-U>call tablemode#spreadsheet#cell#TextObject(0)<CR>
 onoremap <silent> <Plug>(table-mode-cell-text-object-i) :<C-U>call tablemode#spreadsheet#cell#TextObject(1)<CR>
+xnoremap <silent> <Plug>(table-mode-cell-text-object-a) :<C-U>call tablemode#spreadsheet#cell#TextObject(0)<CR>
+xnoremap <silent> <Plug>(table-mode-cell-text-object-i) :<C-U>call tablemode#spreadsheet#cell#TextObject(1)<CR>
 
 nnoremap <silent> <Plug>(table-mode-delete-row) :call tablemode#spreadsheet#DeleteRow()<CR>
 nnoremap <silent> <Plug>(table-mode-delete-column) :call tablemode#spreadsheet#DeleteColumn()<CR>

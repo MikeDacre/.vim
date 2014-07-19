@@ -2,25 +2,21 @@
 import os.path
 import sys
 import threading
+import warnings
 from contextlib import contextmanager
 
 import vim # noqa
-
-
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+from ._compat import StringIO, PY2
 
 
 DEBUG = int(vim.eval('g:pymode_debug'))
-PY2 = sys.version_info[0] == 2
+
+warnings.filterwarnings('ignore')
 
 
 @contextmanager
 def silence_stderr():
     """ Redirect stderr. """
-
     if DEBUG:
         yield
 
@@ -37,7 +33,6 @@ def silence_stderr():
 
 def patch_paths():
     """ Function description. """
-
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'libs'))
 
     if PY2:

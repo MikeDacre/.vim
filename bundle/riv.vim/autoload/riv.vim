@@ -3,7 +3,7 @@
 "    File: riv.vim
 " Summary: Riv autoload main
 "  Author: Rykka G.F
-"  Update: 2012-10-05
+"  Update: 2014-07-12
 "=============================================
 let s:cpo_save = &cpo
 set cpo-=C
@@ -99,6 +99,7 @@ let s:default.options = {
     \'todo_default_group' : 0,
     \'todo_datestamp'     : 1,
     \'todo_keywords'      : "TODO,DONE;FIXME,FIXED;START,PROCESS,STOP",
+    \'disable_folding'    : 0,
     \'fold_blank'         : 2,
     \'fold_level'         : 3,
     \'fold_section_mark'  : ".",
@@ -124,6 +125,9 @@ let s:default.options = {
     \'i_tab_user_cmd'     : "",
     \'i_stab_user_cmd'    : "",
     \'ignored_imaps'      : "",
+    \'ignored_nmaps'      : "",
+    \'ignored_vmaps'      : "",
+    \'ignored_maps'       : "",
     \'month_names'        : 'January,February,March,April,May,June,July,'
                           \.'August,September,October,November,December',
     \'python_rst_hl'      : 0,
@@ -270,7 +274,7 @@ fun! riv#load_conf() "{{{1
     let s:t.time_fmt  = "%Y-%m-%d"
     let s:t.sect_punc = '!"#$%&''()*+,-./:;<=>?@[\]^_`{|}~'
     let s:t.list_lvs  =  ["*","+","-"]
-    let s:t.highlight_code = riv#ptn#norm_list(split(g:riv_highlight_code,','))
+    let s:t.highlight_code = split(g:riv_highlight_code,',')
     let s:t.month_names = split(g:riv_month_names,',')
     
     let s:c.sect_lvs = split(g:riv_section_levels,'\zs')
@@ -294,9 +298,14 @@ fun! riv#load_conf() "{{{1
         let s:c.i_stab_user_cmd = g:riv_i_stab_user_cmd
     endif
     
-    for key in split(g:riv_ignored_imaps,',')
-        call remove(g:riv_default.buf_imaps, key)
-    endfor
+    " This is Invalid Now!!
+    " for key in split(g:riv_ignored_imaps,',')
+    "     call (g:riv_default.buf_imaps, key)
+    " endfor
+    let g:riv_default.ignored_imaps = split(g:riv_ignored_imaps,',')
+    let g:riv_default.ignored_nmaps = split(g:riv_ignored_nmaps,',')
+    let g:riv_default.ignored_vmaps = split(g:riv_ignored_vmaps,',')
+    let g:riv_default.ignored_maps = split(g:riv_ignored_maps,',')
 
     if empty(g:riv_ft_browser) "{{{
         if has('win32') || has('win64')
@@ -345,10 +354,10 @@ endfun "}}}
 
 fun! riv#buf_load_aug() "{{{
     aug RIV_BUFFER "{{{
-        if exists("g:riv_auto_format_table") "{{{
+        if exists("g:riv_auto_format_table") && g:riv_auto_format_table == 1 "{{{
             au! InsertLeave <buffer> call riv#table#format_pos()
         endif "}}}
-        if exists("g:riv_link_cursor_hl") "{{{
+        if exists("g:riv_link_cursor_hl")  && g:riv_link_cursor_hl == 1 "{{{
             " cursor_link_highlight
             au! CursorMoved,CursorMovedI <buffer>  call riv#link#hi_hover()
             " clear the highlight before bufwin/winleave
@@ -371,8 +380,11 @@ fun! riv#buf_load_syn() "{{{
 endfun "}}}
 fun! riv#buf_init() "{{{
     " for the rst buffer
-    setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) 
-    setl foldtext=riv#fold#text()
+    if g:riv_disable_folding == 0
+        setl foldmethod=expr foldexpr=riv#fold#expr(v:lnum) 
+        setl foldtext=riv#fold#text()
+    endif
+
     setl comments=fb:.. commentstring=..\ %s 
     setl formatoptions+=tcroql expandtab
     let b:undo_ftplugin = "setl fdm< fde< fdt< com< cms< et< fo<"
