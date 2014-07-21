@@ -13,7 +13,7 @@
 #       LICENCE: Open Source
 #       CREATED: 11/10/2011 22:16:34 PST
 #      REVISION: 1.1
-# Last modified: 2014-01-31 15:00
+# Last modified: 2014-07-21 10:10
 #===============================================================================
 
 VIM_HOME="$HOME/.vim"
@@ -35,11 +35,13 @@ fix_plugin_bugs () {
 
   # Link new templates
   cd $VIM_HOME/templates
-  for i in template.*; do
+  for i in \=template.*; do
     cd $VIM_HOME/bundle/vim-template/templates/
     rm $i 2>/dev/null 
     ln -f -s $VIM_HOME/templates/$i $i
   done
+  cd $VIM_HOME/bundle/vim-table-mode/plugin/
+  patch < $VIM_HOME/patches/table-mode.patch
   cd $VIM_HOME
 
   # Delete broken links
