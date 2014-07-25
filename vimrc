@@ -112,7 +112,7 @@ set ruler
 set number
 set virtualedit=all
 set showmatch matchtime=2
-set history=50000
+set history=5000
 set updatetime=1000
 set backup
 set incsearch
