@@ -1,22 +1,3 @@
-" ==============================  Header ======================================
-" File:          autoload/tablemode/spreadsheet.vim
-" Description:   Table mode for vim for creating neat tables.
-" Author:        Dhruva Sagar <http://dhruvasagar.com/>
-" License:       MIT (http://www.opensource.org/licenses/MIT)
-" Website:       https://github.com/dhruvasagar/vim-table-mode
-" Note:          This plugin was heavily inspired by the 'CucumberTables.vim'
-"                (https://gist.github.com/tpope/287147) plugin by Tim Pope.
-"
-" Copyright Notice:
-"                Permission is hereby granted to use and distribute this code,
-"                with or without modifications, provided that this copyright
-"                notice is copied with it. Like anything else that's free,
-"                table-mode.vim is provided *as is* and comes with no warranty
-"                of any kind, either expressed or implied. In no event will
-"                the copyright holder be liable for any damamges resulting
-"                from the use of this software.
-" =============================================================================
-
 " Private Functions {{{1
 function! s:Sum(list) "{{{2
   let result = 0.0
@@ -37,20 +18,11 @@ function! s:Average(list) "{{{2
 endfunction
 
 " Public Functions {{{1
-function! tablemode#spreadsheet#sid() "{{{2
-  return maparg('<sid>', 'n')
-endfunction
-nnoremap <sid> <sid>
-
-function! tablemode#spreadsheet#scope() "{{{2
-  return s:
-endfunction
-
 function! tablemode#spreadsheet#GetFirstRow(line) "{{{2
   if tablemode#table#IsRow(a:line)
     let line = tablemode#utils#line(a:line)
 
-    while tablemode#table#IsRow(line - 1) || tablemode#table#IsBorder(line - 1)
+    while !tablemode#table#IsHeader(line - 1) && (tablemode#table#IsRow(line - 1) || tablemode#table#IsBorder(line - 1))
       let line -= 1
     endwhile
     if tablemode#table#IsBorder(line) | let line += 1 | endif
@@ -105,7 +77,7 @@ function! tablemode#spreadsheet#RowNr(line) "{{{2
   let line = tablemode#utils#line(a:line)
 
   let rowNr = 0
-  while tablemode#table#IsRow(line) || tablemode#table#IsBorder(line)
+  while !tablemode#table#IsHeader(line) && (tablemode#table#IsRow(line) || tablemode#table#IsBorder(line))
     if tablemode#table#IsRow(line) | let rowNr += 1 | endif
     let line -= 1
   endwhile
@@ -117,13 +89,13 @@ function! tablemode#spreadsheet#RowCount(line) "{{{2
   let line = tablemode#utils#line(a:line)
 
   let [tline, totalRowCount] = [line, 0]
-  while tablemode#table#IsRow(tline) || tablemode#table#IsBorder(tline)
+  while !tablemode#table#IsHeader(tline) && (tablemode#table#IsRow(tline) || tablemode#table#IsBorder(tline))
     if tablemode#table#IsRow(tline) | let totalRowCount += 1 | endif
     let tline -= 1
   endwhile
 
   let tline = line + 1
-  while tablemode#table#IsRow(tline) || tablemode#table#IsBorder(tline)
+  while !tablemode#table#IsHeader(tline) && (tablemode#table#IsRow(tline) || tablemode#table#IsBorder(tline))
     if tablemode#table#IsRow(tline) | let totalRowCount += 1 | endif
     let tline += 1
   endwhile
@@ -163,32 +135,6 @@ function! tablemode#spreadsheet#MoveToStartOfCell() "{{{2
     normal! 2l
   else
     execute 'normal! F' . g:table_mode_separator . '2l'
-  endif
-endfunction
-
-function! tablemode#spreadsheet#GetFirstRow(line) "{{{2
-  if tablemode#table#IsRow(a:line)
-    let line = tablemode#utils#line(a:line)
-
-    while tablemode#table#IsRow(line - 1) || tablemode#table#IsBorder(line - 1)
-      let line -= 1
-    endwhile
-    if tablemode#table#IsBorder(line) | let line += 1 | endif
-
-    return line
-  endif
-endfunction
-
-function! tablemode#spreadsheet#GetLastRow(line) "{{{2
-  if tablemode#table#IsRow(a:line)
-    let line = tablemode#utils#line(a:line)
-
-    while tablemode#table#IsRow(line + 1) || tablemode#table#IsBorder(line + 1)
-      let line += 1
-    endwhile
-    if tablemode#table#IsBorder(line) | let line -= 1 | endif
-
-    return line
   endif
 endfunction
 
@@ -233,4 +179,3 @@ function! tablemode#spreadsheet#Average(range, ...) abort "{{{2
   call insert(args, a:range)
   return s:Average(call('tablemode#spreadsheet#cell#GetCellRange', args))
 endfunction
-

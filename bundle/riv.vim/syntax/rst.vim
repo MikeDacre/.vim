@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:         reStructuredText documentation format
 " Maintainer:       Nikolai Weibull <now@bitwi.se>
-" Latest Revision:  2014-06-28
+" Latest Revision:  2014-08-14
 
 if exists("b:current_syntax")
   finish
@@ -55,26 +55,46 @@ syn match   rstSimpleTableLines     contained display
 syn cluster rstDirectives           contains=rstFootnote,rstCitation,
       \ rstHyperlinkTarget,rstExDirective
 
-syn match   rstExplicitMarkup       '^\.\.\_s'
-      \ nextgroup=@rstDirectives,rstComment,rstSubstitutionDefinition
-
-let s:ReferenceName = '[[:alnum:]]\+\%([_.-][[:alnum:]]\+\)*'
 
 
-execute 'syn region rstComment contained' .
-      \ ' start=/.*/'
-      \ ' skip=+^$+' 
-      \ ' end=/^\s\@!/ contains=@rstCommentGroup'
+" NOTE: Fix #66 https://github.com/Rykka/riv.vim/pull/66
+" Here we match all the whitespace that's more than 'z1' and ignore it. (skip=#^\(\(\z1\s\+\)\@>\S\)#')
+" See 'syn-skip', 'syn-keepend' and '\@>'
+"
+execute 'syn region rstExplicitMarkup keepend'
+        \ ' start=#^\z(\s*\)\.\.\s#'
+        \ ' skip=#^\(\(\z1\s\+\)\@>\S\|\s*$\)#'
+        \ ' end=#^\ze\s*\S#'
+        \ ' contains=rstExplicitMarkupDot,@rstDirectives,rstSubstitutionDefinition,rstComment'
+
+syn match   rstExplicitMarkupDot       '^\s*\.\.\_s' contained
+      \ nextgroup=@rstDirectives,rstSubstitutionDefinition,rstComment
+
+" NOTE: the rst recongnize unicode_char_ target and refernce
+" So use [^[:punct:][:space:]] here.
+let s:ReferenceName = '[^[:cntrl:][:punct:][:space:]]\+\%([_.-][^[:space:][:punct:][:cntrl:]]\+\)*'
+
+" NOTE: #66 If we use '.*' all explicit markup will became comment.
+" So use '[^.]' here. us \_s to skip the exdirective match
+" See '/collection' 
+" Also use '\@='to match \_s with zero width
+execute 'syn region rstComment contained'
+        \ ' start=#[^.|[_[:blank:]]\+[^:[:blank:]]\_s\@=#'
+        \ ' skip=+^$+' .
+        \ ' end=+^\s\@!+'
+        \ ' contains=@rstCommentGroup'
 
 execute 'syn region rstFootnote contained matchgroup=rstDirective' .
       \ ' start=+\[\%(\d\+\|#\%(' . s:ReferenceName . '\)\=\|\*\)\]\_s+' .
       \ ' skip=+^$+' .
-      \ ' end=+^\s\@!+ contains=@rstCruft,@NoSpell'
+      \ ' end=+^\s\@!+'
+      \ ' contains=@rstCruft,@NoSpell'
 
 execute 'syn region rstCitation contained matchgroup=rstDirective' .
       \ ' start=+\[' . s:ReferenceName . '\]\_s+' .
       \ ' skip=+^$+' .
-      \ ' end=+^\s\@!+ contains=@s:ReferenceNamerstCruft,@NoSpell'
+      \ ' end=+^\s\@!+'
+      \ ' contains=@s:ReferenceNamerstCruft,@NoSpell'
 
 syn region rstHyperlinkTarget contained matchgroup=rstDirective
       \ start='_\%(_\|[^:\\]*\%(\\.[^:\\]*\)*\):\_s' skip=+^$+ end=+^\s\@!+
@@ -168,6 +188,7 @@ hi def link rstDoctestBlock                 PreProc
 hi def link rstTableLines                   rstDelimiter
 hi def link rstSimpleTableLines             rstTableLines
 hi def link rstExplicitMarkup               rstDirective
+hi def link rstExplicitMarkupDot            PreProc
 hi def link rstDirective                    Keyword
 hi def link rstFootnote                     String
 hi def link rstCitation                     String
@@ -179,7 +200,7 @@ hi def link rstDelimiter                    Delimiter
 hi def      rstEmphasis                     term=italic cterm=italic gui=italic
 hi def link rstStrongEmphasis               Special
 "term=bold cterm=bold gui=bold
-hi def link rstInterpretedTextOrHyperlinkReference  Identifier
+hi def link rstInterpretedTextOrHyperlinkReference Float 
 hi def link rstInlineLiteral                String
 hi def link rstSubstitutionReference        PreProc
 hi def link rstInlineInternalTargets        Identifier

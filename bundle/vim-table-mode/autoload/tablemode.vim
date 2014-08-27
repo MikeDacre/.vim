@@ -1,31 +1,4 @@
-" ==============================  Header ======================================
-" File:          autoload/tablemode.vim
-" Description:   Table mode for vim for creating neat tables.
-" Author:        Dhruva Sagar <http://dhruvasagar.com/>
-" License:       MIT (http://www.opensource.org/licenses/MIT)
-" Website:       https://github.com/dhruvasagar/vim-table-mode
-" Note:          This plugin was heavily inspired by the 'CucumberTables.vim'
-"                (https://gist.github.com/tpope/287147) plugin by Tim Pope.
-"
-" Copyright Notice:
-"                Permission is hereby granted to use and distribute this code,
-"                with or without modifications, provided that this copyright
-"                notice is copied with it. Like anything else that's free,
-"                table-mode.vim is provided *as is* and comes with no warranty
-"                of any kind, either expressed or implied. In no event will
-"                the copyright holder be liable for any damamges resulting
-"                from the use of this software.
-" =============================================================================
-
 " Private Functions {{{1
-function! s:sub(str,pat,rep) abort "{{{2
-  return substitute(a:str,'\v\C'.a:pat,a:rep,'')
-endfunction
-
-function! s:gsub(str,pat,rep) abort "{{{2
-  return substitute(a:str,'\v\C'.a:pat,a:rep,'g')
-endfunction
-
 function! s:SetBufferOptDefault(opt, val) "{{{2
   if !exists('b:' . a:opt)
     let b:{a:opt} = a:val
@@ -53,35 +26,37 @@ function! s:ToggleMapping() "{{{2
   " '|' is a special character, we need to map <Bar> instead
   if g:table_mode_separator ==# '|' | let separator_map = '<Bar>' | endif
 
-  if tablemode#IsActive()
-    call s:Map('<Plug>(table-mode-tableize)', separator_map, 'i')
-    call s:Map('<Plug>(table-mode-motion-up)', '{<Bar>', 'n')
-    call s:Map('<Plug>(table-mode-motion-down)', '}<Bar>', 'n')
-    call s:Map('<Plug>(table-mode-motion-left)', '[<Bar>', 'n')
-    call s:Map('<Plug>(table-mode-motion-right)', ']<Bar>', 'n')
+  if !g:table_mode_disable_mappings
+    if tablemode#IsActive()
+      call s:Map('<Plug>(table-mode-tableize)', separator_map, 'i')
+      call s:Map('<Plug>(table-mode-motion-up)', '{<Bar>', 'n')
+      call s:Map('<Plug>(table-mode-motion-down)', '}<Bar>', 'n')
+      call s:Map('<Plug>(table-mode-motion-left)', '[<Bar>', 'n')
+      call s:Map('<Plug>(table-mode-motion-right)', ']<Bar>', 'n')
 
-    call s:Map('<Plug>(table-mode-cell-text-object-a)', 'a<Bar>', 'ox')
-    call s:Map('<Plug>(table-mode-cell-text-object-i)', 'i<Bar>', 'ox')
+      call s:Map('<Plug>(table-mode-cell-text-object-a)', 'a<Bar>', 'ox')
+      call s:Map('<Plug>(table-mode-cell-text-object-i)', 'i<Bar>', 'ox')
 
-    call s:Map('<Plug>(table-mode-realign)', '<Leader>tr', 'n')
-    call s:Map('<Plug>(table-mode-delete-row)', '<Leader>tdd', 'n')
-    call s:Map('<Plug>(table-mode-delete-column)', '<Leader>tdc', 'n')
-    call s:Map('<Plug>(table-mode-add-formula)', '<Leader>tfa', 'n')
-    call s:Map('<Plug>(table-mode-eval-formula)', '<Leader>tfe', 'n')
-    call s:Map('<Plug>(table-mode-echo-cell)', '<Leader>t?', 'n')
-  else
-    call s:UnMap(separator_map, 'i')
-    call s:UnMap('{<Bar>', 'n')
-    call s:UnMap('}<Bar>', 'n')
-    call s:UnMap('[<Bar>', 'n')
-    call s:UnMap(']<Bar>', 'n')
-    call s:UnMap('a<Bar>', 'o')
-    call s:UnMap('i<Bar>', 'o')
-    call s:UnMap('<Leader>tdd', 'n')
-    call s:UnMap('<Leader>tdc', 'n')
-    call s:UnMap('<Leader>tfa', 'n')
-    call s:UnMap('<Leader>tfe', 'n')
-    call s:UnMap('<Leader>t?', 'n')
+      call s:Map('<Plug>(table-mode-realign)', '<Leader>tr', 'n')
+      call s:Map('<Plug>(table-mode-delete-row)', '<Leader>tdd', 'n')
+      call s:Map('<Plug>(table-mode-delete-column)', '<Leader>tdc', 'n')
+      call s:Map('<Plug>(table-mode-add-formula)', '<Leader>tfa', 'n')
+      call s:Map('<Plug>(table-mode-eval-formula)', '<Leader>tfe', 'n')
+      call s:Map('<Plug>(table-mode-echo-cell)', '<Leader>t?', 'n')
+    else
+      call s:UnMap(separator_map, 'i')
+      call s:UnMap('{<Bar>', 'n')
+      call s:UnMap('}<Bar>', 'n')
+      call s:UnMap('[<Bar>', 'n')
+      call s:UnMap(']<Bar>', 'n')
+      call s:UnMap('a<Bar>', 'o')
+      call s:UnMap('i<Bar>', 'o')
+      call s:UnMap('<Leader>tdd', 'n')
+      call s:UnMap('<Leader>tdc', 'n')
+      call s:UnMap('<Leader>tfa', 'n')
+      call s:UnMap('<Leader>tfe', 'n')
+      call s:UnMap('<Leader>t?', 'n')
+    endif
   endif
 endfunction
 
@@ -117,6 +92,7 @@ function! s:SetActive(bool) "{{{2
   let b:table_mode_active = a:bool
   call s:ToggleSyntax()
   call s:ToggleMapping()
+  if b:table_mode_active | echo "table-mode enabled" | else | echo "table-mode disabled" | endif
 endfunction
 
 function! s:ConvertDelimiterToSeparator(line, ...) "{{{2
@@ -152,15 +128,6 @@ function! s:Tableizeline(line, ...) "{{{2
 endfunction
 
 " Public API {{{1
-function! tablemode#sid() "{{{2
-  return maparg('<SID>', 'n')
-endfunction
-nnoremap <SID> <SID>
-
-function! tablemode#scope() "{{{2
-  return s:
-endfunction
-
 function! tablemode#IsActive() "{{{2
   if g:table_mode_always_active | return 1 | endif
 
