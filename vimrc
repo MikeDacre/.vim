@@ -418,6 +418,7 @@ let g:bufExplorerFindActive=1
 map <leader>be :BufExplorer<CR>
 
 " R Plugin
-let g:vimrplugin_notmuxconf = 1
+"let g:vimrplugin_notmuxconf = 1
 let g:vimrplugin_vsplit = 1
-let g:ScreenImpl = 'Tmux'
+"let g:ScreenImpl = 'Tmux'
+nmap <LocalLeader>ll <Plug>RSendLine
