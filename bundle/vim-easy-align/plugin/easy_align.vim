@@ -1,4 +1,4 @@
-" Copyright (c) 2013 Junegunn Choi
+" Copyright (c) 2014 Junegunn Choi
 "
 " MIT License
 "
@@ -75,6 +75,12 @@ function! s:set_repeat()
 endfunction
 
 function! s:generic_easy_align_op(type, vmode, live)
+  if !&modifiable
+    if a:vmode
+      normal! gv
+    endif
+    return
+  endif
   let sel_save = &selection
   let &selection = "inclusive"
 

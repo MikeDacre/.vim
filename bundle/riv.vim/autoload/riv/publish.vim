@@ -287,9 +287,11 @@ fun! s:single2(ft, file, browse) "{{{
         if a:ft == "latex"
             exe 'sp ' out_file
         elseif a:ft == "odt"
-            call s:sys(g:riv_ft_browser . ' '. shellescape(out_file) . ' &')
+            " call s:sys(g:riv_ft_browser . ' '. shellescape(out_file) . ' &')
+            call riv#util#open(shellescape(out_file))
         else
-            call s:sys(g:riv_web_browser . ' '. shellescape(out_file) . ' &')
+            " call s:sys(g:riv_web_browser . ' '. shellescape(out_file) . ' &')
+            call riv#util#open(shellescape(out_file))
         endif
     endif
 endfun "}}}
@@ -361,17 +363,20 @@ fun! riv#publish#2(ft, file, path, browse) "{{{
         if a:ft == "latex"
             exe 'sp ' out_file
         elseif a:ft == "odt"
-            call s:sys(g:riv_ft_browser . ' '. out_file . ' &')
+            " call s:sys(g:riv_ft_browser . ' '. out_file . ' &')
+            call riv#util#open(out_file)
         else
             let escaped_path = substitute(out_file, ' ', '\\ ', 'g')
-            call s:sys(g:riv_web_browser . ' '. escaped_path . ' &')
+            " call s:sys(g:riv_web_browser . ' '. escaped_path . ' &')
+            call riv#util#open(escaped_path)
         endif
     endif
 endfun "}}}
 
 fun! riv#publish#browse() "{{{
     let path = riv#path#build_ft('html') .  'index.html'
-    call s:sys(g:riv_web_browser . ' '. shellescape(path) . ' &')
+    " call s:sys(g:riv_web_browser . ' '. shellescape(path) . ' &')
+    call riv#util#open(shellescape(path))
 endfun "}}}
 fun! riv#publish#open_path() "{{{
     exe 'sp ' riv#path#build_path()

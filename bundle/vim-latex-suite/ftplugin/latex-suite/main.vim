@@ -418,7 +418,7 @@ function! Tex_GetMainFileName(...)
 		return retval
 	endif
 
-	let s:origdir = fnameescape(getcwd())
+	let l:origdir = fnameescape(getcwd())
 
 	let dirmodifier = '%:p:h'
 	let dirLast = fnameescape(expand(dirmodifier))
@@ -449,7 +449,7 @@ function! Tex_GetMainFileName(...)
 		let lheadfile = expand('%'.modifier)
 	endif
 
-	exe 'cd '.s:origdir
+	exe 'cd '.l:origdir
 
 	" NOTE: The caller of this function needs to escape the file name with
 	"       fnameescape() . The reason its not done here is that escaping is not
@@ -546,7 +546,7 @@ function! Tex_GetErrorList()
 	let _a = @a
 	redir @a | silent! clist | redir END
 	let errlist = @a
-	let @a = _a
+	call setreg("a", _a, "c")
 
 	if errlist =~ 'E42: '
 		let errlist = ''
@@ -560,7 +560,7 @@ endfunction " }}}
 "              us to create temporary files in a specified directory.
 function! Tex_GetTempName(dirname)
 	let prefix = 'latexSuiteTemp'
-	let slash = (a:dirname =~ '\\\|/$' ? '' : '/')
+	let slash = (a:dirname =~ '\\$\|/$' ? '' : '/')
 	let i = 0
 	while filereadable(a:dirname.slash.prefix.i.'.tex') && i < 1000
 		let i = i + 1
@@ -981,7 +981,7 @@ else
 		let _a = @a
 		silent! normal! ggVG"ay
 		let retval = @a
-		let @a = _a
+		call setreg("a", _a, "c")
 
 		silent! bd
 		let &report = _report

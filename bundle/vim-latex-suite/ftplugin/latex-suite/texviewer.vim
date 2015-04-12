@@ -59,6 +59,7 @@ function! Tex_Complete(what, where)
 		let s:curline = strpart(getline('.'), 0, col('.'))
 		let s:prefix = matchstr(s:curline, '.*{\zs.\{-}\(}\|$\)')
 		let s:refprefix = ''
+
 		" a command is of the type
 		" \psfig[option=value]{figure=}
 		" Thus
@@ -67,26 +68,37 @@ function! Tex_Complete(what, where)
 		" from which we need to extract
 		" 	s:type = 'psfig'
 		" 	s:typeoption = '[option=value]'
-		let pattern = '.*\\\(\w\{-}\)\(\[.\{-}\]\)*{\([^ [\]\t}]\+\)\?$'
-		if s:curline =~ pattern
-			let s:type = substitute(s:curline, pattern, '\1', 'e')
-			let s:typeoption = substitute(s:curline, pattern, '\2', 'e')
+		let commandpattern = '.*\\\(\w\{-}\)\(\[.\{-}\]\)*{\([^ [\]\t}]\+\)\?$'
+
+		" An equation reference is detected by the following pattern.
+		" It matches a opening parenthesis, followed by
+		" a mix of letters, numbers and dots.
+		" It does not match something like "(theorem.1",
+		" since this should be expanded to something like
+		" "(\ref{thm1}".
+		let eqpattern = '^.\{-}\((\%(theorem\|lemma\|definition\|remark\|proposition\|corollary\|assumption\|figure\|table\|algorithm\|part\|chapter\|section\|subsection\|subsubsection\|paragraph\|subparagraph\)\@!\(\w\|\.\)*)\?\)$'
+
+		" The next pattern matches a reference to a theorem (et al)
+		" It matches a mix of letters, numbers and dots,
+		" starting with letter or dot and containing at least one dot.
+		let otherpattern = '^.\{-}\(\w\+\.\%(\w\|\.\)*\)$'
+
+		if s:curline =~ eqpattern
+			" User want to complete an equation reference
+			let s:type = 'eqref'
+			let s:prefix = substitute(s:curline, eqpattern, '\1', '')
+			let s:refprefix = '\eqref{'
+		elseif s:curline =~ otherpattern
+			" User want to complete theorem/remark/... reference
+			let s:type = 'autoref'
+			let s:prefix = substitute(s:curline, otherpattern, '\1', '')
+			let s:refprefix = '\autoref{'
+		elseif s:curline =~ commandpattern
+			let s:type = substitute(s:curline, commandpattern, '\1', 'e')
+			let s:typeoption = substitute(s:curline, commandpattern, '\2', 'e')
 			call Tex_Debug('Tex_Complete: s:type = '.s:type.', typeoption = '.s:typeoption, 'view')
 		else
-			let eqpattern = '^.\{-}\((\%(theorem\|lemma\|definition\|remark\|proposition\|corollary\|assumption\|figure\|table\|algorithm\|part\|chapter\|section\|subsection\|subsubsection\|paragraph\|subparagraph\)\@!\(\w\|\.\)*)\?\)$'
-			let otherpattern = '^.\{-}\(\w*\.\(\w\|\.\)*\)$'
-			if s:curline =~ eqpattern
-				" User want to complete an equation reference
-				let s:type = 'eqref'
-				let s:prefix = substitute(s:curline, eqpattern, '\1', '')
-				let s:refprefix = '\eqref{'
-			elseif s:curline =~ otherpattern
-				" User want to complete theorem/remark/... reference
-				let s:type = 'autoref'
-				let s:prefix = substitute(s:curline, otherpattern, '\1', '')
-				let s:refprefix = '\autoref{'
-			else
-			endif
+			" Do nothing here.
 		endif
 
 		if exists("s:type") && s:type =~ 'ref'
@@ -116,7 +128,7 @@ function! Tex_Complete(what, where)
 
 			redraw!
 
-		elseif exists("s:type") && s:type =~ 'cite'
+		elseif exists("s:type") && s:type =~ '[Cc]ite'
 
 			let s:prefix = matchstr(s:prefix, '\([^,]\+,\)*\zs\([^,]\+\)\ze$')
 			call Tex_Debug(":Tex_Complete: using s:prefix = ".s:prefix, "view")
@@ -252,7 +264,7 @@ function! Tex_CompleteWord(completeword, prefixlength)
 endfunction " }}}
 
 " ==============================================================================
-" File name completion helper functons
+" File name completion helper functions
 " ============================================================================== 
 " Tex_SetupFileCompletion:  {{{
 " Description: 
@@ -567,17 +579,17 @@ function! Tex_ScanFileForCite(prefix)
 	let presBufNum = bufnr('%')
 
 	let foundCiteFile = 0
-	" First find out if this file has a \bibliography command in it. If so,
-	" assume that this is the only file in the project which defines a
-	" bibliography.
-	if search('\\\(no\)\?\(bibliography\|addbibresource\){', 'w')
+	" First find out if this file has a \(no)bibliography or a \addbibresource
+	" (biblatex) command in it. If so, assume that this is the only file
+	" in the project which defines a bibliography.
+	if search('\\\(\(no\)\?bibliography\|addbibresource\(\[.*\]\)\?\){', 'w')
 		call Tex_Debug('Tex_ScanFileForCite: found bibliography command in '.bufname('%'), 'view')
 		" convey that we have found a bibliography command. we do not need to
 		" proceed any further.
 		let foundCiteFile = 1
 
 		" extract the bibliography filenames from the command.
-		let bibnames = matchstr(getline('.'), '\\\(no\)\?\(bibliography\|addbibresource\){\zs.\{-}\ze}')
+		let bibnames = matchstr(getline('.'), '\\\(\(no\)\?bibliography\|addbibresource\(\[.*\]\)\?\){\zs.\{-}\ze}')
 		let bibnames = substitute(bibnames, '\s', '', 'g')
 
 		call Tex_Debug('trying to search through ['.bibnames.']', 'view')
@@ -593,9 +605,8 @@ function! Tex_ScanFileForCite(prefix)
 
 			" first try to find if a .bib file exists. If so do not search in
 			" the corresponding .bbl file. (because the .bbl file will most
-			" probly be generated automatically from the .bib file with
+			" probably be generated automatically from the .bib file with
 			" bibtex).
-			
 			let fname = Tex_FindFile(bibname, '.,'.g:Tex_BIBINPUTS, '.bib')
 			if fname != ''
 				call Tex_Debug('finding .bib file ['.bufname('%').']', 'view')
@@ -609,6 +620,14 @@ function! Tex_ScanFileForCite(prefix)
 					call Tex_Debug('finding .bbl file ['.bufname('.').']', 'view')
 					call Tex_Grepadd('\\bibitem{'.a:prefix, "%")
 					q
+				else
+					" Assume that file is a full path - can also be a remote
+					" file or url, such as http://..., which is useful for
+					" use with zotero.
+					exec 'split "'.Tex_EscapeSpaces(bibname).'"'
+					call Tex_Debug('opening bibliography file', 'view')
+					call Tex_Grepadd('@.*{'.a:prefix, "%")
+					q
 				endif
 			endif
 
@@ -621,11 +640,11 @@ function! Tex_ScanFileForCite(prefix)
 	endif
 
 	" If we have a thebibliography environment, then again assume that this is
-	" the only file which defines the bib-keys. Aand convey this information
+	" the only file which defines the bib-keys. And convey this information
 	" upwards by returning 1.
 	if search('^\s*\\begin{thebibliography}', 'w')
 		call Tex_Debug('got a thebibliography environment in '.bufname('%'), 'view')
-		
+
 		let foundCiteFile = 1
 
 		split
@@ -796,10 +815,10 @@ function! Tex_StartOutlineCompletion()
 
     call Tex_SetupOutlineSyntax()
 
-	exec 'nnoremap <buffer> <cr> '
+	exec 'nnoremap <buffer> <silent> <cr> '
 		\ .':cd '.s:origdir.'<CR>'
 		\ .':call Tex_FinishOutlineCompletion()<CR>'
-	exec 'nnoremap <buffer> q '
+	exec 'nnoremap <buffer> <silent> q '
 		\ .':cd '.s:origdir.'<CR>'
 		\ .':close<CR>'
 		\ .':call Tex_SwitchToInsertMode()<CR>'
@@ -861,12 +880,12 @@ function! Tex_FindBibFiles()
 	split
 	exec 'silent! e '.fnameescape(mainfname)
 
-	if search('\\\(no\)\?\(bibliography\|addbibresource\){', 'w')
+	if search('\\\(\(no\)\?bibliography\|addbibresource\(\[.*\]\)\?\){', 'w')
 
 		call Tex_Debug('Tex_FindBibFiles: found bibliography command in '.bufname('%'), 'view')
 
 		" extract the bibliography filenames from the command.
-		let bibnames = matchstr(getline('.'), '\\\(no\)\?\(bibliography\|addbibresource\){\zs.\{-}\ze}')
+		let bibnames = matchstr(getline('.'), '\\\(\(no\)\?bibliography\|addbibresource\(\[.*\]\)\?\){\zs.\{-}\ze}')
 		let bibnames = substitute(bibnames, '\s', '', 'g')
 
 		call Tex_Debug(':Tex_FindBibFiles: trying to search through ['.bibnames.']', 'view')

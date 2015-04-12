@@ -62,10 +62,14 @@ In your vimrc you can put:
 * ``let g:templates_no_autocmd = 1`` to disable automatic insertion of
   template in new files.
 
-* ``let g:templates_name_prefix = .vimtemplate.`` to change the name of the
+* ``let g:templates_directory = '/path/to/directory'`` to specify a directory
+  from where to search for additional global templates. See `template search
+  order`_ below for more details. This can also be a list of paths.
+
+* ``let g:templates_name_prefix = '.vimtemplate.'`` to change the name of the
   template files that are searched.
 
-* ``let g:templates_global_name_prefix = "template:"`` to change the prefix of the
+* ``let g:templates_global_name_prefix = 'template:'`` to change the prefix of the
   templates in the global template directory.
 
 * ``let g:templates_debug = 1`` to have vim-template output debug information
@@ -80,6 +84,14 @@ In your vimrc you can put:
   names. This might be helpful if hacking on a windows box where ``*`` is not
   allowed in file names. The above configuration, for example, treates
   underscores ``_`` as the typical regex wildcard ``.*``.
+
+* ``let g:templates_no_builtin_templates = 1`` to disable usage of the
+  built-in templates. See `template search order`_ below for more details.
+
+* ``let g:templates_user_variables = [[USERVAR, UserFunc]]`` to enable
+  user-defined variable expanding. See `User-defined variable expanding`_
+  below for details.
+
 
 Usage
 =====
@@ -108,7 +120,12 @@ The algorithm to search for templates works like this:
 
 2. Go up a directory and goto *(1)*, if not possible, goto *(3)*.
 
-3. Try to use the ``=template=<pattern>`` file supplied with the plugin.
+3. Try to use the ``=template=<pattern>`` file from the directory specified
+   using the ``g:templates_directory`` option (only if the option is defined
+   and the directory exists).
+
+3. Try to use the ``=template=<pattern>`` file supplied with the plugin (only
+   if ``g:templates_no_builtin_templates`` was not defined).
 
 
 Variables in templates
@@ -122,7 +139,7 @@ The following variables will be expanded in templates:
     Date in ``YYYY-mm-dd`` format
 ``%TIME%``
     Time in ``HH:MM`` format
-``%FDATE``
+``%FDATE%``
     Full date (date + time), in ``YYYY-mm-dd HH:MM`` format.
 ``%FILE%``
     File name, without extension.
@@ -150,4 +167,23 @@ The following variables will be expanded in templates:
 ``%HERE%``
     Expands to nothing, but ensures that the cursor will be placed in its
     position after expanding the template.
+
+User-defined variable expanding
+-------------------------------
+
+You can set ``g:templates_user_variables`` to expand custom variables. It should
+be something like ``[['USERVAR1', 'UserFunc1'], ['USERVAR2', 'UserFunc2']]``,
+where ``USERVAR1`` is the variable to be expanded and ``UserFunc1`` is the name of
+the function that returns the result. The function should take no arguments and
+return the string after expansion.
+
+Example:::
+
+    let g:templates_user_variables = [['FULLPATH', 'GetFullPath']]
+    function GetFullPath()
+        return expand('%:p')
+    endfunction
+
+And each occurrence of ``%FULLPATH%`` in template will be replaced with the full
+path of current file.
 
