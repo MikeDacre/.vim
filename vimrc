@@ -392,21 +392,16 @@ let php_folding=1
 au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Python
-au BufRead,BufNewFile *.py set filetype=python3
+au BufRead,BufNewFile *.py set filetype=python
 
-autocmd FileType python3 set omnifunc=pythoncomplete#Complete
-autocmd FileType python3 setlocal tabstop=4 shiftwidth=4 softtabstop=4
-"
-" Disable pylint checking every save
-let g:pymode_lint_checkers = ['pep8', 'mccabe']
-let g:pymode_lint_ignore = "E501,E221,E126,E401"
-let g:pymode_rope_rename_bind = '<leader>rr'
-let g:pymode_lint_unmodified = 0
-let g:pymode_lint_on_write = 0
-let g:pymode_rope = 0
-let g:pymode_py3k = 1
-let g:pymode_lint_write = 0
-let g:pep8_map='<leader>8'
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
+
+" Jedi
+let g:jedi#force_py_version = 3
+noremap <leader>gg :call jedi#goto_assignments()
+noremap <leader>gd :call jedi#goto_definitions()
+noremap <leader>rn :call jedi#rename()
 
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
@@ -457,7 +452,7 @@ let tlist_python3_settings = 'Python;c:classes;f:functions;m:class_members;v:var
 map <leader>tl <Plug>TaskList
 
 " Gundo
-map <leader>g :GundoToggle<CR>
+map <leader>gu :GundoToggle<CR>
 
 " mark (special) text
 let g:ex_todo_keyword = 'NOTE REF EXAMPLE SAMPLE CHECK TIPS HINT'
