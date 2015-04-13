@@ -13,7 +13,7 @@
 #       LICENCE: Open Source
 #       CREATED: 11/10/2011 22:16:34 PST
 #      REVISION: 1.1
-# Last modified: 2015-04-13 14:35
+# Last modified: 2015-04-13 14:38
 #===============================================================================
 
 VIM_HOME="$HOME/.vim"
@@ -71,9 +71,12 @@ if [ -d $VIM_HOME/bundle ]; then
   cd $VIM_HOME
 
   # Update every module
-  while read p; do
-    $VIM_HOME/vim-bundle/vim-bundle update $p
-  done < plugin-list
+  for i in bundle/*; do
+    cd $i
+    remote=$(git remote -v | grep push | awk '{print $2}' | sed 's/.*://')
+    cd $VIM_HOME
+    $VIM_HOME/vim-bundle/vim-bundle update $remote
+  done
 
   # Do my stuff to bundles
   fix_plugin_bugs
