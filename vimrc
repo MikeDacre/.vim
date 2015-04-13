@@ -263,8 +263,8 @@ fun InsertCmd( cmd )
        redraw!
 endfun
 
-nnoremap <leader>my iMike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR> <ESC>
-inoremap <leader>my Mike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>) <C-R>=strftime("%d-%m-%y %H:%M:%S")<CR>
+nnoremap <leader>my iMike Dacre <C-R>=strftime("%y-%m-%d %H:%M:%S")<CR> <ESC>
+inoremap <leader>my Mike Dacre <C-R>=strftime("%y-%m-%d %H:%M:%S")<CR>
 
 nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
 inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
@@ -290,6 +290,30 @@ fun LastMod()
   exe "1," . l . "g/Last modified: /s/Last modified: .*/Last modified: " .
   \ strftime("%Y-%m-%d %H:%M")
 endfun
+
+" Send line to Tmux
+fun SendLine()
+  call VimuxSendText(getline('.'))
+  call VimuxSendKeys("Enter")
+endfun
+
+fun SendSelection()
+  call VimuxSendText(@v)
+  call VimuxSendKeys("Enter")
+endfunction
+
+fun SendSelectionDedent()
+  let c = substitute(@v, '\t', '  ', 'g')
+  let c = substitute(c, '^ \+', '', 'g')
+  let c = substitute(c, '\r \+', '\n', 'g')
+  let c = substitute(c, '\n \+', '\n', 'g')
+  call VimuxSendText(c)
+  call VimuxSendKeys("Enter")
+endfunction
+
+nmap <LocalLeader>sl :call SendLine()<cr>
+vmap <LocalLeader>sl "vy :call SendSelection()<CR>
+vmap <LocalLeader>sd "vy :call SendSelectionDedent()<CR>
 
 "Protect large files from sourcing and other overhead.
 let g:LargeFile=100
