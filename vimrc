@@ -292,16 +292,23 @@ fun LastMod()
 endfun
 
 " Send line to Tmux
+let g:ScreenImpl = 'Tmux'
 fun StartScreenTmux()
   if !g:ScreenShellActive
     if &filetype == 'python' 
       :IPython
-    elseif &filetype == 'python3'
-      :IPython3
     else
       :ScreenShell
     endif
   endif 
+endfun
+
+fun OpenCloseScreen()
+  if g:ScreenShellActive
+    :ScreenQuit
+  else
+    call StartScreenTmux()
+  endif
 endfun
 
 fun SendLine()
@@ -325,7 +332,7 @@ fun SendCellPython()
   call g:ScreenShellSend(@b)
 endfun
 
-map <C-e> :call StartScreenTmux()<cr>
+map  <silent> <C-e> :call OpenCloseScreen()<cr>
 nmap <silent> <Space> :call SendLine()<cr>
 vmap <silent> <Space> :ScreenSend<cr>
 nmap <silent> <LocalLeader>sc :call SendCellPython()<cr>
@@ -447,6 +454,7 @@ let Tlist_Use_Right_Window = 0
 let Tlist_Process_file_Always = 1
 let tlist_php_settings = 'php;c:class;d:constant;f:function'
 let tlist_python3_settings = 'Python;c:classes;f:functions;m:class_members;v:variables;i:imports'
+let tlist_python_settings = 'Python;c:classes;f:functions;m:class_members;v:variables;i:imports'
 
 " Task List
 map <leader>tl <Plug>TaskList
@@ -460,6 +468,9 @@ let g:ex_comment_lable_keyword = 'DELME TEMP MODIFY ADD KEEPME DISABLE TEST ' " 
 let g:ex_comment_lable_keyword .= 'ERROR DEBUG CRASH DUMMY UNUSED TESTME ' " for testing
 let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUPLICATE REDUNDANCY PATCH ' " for refactoring
 
+" Comment plugin
+map <Leader>cv <plug>NERDCommenterToggle
+
 " Buffer Explorer
 let g:bufExplorerFindActive=1
 map <leader>be :BufExplorer<CR>
@@ -467,5 +478,4 @@ map <leader>be :BufExplorer<CR>
 " R Plugin
 "let g:vimrplugin_notmuxconf = 1
 let g:vimrplugin_vsplit = 1
-let g:ScreenImpl = 'Tmux'
 nmap <LocalLeader>ll <Plug>RSendLine
