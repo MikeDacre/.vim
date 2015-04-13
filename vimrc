@@ -182,6 +182,14 @@ inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
 let g:ex_usr_name = "Mike Dacre"
  
 """ My Functions 
+
+" Sort
+map <leader>ss :sort<cr>
+map <leader>su :!sort -u<cr>
+
+" Tidy up pargraphs
+vmap Q gq
+nmap Q gqap
  
 " Tab stuff
 map <leader>tn :tabnew<cr>
