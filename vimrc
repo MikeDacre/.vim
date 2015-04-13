@@ -292,28 +292,44 @@ fun LastMod()
 endfun
 
 " Send line to Tmux
-fun SendLine()
-  call VimuxSendText(getline('.'))
-  call VimuxSendKeys("Enter")
+fun StartScreenTmux()
+  if !g:ScreenShellActive
+    if &filetype == 'python' 
+      :IPython
+    elseif &filetype == 'python3'
+      :IPython3
+    else
+      :ScreenShell
+    endif
+  endif 
 endfun
 
-fun SendSelection()
-  call VimuxSendText(@v)
-  call VimuxSendKeys("Enter")
-endfunction
+fun SendLine()
+  call StartScreenTmux()
+  let c = getline('.')
+  call g:ScreenShellSend(c)
+endfun
 
 fun SendSelectionDedent()
+  call StartScreenTmux()
   let c = substitute(@v, '\t', '  ', 'g')
   let c = substitute(c, '^ \+', '', 'g')
   let c = substitute(c, '\r \+', '\n', 'g')
   let c = substitute(c, '\n \+', '\n', 'g')
-  call VimuxSendText(c)
-  call VimuxSendKeys("Enter")
+  call g:ScreenShellSend(c)
 endfunction
 
-nmap <LocalLeader>sl :call SendLine()<cr>
-vmap <LocalLeader>sl "vy :call SendSelection()<CR>
-vmap <LocalLeader>sd "vy :call SendSelectionDedent()<CR>
+fun SendCellPython()
+  call StartScreenTmux()
+  :?##\|\#^?;/##\|\#$/y b
+  call g:ScreenShellSend(@b)
+endfun
+
+map <C-e> :call StartScreenTmux()<cr>
+nmap <silent> <Space> :call SendLine()<cr>
+vmap <silent> <Space> :ScreenSend<cr>
+nmap <silent> <LocalLeader>sc :call SendCellPython()<cr>
+vmap <silent> <LocalLeader>sd "vy :call SendSelectionDedent()<CR>
 
 "Protect large files from sourcing and other overhead.
 let g:LargeFile=100
@@ -456,5 +472,5 @@ map <leader>be :BufExplorer<CR>
 " R Plugin
 "let g:vimrplugin_notmuxconf = 1
 let g:vimrplugin_vsplit = 1
-"let g:ScreenImpl = 'Tmux'
+let g:ScreenImpl = 'Tmux'
 nmap <LocalLeader>ll <Plug>RSendLine

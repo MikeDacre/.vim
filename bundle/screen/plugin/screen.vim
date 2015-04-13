@@ -173,6 +173,14 @@ function! ScreenShellCommands() " {{{
       command IPython :call screen#IPython()
     endif
   endif
+
+  if !screen#CmdDefined(':IPython3')
+    if supports_vertical
+      command -bang IPython3 :call screen#IPython3('<bang>')
+    else
+      command IPython3 :call screen#IPython3()
+    endif
+  endif  
 endfunction " }}}
 
 call ScreenShellCommands()

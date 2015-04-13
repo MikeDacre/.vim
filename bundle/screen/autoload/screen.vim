@@ -693,6 +693,17 @@ function! screen#IPython(...) " {{{
   exec 'ScreenShell' . bang . ' ipython'
 endfunction " }}}
 
+function! screen#IPython3(...) " {{{
+  let bang = a:0 ? a:1 : ''
+  let g:ScreenShellSendPrefixOld = g:ScreenShellSendPrefix
+  let g:ScreenShellSendSuffixOld = g:ScreenShellSendSuffix
+  let g:ScreenShellSendPrefix = '%cpaste'
+  let g:ScreenShellSendSuffix = '--'
+  let g:ScreenShellSendVarsRestore = 1
+
+  exec 'ScreenShell' . bang . ' ipython3'
+endfunction " }}}
+ 
 function! screen#CommandCompleteScreenSessions(argLead, cmdLine, cursorPos) " {{{
   let cmdLine = strpart(a:cmdLine, 0, a:cursorPos)
   let cmdTail = strpart(a:cmdLine, a:cursorPos)
