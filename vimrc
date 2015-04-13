@@ -374,6 +374,10 @@ nnoremap <unique> <silent><leader>sw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/
 
 """ Language and Plugin Config
 
+" Indent guides
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size  = 1
+
 " Template for specific files
 au BufNewFile  *Process.txt 0r ~/.vim/templates/process_TEMPLATE
 "au BufRead,BufNewFile *.txt set filetype=pandoc
