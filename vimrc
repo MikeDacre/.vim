@@ -75,12 +75,12 @@ set cindent shiftwidth=2
 
 " Enable CTRL-A/CTRL-X to work on octal and hex numbers, as well as characters
 set nrformats=octal,hex,alpha
-set expandtab                                    
+set expandtab
 
 " Set Number format to null(default is octal) , when press CTRL-A on number
 " like 007, it would not become 010
 set nf=
- 
+
 set list!
 set listchars=tab:^^
 
@@ -163,7 +163,7 @@ if $VIM_CRONTAB == "true"
   set nobackup
   set nowritebackup
 endif
-  
+
 " Make completion easier
 
 set completeopt=menuone,longest,preview
@@ -177,11 +177,11 @@ inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
 
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
- 
+
 " exVim Settings
 let g:ex_usr_name = "Mike Dacre"
- 
-""" My Functions 
+
+""" My Functions
 
 " Sort
 map <leader>ss :sort<cr>
@@ -190,13 +190,13 @@ map <leader>su :!sort -u<cr>
 " Tidy up pargraphs
 vmap Q gq
 nmap Q gqap
- 
+
 " Tab stuff
 map <leader>tn :tabnew<cr>
 map <leader>te :tabedit
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
-        
+
 " Add cmdlst syntax
 fun CaptureLine()
   let l = getline('.')
@@ -233,12 +233,12 @@ fun ExecLine()
   set expandtab
   redraw!
 endfun
- 
+
 au BufRead,BufNewFile *.cmdlst set filetype=sh
 au BufRead,BufNewFile *.pbs set filetype=sh
 noremap <leader>il :call CaptureLine()<CR>
 noremap <leader>el :call ExecLine()<CR>
- 
+
 " Date inserting
 nnoremap <leader>dd "=strftime("%Y-%m-%d %H:%M:%S")<CR>P
 inoremap <leader>dd <C-R>=strftime("%Y-%m-%d %H:%M:%S")<CR>
@@ -268,14 +268,14 @@ inoremap <leader>my Mike Dacre (Stanford @<C-O>:call InsertCmd( 'hostname' )<CR>
 
 nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
 inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
- 
+
 " Pasting Mode
 map <leader>pp :set paste<CR>:set noexpandtab<CR>
 map <leader>PP :set nopaste<CR>:set expandtab<CR>
 
 " Delete starting whitespace
 map <leader>ds :s/^\s\+<CR>
- 
+
 " Templates
 let g:template_basedir = "~/.vim/templates"
 
@@ -324,9 +324,9 @@ endif
 " the word will be swapped with the next word.  The words may
 " even be separated by punctuation (such as "abc = def").
 nnoremap <unique> <silent><leader>sw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/<cr><c-o>
- 
+
 """ Language and Plugin Config
- 
+
 " Template for specific files
 au BufNewFile  *Process.txt 0r ~/.vim/templates/process_TEMPLATE
 "au BufRead,BufNewFile *.txt set filetype=pandoc
@@ -353,8 +353,10 @@ au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Python
 au BufRead,BufNewFile *.py set filetype=python3
-"autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
+
+autocmd FileType python3 set omnifunc=pythoncomplete#Complete
+autocmd FileType python3 setlocal tabstop=4 shiftwidth=4 softtabstop=4
+"
 " Disable pylint checking every save
 let g:pymode_lint_checkers = ['pep8', 'mccabe']
 let g:pymode_lint_ignore = "E501,E221,E126,E401"
@@ -365,10 +367,10 @@ let g:pymode_rope = 0
 let g:pymode_py3k = 1
 let g:pymode_lint_write = 0
 let g:pep8_map='<leader>8'
- 
+
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
-             
+
 " Table Mode
 let g:table_mode_fillchar = '='
 let g:table_mode_separator = '#'
@@ -379,16 +381,18 @@ let g:pandoc_bibfiles = ['/Users/dacre/bib/Altitude.bib']
 " NERDtree
 noremap <F5> :NERDTree<CR>
 let g:NERDTreeWinPos = "right"
-                     
+
 " Sessions
 set sessionoptions=blank,buffers,curdir,folds,globals,help,localoptions,options,resize,tabpages,winsize,winpos
- 
+
 " Session
 noremap <leader>ss :SessionSave<CR>
-noremap <leader>so :SessionOpen  
+noremap <leader>so :SessionOpen
 
 " SnipMate
 let g:snips_author = 'Mike Dacre'
+
+" vim-ipython
 
 " Vimux
 noremap <silent> <leader>vp :VimuxPromptCommand<CR>
