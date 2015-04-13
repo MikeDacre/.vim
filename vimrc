@@ -26,6 +26,7 @@ filetype off
 call pathogen#infect('bundle/{}')
 call pathogen#helptags()
 
+
 "General
 if has("gui_running") || &term == "xterm-256color" || &term == "screen-256color"
   set t_Co=256
@@ -87,16 +88,13 @@ set listchars=tab:^^
 " Show way cooler status line
 
 set laststatus=2
-set statusline=%<%F\ %h%m%r%h%w%y\ %{fugitive#statusline()}%=\ col:%c%V\ %P
-
-" Use F10 to toggle 'paste' mode
-set pastetoggle=<F10>
+"set statusline=%<%F\ %h%m%r%h%w%y\ %{fugitive#statusline()}%=\ col:%c%V\ %P
 
 " Round indent to multiple of 'shiftwidth' for > and < commands
 set shiftround
 
 " Allow continual indent/dedent in visual block
-vnoremap < <gv 
+vnoremap < <gv
 vnoremap > >gv
 
 " Fix my <Backspace> key (in Mac OS X Terminal)
@@ -176,6 +174,9 @@ set completeopt=menuone,longest,preview
 let g:ex_usr_name = "Mike Dacre"
 
 """ My Functions
+
+" Fold with F
+nmap <leader>F za
 
 " Sort
 map <leader>ss :sort<cr>
@@ -270,6 +271,9 @@ map <leader>PP :set nopaste<CR>:set expandtab<CR>
 " Delete starting whitespace
 map <leader>ds :s/^\s\+<CR>
 
+" Delete training whitespace
+autocmd BufWritePre * :%s/\s\+$//e
+
 " Templates
 let g:template_basedir = "~/.vim/templates"
 
@@ -289,12 +293,12 @@ endfun
 let g:ScreenImpl = 'Tmux'
 fun StartScreenTmux()
   if !g:ScreenShellActive
-    if &filetype == 'python' 
+    if &filetype == 'python'
       :IPython
     else
       :ScreenShell
     endif
-  endif 
+  endif
 endfun
 
 fun OpenCloseScreen()
@@ -329,6 +333,7 @@ endfun
 map  <silent> <C-e> :call OpenCloseScreen()<cr>
 nmap <silent> <Space> :call SendLine()<cr>
 vmap <silent> <Space> :ScreenSend<cr>
+smap <silent> <Space> <Nop>
 nmap <silent> <LocalLeader>sc :call SendCellPython()<cr>
 vmap <silent> <LocalLeader>sd "vy :call SendSelectionDedent()<CR>
 
@@ -400,7 +405,7 @@ au BufNewFile,BufRead *.pgsql                   setf pgsql
 au BufRead,BufNewFile *.py set filetype=python
 
 autocmd FileType python set omnifunc=pythoncomplete#Complete
-"autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 " Jedi
 let g:jedi#force_py_version = 3
@@ -409,11 +414,16 @@ noremap <leader>gd :call jedi#goto_definitions()
 noremap <leader>rn :call jedi#rename()
 
 " Python Mode
-let g:pymode                   = 1
-let g:pymode_folding           = 0
-let g:pymode_rope              = 0          " Jedi does this
-let g:pymode_python            = 'python3'  " Always use python3
-let g:pymode_trim_whitespaces  = 1
+let g:pymode                    = 1
+let g:pymode_folding            = 1
+let g:pymode_rope               = 0          " Jedi does this
+let g:pymode_rope_completion    = 0
+let g:pymode_python             = 'python3'  " Always use python3
+let g:pymode_trim_whitespaces   = 1
+let g:pymode_breakpoint         = 1
+let g:pymode_breakpoint_bind    = '<leader>bb'
+let g:pymode_lint_checkers      = ['pyflakes', 'pylint', 'mccabe']
+let g:pymode_syntax             = 1
 
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
@@ -484,3 +494,12 @@ map <leader>be :BufExplorer<CR>
 "let g:vimrplugin_notmuxconf = 1
 let g:vimrplugin_vsplit = 1
 nmap <LocalLeader>ll <Plug>RSendLine
+
+" Highlight whitespace
+autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()

@@ -29,3 +29,6 @@ vim-scripts/bufexplorer.zip
 vim-scripts/perl-support.vim
 vim-scripts/sessionman.vim
 vim-scripts/taglist.vim
+klen/python-mode
+bling/vim-airline
+bling/vim-bufferline
