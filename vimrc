@@ -95,6 +95,10 @@ set pastetoggle=<F10>
 " Round indent to multiple of 'shiftwidth' for > and < commands
 set shiftround
 
+" Allow continual indent/dedent in visual block
+vnoremap < <gv 
+vnoremap > >gv
+
 " Fix my <Backspace> key (in Mac OS X Terminal)
 set t_kb=
 fixdel
@@ -167,16 +171,6 @@ endif
 " Make completion easier
 
 set completeopt=menuone,longest,preview
-
-inoremap <C-F> <C-X><C-F>
-
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
-  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-
-inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
-  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 " exVim Settings
 let g:ex_usr_name = "Mike Dacre"
@@ -413,6 +407,13 @@ let g:jedi#force_py_version = 3
 noremap <leader>gg :call jedi#goto_assignments()
 noremap <leader>gd :call jedi#goto_definitions()
 noremap <leader>rn :call jedi#rename()
+
+" Python Mode
+let g:pymode                   = 1
+let g:pymode_folding           = 0
+let g:pymode_rope              = 0          " Jedi does this
+let g:pymode_python            = 'python3'  " Always use python3
+let g:pymode_trim_whitespaces  = 1
 
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
