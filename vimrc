@@ -298,13 +298,21 @@ fun LastMod()
 endfun
 
 " Send line to Tmux
+let g:ScreenIPython3 = 1
 let g:ScreenImpl = 'Tmux'
 fun StartScreenTmux()
   if !g:ScreenShellActive
     if &filetype == 'python'
-      :IPython
+      let bang = a:0 ? a:1 : ''
+      let g:ScreenShellSendPrefixOld = g:ScreenShellSendPrefix
+      let g:ScreenShellSendSuffixOld = g:ScreenShellSendSuffix
+      let g:ScreenShellSendPrefix = '%cpaste'
+      let g:ScreenShellSendSuffix = '--'
+      let g:ScreenShellSendVarsRestore = 1
+      call screen#ScreenShell('ipython3', 'vertical')
+      call g:ScreenShellSend('%pylab')
     else
-      :ScreenShell
+      call screen#ScreenShell('zsh', 'vertical')
     endif
   endif
 endfun
