@@ -168,7 +168,15 @@ endif
 
 " Make completion easier
 
-set completeopt=menuone,longest,preview
+set completeopt=menuone,longest
+
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 " exVim Settings
 let g:ex_usr_name = "Mike Dacre"
@@ -404,11 +412,13 @@ au BufNewFile,BufRead *.pgsql                   setf pgsql
 " Python
 au BufRead,BufNewFile *.py set filetype=python
 
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
+"autocmd FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 " Jedi
-let g:jedi#force_py_version = 3
+let g:jedi#force_py_version       = 3
+"let g:jedi#popup_on_dot           = 0
+let g:jedi#auto_vim_configuration = 0
 noremap <leader>gg :call jedi#goto_assignments()
 noremap <leader>gd :call jedi#goto_definitions()
 noremap <leader>rn :call jedi#rename()
@@ -422,8 +432,9 @@ let g:pymode_python             = 'python3'  " Always use python3
 let g:pymode_trim_whitespaces   = 1
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
+let g:pymode_lint_on_write      = 0
 let g:pymode_lint_checkers      = ['pyflakes', 'pylint', 'mccabe']
-let g:pymode_syntax             = 1
+"let g:pymode_syntax             = 1
 
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete

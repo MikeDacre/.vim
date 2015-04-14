@@ -24,7 +24,6 @@ tpope/vim-fugitive
 tpope/vim-pathogen
 tpope/vim-surround
 vim-pandoc/vim-pandoc-syntax
-vim-scripts/AutoComplPop
 vim-scripts/bufexplorer.zip
 vim-scripts/perl-support.vim
 vim-scripts/sessionman.vim
