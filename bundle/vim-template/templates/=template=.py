@@ -1,1 +1,1 @@
-/home/dacre/.vim/templates/=template=.py
+/home/peanut/.vim/templates/=template=.py
