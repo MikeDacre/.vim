@@ -390,6 +390,20 @@ nnoremap <unique> <silent><leader>sw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/
 
 """ Language and Plugin Config
 
+" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_python_python_exec = 'python3'
+" Don't check python
+"let g:syntastic_python_checkers    = ['']
+
 " Indent guides
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size  = 1
