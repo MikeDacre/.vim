@@ -350,6 +350,7 @@ map  <silent> <C-e> :call OpenCloseScreen()<cr>
 nmap <silent> <Space> :call SendLine()<cr>
 vmap <silent> <Space> :ScreenSend<cr>
 smap <silent> <Space> <Nop>
+nmap <silent> <LocalLeader>sa :ScreenSend<cr>
 nmap <silent> <LocalLeader>sc :call SendCellPython()<cr>
 vmap <silent> <LocalLeader>sd "vy :call SendSelectionDedent()<CR>
 
@@ -425,11 +426,11 @@ au BufRead,BufNewFile *.py set filetype=python
 
 " Jedi
 let g:jedi#force_py_version       = 3
-"let g:jedi#popup_on_dot           = 0
-let g:jedi#auto_vim_configuration = 0
-noremap <leader>gg :call jedi#goto_assignments()
-noremap <leader>gd :call jedi#goto_definitions()
-noremap <leader>rn :call jedi#rename()
+let g:jedi#popup_on_dot           = 1
+let g:jedi#auto_vim_configuration = 1
+noremap <leader>gg :call jedi#goto_assignments()<cr>
+noremap <leader>gd :call jedi#goto_definitions()<cr>
+noremap <leader>rn :call jedi#rename()<cr>
 
 " Python Mode
 let g:pymode                    = 1
@@ -441,8 +442,13 @@ let g:pymode_trim_whitespaces   = 1
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 0
-let g:pymode_lint_checkers      = ['pyflakes', 'pylint', 'mccabe']
-"let g:pymode_syntax             = 1
+let g:pymode_lint_checkers      = ['pyflakes', 'pylint', 'mccabe', 'pep8']
+let g:pymode_syntax             = 1
+
+"if &filetype == 'python'
+nmap <silent> <LocalLeader>pl :PymodeLint<cr>
+nmap <silent> <LocalLeader>pu :PymodeLintAuto<cr>
+"endif
 
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete

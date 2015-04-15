@@ -1,1 +1,1 @@
-/home/peanut/.vim/templates/=template=.py
+../../../templates/=template=.py
