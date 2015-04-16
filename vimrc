@@ -400,7 +400,6 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
-let g:syntastic_python_python_exec = 'python3'
 
 " Indent guides
 let g:indent_guides_start_level = 2
@@ -433,7 +432,9 @@ au BufNewFile,BufRead *.pgsql                   setf pgsql
 " Python
 au BufRead,BufNewFile *.py set filetype=python
 
-let g:syntastic_python_checkers    = ['pyflakes', 'pylint', 'mccabe', 'pep8']
+let g:syntastic_python_python_exec = 'python3'
+"let g:syntastic_python_checkers    = ['python', 'pep8', 'py3kwarn', 'pyflakes', 'pylint']
+let g:syntastic_python_checkers    = ['python', 'pep8', 'pyflakes']
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
 "autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
@@ -446,7 +447,7 @@ noremap <leader>gd :call jedi#goto_definitions()<cr>
 noremap <leader>rn :call jedi#rename()<cr>
 
 " Python Mode
-let g:pymode                    = 0
+"let g:pymode                    = 0
 "let g:pymode_folding            = 1
 "let g:pymode_rope               = 0          " Jedi does this
 "let g:pymode_rope_completion    = 0
