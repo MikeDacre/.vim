@@ -401,8 +401,6 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_python_python_exec = 'python3'
-" Don't check python
-"let g:syntastic_python_checkers    = ['']
 
 " Indent guides
 let g:indent_guides_start_level = 2
@@ -435,6 +433,7 @@ au BufNewFile,BufRead *.pgsql                   setf pgsql
 " Python
 au BufRead,BufNewFile *.py set filetype=python
 
+let g:syntastic_python_checkers    = ['pyflakes', 'pylint', 'mccabe', 'pep8']
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
 "autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
@@ -447,21 +446,21 @@ noremap <leader>gd :call jedi#goto_definitions()<cr>
 noremap <leader>rn :call jedi#rename()<cr>
 
 " Python Mode
-let g:pymode                    = 1
-let g:pymode_folding            = 1
-let g:pymode_rope               = 0          " Jedi does this
-let g:pymode_rope_completion    = 0
-let g:pymode_python             = 'python3'  " Always use python3
-let g:pymode_trim_whitespaces   = 1
-let g:pymode_breakpoint         = 1
-let g:pymode_breakpoint_bind    = '<leader>bb'
-let g:pymode_lint_on_write      = 0
-let g:pymode_lint_checkers      = ['pyflakes', 'pylint', 'mccabe', 'pep8']
-let g:pymode_syntax             = 1
+let g:pymode                    = 0
+"let g:pymode_folding            = 1
+"let g:pymode_rope               = 0          " Jedi does this
+"let g:pymode_rope_completion    = 0
+"let g:pymode_python             = 'python3'  " Always use python3
+"let g:pymode_trim_whitespaces   = 1
+"let g:pymode_breakpoint         = 1
+"let g:pymode_breakpoint_bind    = '<leader>bb'
+"let g:pymode_lint_on_write      = 0
+"let g:pymode_lint_checkers      = ['pyflakes', 'pylint', 'mccabe', 'pep8']
+"let g:pymode_syntax             = 1
 
 "if &filetype == 'python'
-nmap <silent> <LocalLeader>pl :PymodeLint<cr>
-nmap <silent> <LocalLeader>pu :PymodeLintAuto<cr>
+nmap <silent> <LocalLeader>pl :SyntasticCheck<cr>
+nmap <silent> <LocalLeader>pu :SyntasticReset<cr>
 "endif
 
 " Perl
