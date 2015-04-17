@@ -454,7 +454,8 @@ let g:pymode_trim_whitespaces   = 1
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
-let g:pymode_lint_checkers      = ['pylint', 'mccabe']
+"let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
+let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8']
 let g:pymode_syntax             = 1
 
 nmap <silent> <LocalLeader>pl :SyntasticCheck<cr>
