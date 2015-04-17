@@ -441,7 +441,7 @@ let g:syntastic_python_checkers    = ['python', 'pep8', 'pyflakes']
 " Jedi
 let g:jedi#force_py_version       = 3
 let g:jedi#popup_on_dot           = 1
-let g:jedi#auto_vim_configuration = 1
+let g:jedi#auto_vim_configuration = 0
 noremap <leader>gg :call jedi#goto_assignments()<cr>
 noremap <leader>gd :call jedi#goto_definitions()<cr>
 noremap <leader>rn :call jedi#rename()<cr>
