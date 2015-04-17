@@ -100,38 +100,32 @@ snippet ifwith
 		${7:$5}(${8:$1})
 snippet stdarg
 	def _get_args():
-		"""Command Line Argument Parsing"""
-		import argparse, sys
+	    """Command Line Argument Parsing"""
+	    import argparse
+	    import sys
 
-		parser = argparse.ArgumentParser(
-		             description=__doc__,
-		             formatter_class=argparse.RawDescriptionHelpFormatter)
+	    f_class = argparse.RawDescriptionHelpFormatter
+	    parser  = argparse.ArgumentParser(description=__doc__,
+	                                      formatter_class=f_class)
 
-		# Optional Arguments
-		# parser.add_argument('${1:-v}', help="${2:Verbose output}")
+	    # Optional Files
+	    parser.add_argument('-i', '--infile', nargs='?', default=sys.stdin,
+	                        help="Input file, Default STDIN")
+	    parser.add_argument('-o', '--outfile', nargs='?', default=sys.stdout,
+	                        help="Output file, Default STDOUT")
+	    parser.add_argument('-l', '--logfile', nargs='?', default=sys.stderr,
+	                        type=argparse.FileType('a'),
+	                        help="Log File, Default STDERR (append mode)")
 
-		# Required Files
-		# parser.add_argument('${3:file}', nargs=1,
-		#                    help="${4:Required file}")
+	    return parser
 
-		# Optional Files
-		parser.add_argument('-i', '--infile', nargs='?', default=sys.stdin,
-		                    help="${5:Input file, Default STDIN}")
-		parser.add_argument('-o', '--outfile', nargs='?', default=sys.stdout,
-		                    help="Output file, Default STDOUT")
-		parser.add_argument('-l', '--logfile', nargs='?', default=sys.stderr,
-		                    type=argparse.FileType('a'),
-		                    help="Log File, Default STDERR (append mode)")
 
-		return parser
-
-	# Main function for direct running
 	def main():
-		"""Run directly"""
-		# Get commandline arguments
-		parser = _get_args()
-		args = parser.parse_args()
+	    """Run directly"""
+	    # Get commandline arguments
+	    parser = _get_args()
+	    args = parser.parse_args()
 
 	# The end
 	if __name__ == '__main__':
-		main()
+	    main()

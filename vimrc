@@ -425,8 +425,9 @@ set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list            = 1
-let g:syntastic_check_on_open            = 1
+let g:syntastic_check_on_open            = 0
 let g:syntastic_check_on_wq              = 0
+let g:syntastic_aggregate_errors         = 1
 
 let g:syntastic_python_python_exec       = 'python3'
 let g:syntastic_python_checkers          = ['python', 'pep8', 'py3kwarn', 'pyflakes', 'pylint']
@@ -456,7 +457,8 @@ let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
 let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8', 'pyflakes']
-let g:pymode_lint_ignore        = "W0611"
+let g:pymode_lint_ignore        = "W0611,E221"
+let g:pymode_lint_cwindow       = 0
 let g:pymode_syntax             = 1
 
 nmap <silent> <LocalLeader>pl :SyntasticCheck<cr>
@@ -521,6 +523,8 @@ let g:ex_comment_lable_keyword .= 'ERROR DEBUG CRASH DUMMY UNUSED TESTME ' " for
 let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUPLICATE REDUNDANCY PATCH ' " for refactoring
 
 " Comment plugin
+let NERDSpaceDelims=1
+let g:NERDCustomDelimiters = { 'py' : { 'left': '# ', 'leftAlt': '', 'rightAlt': '' }}
 map <Leader>cv <plug>NERDCommenterToggle
 
 " Buffer Explorer
