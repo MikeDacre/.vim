@@ -1,6 +1,9 @@
 snippet #!
-	#!/usr/env python
+	#!/usr/bin/env python3
 
+snippet ftb
+	f = ${1:i}.rstrip().split('${2:\t}')
+	${3:#Next}
 snippet imp
 	import ${1:module}
 # Module Docstring
@@ -17,7 +20,7 @@ snippet for
 	for ${1:needle} in ${2:haystack}:
 		${3:# code...}
 # New Class
-snippet cl
+snippet class
 	class ${1:ClassName}(${2:object}):
 		"""${3:docstring for $1}"""
 		def __init__(self, ${4:arg}):
@@ -54,21 +57,21 @@ snippet try Try/Except
 		${1:pass}
 	except ${2:Exception}, ${3:e}:
 		${4:raise $3}
-snippet try Try/Except/Else
+snippet tryelse Try/Except/Else
 	try:
 		${1:pass}
 	except ${2:Exception}, ${3:e}:
 		${4:raise $3}
 	else:
 		${5:pass}
-snippet try Try/Except/Finally
+snippet tryfinal Try/Except/Finally
 	try:
 		${1:pass}
 	except ${2:Exception}, ${3:e}:
 		${4:raise $3}
 	finally:
 		${5:pass}
-snippet try Try/Except/Else/Finally
+snippet tryelsef Try/Except/Else/Finally
 	try:
 		${1:pass}
 	except ${2:Exception}, ${3:e}:
@@ -84,26 +87,51 @@ snippet ifmain
 # __magic__
 snippet _
 	__${1:init}__${2}
+snippet iffile
+	if isinstance(${1:args.infile}, str):
+		${2:infile} = open(${3:$1}, '${4:r}')
+	else:
+		${5:$2} = ${6:$1}
+snippet ifwith
+	if isinstance(${1:args.outfile}, str):
+		with open(${2:$1}, '${3:w}') as ${4:outfile}:
+			${5:run_all}(${6:$4})
+	else:
+		${7:$5}(${8:$1})
 snippet stdarg
-	import argparse, sys
-	
-	# Get command line arguments
-	parser = argparse.ArgumentParser(${1:description=helptext},
-	                                formatter_class=argparse.RawDescriptionHelpFormatter)
-	
-	# Optional Arguments
-	#${2:parser.add_argument()}
-	
-	# Required Files
-	#${3:parser.add_argument()}
-	
-	# Optional Files
-	parser.add_argument('logfile', nargs='?', type=argparse.FileType('a'),
-	                    default=sys.stderr, help="Log File, Default STDERR (append mode)")
-	parser.add_argument('infile', nargs='?', type=argparse.FileType('w'),
-	                     default=sys.stdout, help="Output file, Default STDOUT")
-	parser.add_argument('outfile', nargs='?', type=argparse.FileType('r'),
-	                     default=sys.stdin, help="Output file, Default STDIN")
-	 
-	args = parser.parse_args()
-	
+	def _get_args():
+		"""Command Line Argument Parsing"""
+		import argparse, sys
+
+		parser = argparse.ArgumentParser(
+		             description=__doc__,
+		             formatter_class=argparse.RawDescriptionHelpFormatter)
+
+		# Optional Arguments
+		# parser.add_argument('${1:-v}', help="${2:Verbose output}")
+
+		# Required Files
+		# parser.add_argument('${3:file}', nargs=1,
+		#                    help="${4:Required file}")
+
+		# Optional Files
+		parser.add_argument('-i', '--infile', nargs='?', default=sys.stdin,
+		                    help="${5:Input file, Default STDIN}")
+		parser.add_argument('-o', '--outfile', nargs='?', default=sys.stdout,
+		                    help="Output file, Default STDOUT")
+		parser.add_argument('-l', '--logfile', nargs='?', default=sys.stderr,
+		                    type=argparse.FileType('a'),
+		                    help="Log File, Default STDERR (append mode)")
+
+		return parser
+
+	# Main function for direct running
+	def main():
+		"""Run directly"""
+		# Get commandline arguments
+		parser = _get_args()
+		args = parser.parse_args()
+
+	# The end
+	if __name__ == '__main__':
+		main()
