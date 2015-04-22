@@ -524,7 +524,11 @@ let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUP
 
 " Comment plugin
 let NERDSpaceDelims=1
-let g:NERDCustomDelimiters = { 'py' : { 'left': '# ', 'leftAlt': '', 'rightAlt': '' }}
+let g:NERDCustomDelimiters = {
+      \ 'py' : { 'left': '#' },
+      \ 'sshconfig' : { 'left': '#' },
+      \ 'sshdconfig': { 'left': '#' }
+      \ }
 map <Leader>cv <plug>NERDCommenterToggle
 
 " Buffer Explorer
