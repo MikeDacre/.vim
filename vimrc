@@ -467,6 +467,9 @@ nmap <silent> <LocalLeader>pu :SyntasticReset<cr>
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
 
+" SuperTab
+let g:SuperTabDefaultCompletionType = "context"
+
 " Table Mode
 let g:table_mode_fillchar = '='
 let g:table_mode_separator = '#'
