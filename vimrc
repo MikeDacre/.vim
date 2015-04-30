@@ -326,24 +326,27 @@ fun OpenCloseScreen()
 endfun
 
 fun SendLine()
-  call StartScreenTmux()
-  let c = getline('.')
-  call g:ScreenShellSend(c)
+  if g:ScreenShellActive
+    let c = getline('.')
+    call g:ScreenShellSend(c)
+  endif
 endfun
 
 fun SendSelectionDedent()
-  call StartScreenTmux()
-  let c = substitute(@v, '\t', '  ', 'g')
-  let c = substitute(c, '^ \+', '', 'g')
-  let c = substitute(c, '\r \+', '\n', 'g')
-  let c = substitute(c, '\n \+', '\n', 'g')
-  call g:ScreenShellSend(c)
+  if g:ScreenShellActive
+    let c = substitute(@v, '\t', '  ', 'g')
+    let c = substitute(c, '^ \+', '', 'g')
+    let c = substitute(c, '\r \+', '\n', 'g')
+    let c = substitute(c, '\n \+', '\n', 'g')
+    call g:ScreenShellSend(c)
+  endif
 endfunction
 
 fun SendCellPython()
-  call StartScreenTmux()
-  :?##\|\#^?;/##\|\#$/y b
-  call g:ScreenShellSend(@b)
+  if g:ScreenShellActive
+    :?##\|\#^?;/##\|\#$/y b
+    call g:ScreenShellSend(@b)
+  endif
 endfun
 
 map  <silent> <C-e> :call OpenCloseScreen()<cr>
