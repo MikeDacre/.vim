@@ -441,6 +441,7 @@ let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive
 au BufRead,BufNewFile *.py set filetype=python
 
 " Jedi
+let g:jedi#auto_initialization    = 1
 let g:jedi#force_py_version       = 3
 let g:jedi#popup_on_dot           = 1
 let g:jedi#auto_vim_configuration = 0
