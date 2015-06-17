@@ -113,7 +113,7 @@ snippet stdarg
 	    """ Run everything """
 
 	##
-	if __name__ == '__main__':
+	if __name__ == '__main__' and '__file__' in globals():
 	    """Command Line Argument Parsing"""
 	    import argparse
 
@@ -122,12 +122,10 @@ snippet stdarg
 	                                      formatter_class=f_class)
 
 	    # Input files
-	    # parser.add_argument('files', nargs='+',
-	    #                     help="The duplicate stats files from rmdup")
+	    parser.add_argument('files', nargs='+',
+	                        help="The duplicate stats files from rmdup")
 
 	    # Optional Files
-	    parser.add_argument('-i', '--infile', nargs='?', default=sys.stdin,
-	                        help="Input file, Default STDIN")
 	    parser.add_argument('-o', '--outfile', nargs='?', default=sys.stdout,
 	                        type=argparse.FileType('w'),
 	                        help="Output file, Default STDOUT")
