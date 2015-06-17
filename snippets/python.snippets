@@ -98,34 +98,50 @@ snippet ifwith
 			${5:run_all}(${6:$4})
 	else:
 		${7:$5}(${8:$1})
+snippet bamfile
+	bamfile = subprocess.Popen('samtools view '+BAMFILE, stdout=subprocess.PIPE, shell=True)
+	for line in bamfile.stdout:
+snippet gzipped
+	# Check if gzipped
+	with open(infile) as f:
+	    head = f.read(3)
+	# Open
+	f = gzip.open(infile, 'rb') if head == "\x1f\x8b\x08" else open(infile, 'rb')
 snippet stdarg
-	def _get_args():
+	def main(files, outfile=sys.stdout, logfile=sys.stderr,
+	         verbose=False):
+	    """ Run everything """
+
+	##
+	if __name__ == '__main__':
 	    """Command Line Argument Parsing"""
 	    import argparse
-	    import sys
 
 	    f_class = argparse.RawDescriptionHelpFormatter
 	    parser  = argparse.ArgumentParser(description=__doc__,
 	                                      formatter_class=f_class)
 
+	    # Input files
+	    # parser.add_argument('files', nargs='+',
+	    #                     help="The duplicate stats files from rmdup")
+
 	    # Optional Files
 	    parser.add_argument('-i', '--infile', nargs='?', default=sys.stdin,
 	                        help="Input file, Default STDIN")
 	    parser.add_argument('-o', '--outfile', nargs='?', default=sys.stdout,
+	                        type=argparse.FileType('w'),
 	                        help="Output file, Default STDOUT")
 	    parser.add_argument('-l', '--logfile', nargs='?', default=sys.stderr,
 	                        type=argparse.FileType('a'),
 	                        help="Log File, Default STDERR (append mode)")
 
-	    return parser
+	    # Debugging flags
+	    parser.add_argument('-v', '--verbose', action="store_true",
+	                        help="Verbose output")
 
-
-	def main():
-	    """Run directly"""
-	    # Get commandline arguments
-	    parser = _get_args()
 	    args = parser.parse_args()
+	    arg_list = (args.files, args.outfile, args.logfile,
+	                args.verbose)
 
-	# The end
-	if __name__ == '__main__':
-	    main()
+	    # Run the script
+	    main(*arg_list)

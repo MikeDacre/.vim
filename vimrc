@@ -293,7 +293,7 @@ fun LastMod()
   else
     let l = line("$")
   endif
-  exe "1," . l . "g/Last modified: /s/Last modified: .*/Last modified: " .
+  exe "1," . l . "g/Last modified: 2015-06-17 11:12
   \ strftime("%Y-%m-%d %H:%M")
 endfun
 
@@ -326,24 +326,27 @@ fun OpenCloseScreen()
 endfun
 
 fun SendLine()
-  call StartScreenTmux()
-  let c = getline('.')
-  call g:ScreenShellSend(c)
+  if g:ScreenShellActive
+    let c = getline('.')
+    call g:ScreenShellSend(c)
+  endif
 endfun
 
 fun SendSelectionDedent()
-  call StartScreenTmux()
-  let c = substitute(@v, '\t', '  ', 'g')
-  let c = substitute(c, '^ \+', '', 'g')
-  let c = substitute(c, '\r \+', '\n', 'g')
-  let c = substitute(c, '\n \+', '\n', 'g')
-  call g:ScreenShellSend(c)
+  if g:ScreenShellActive
+    let c = substitute(@v, '\t', '  ', 'g')
+    let c = substitute(c, '^ \+', '', 'g')
+    let c = substitute(c, '\r \+', '\n', 'g')
+    let c = substitute(c, '\n \+', '\n', 'g')
+    call g:ScreenShellSend(c)
+  endif
 endfunction
 
 fun SendCellPython()
-  call StartScreenTmux()
-  :?##\|\#^?;/##\|\#$/y b
-  call g:ScreenShellSend(@b)
+  if g:ScreenShellActive
+    :?##\|\#^?;/##\|\#$/y b
+    call g:ScreenShellSend(@b)
+  endif
 endfun
 
 map  <silent> <C-e> :call OpenCloseScreen()<cr>
@@ -438,6 +441,7 @@ let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive
 au BufRead,BufNewFile *.py set filetype=python
 
 " Jedi
+let g:jedi#auto_initialization    = 1
 let g:jedi#force_py_version       = 3
 let g:jedi#popup_on_dot           = 1
 let g:jedi#auto_vim_configuration = 0
@@ -457,7 +461,7 @@ let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
 let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8', 'pyflakes']
-let g:pymode_lint_ignore        = "W0611,E221,E501"
+let g:pymode_lint_ignore        = "W0611,E221,E501,E116"
 let g:pymode_lint_cwindow       = 0
 let g:pymode_syntax             = 1
 
@@ -466,6 +470,9 @@ nmap <silent> <LocalLeader>pu :SyntasticReset<cr>
 
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
+
+" SuperTab
+let g:SuperTabDefaultCompletionType = "context"
 
 " Table Mode
 let g:table_mode_fillchar = '='

@@ -31,3 +31,4 @@ vim-scripts/taglist.vim
 klen/python-mode
 bling/vim-airline
 bling/vim-bufferline
+ervandew/supertab
