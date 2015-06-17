@@ -293,7 +293,7 @@ fun LastMod()
   else
     let l = line("$")
   endif
-  exe "1," . l . "g/Last modified: /s/Last modified: .*/Last modified: " .
+  exe "1," . l . "g/Last modified: 2015-06-17 11:12
   \ strftime("%Y-%m-%d %H:%M")
 endfun
 
