@@ -27,6 +27,7 @@ setlocal noswapfile
 setlocal buftype=nofile
 setlocal nowrap
 setlocal iskeyword=@,48-57,_,.
+setlocal nolist
 
 if !exists("g:rplugin_hasmenu")
     let g:rplugin_hasmenu = 0
@@ -94,7 +95,6 @@ function! UpdateOB(what)
     if bufname("%") =~ "Object_Browser" || b:rplugin_extern_ob
         setlocal nomodifiable
     endif
-    redraw
     if rplugin_switchedbuf
         exe "sil noautocmd sb " . g:rplugin_curbuf
         exe "set switchbuf=" . savesb
@@ -119,7 +119,11 @@ function! RBrowserDoubleClick()
     " Toggle state of list or data.frame: open X closed
     let key = RBrowserGetName(0, 1)
     if g:rplugin_curview == "GlobalEnv"
-        call SendToVimCom("\006" . key)
+        if getline(".") =~ "&#.*\t"
+            call SendToVimCom("\006&" . key)
+        else
+            call SendToVimCom("\006" . key)
+        endif
     else
         let key = substitute(key, '`', '', "g") 
         if key !~ "^package:"
@@ -295,16 +299,6 @@ function! RBrowserGetName(cleantail, cleantick)
     endif
 endfunction
 
-function! MakeRBrowserMenu()
-    let g:rplugin_curbuf = bufname("%")
-    if g:rplugin_hasmenu == 1
-        return
-    endif
-    menutranslate clear
-    call RControlMenu()
-    call RBrowserMenu()
-endfunction
-
 function! ObBrBufUnload()
     if exists("g:rplugin_editor_sname")
         call system("tmux select-pane -t " . g:rplugin_vim_pane)
@@ -354,8 +348,6 @@ endif
 unlet s:envstring
 
 call setline(1, ".GlobalEnv | Libraries")
-
-let b:SourceLines = function("RSourceLines")
 
 call RSourceOtherScripts()
 

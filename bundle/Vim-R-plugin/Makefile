@@ -22,7 +22,7 @@
 
 
 PLUGINHOME=`pwd`
-PLUGINVERSION=1.2.3
+PLUGINVERSION=1.2.6
 DEBIANTIME=`date -R`
 PLUGINRELEASEDATE=`date +"%Y-%m-%d"`
 VIM2HTML=/usr/local/share/vim/vim74/doc/vim2html.pl 
@@ -72,7 +72,6 @@ deb:
 	  - r-plugin/setcompldir.vim\n\
 	  - r-plugin/synctex_evince_backward.py\n\
 	  - r-plugin/synctex_evince_forward.py\n\
-	  - r-plugin/synctex_okular_backward.sh\n\
 	  - syntax/rbrowser.vim\n\
 	  - syntax/rdoc.vim\n\
 	  - syntax/rout.vim\n\
@@ -163,6 +162,7 @@ htmldoc:
 	    sed -i -e 's/<\/a>|/<\/a>/g' r-plugin.html ;\
 	    sed -i -e 's/|<code /<code /g' r-plugin.html ;\
 	    sed -i -e 's/<\/code>|/<\/code>/g' r-plugin.html ;\
+	    sed -i -e 's/&term/\&amp;term/g' r-plugin.html ;\
 	    sed -i -e 's/`//g' r-plugin.html ;\
 	    sed -i -e 's/\( *\)\(http\S*\)/\1<a href="\2">\2<\/a>/' r-plugin.html ;\
 	    sed -i -e 's/<\/pre><hr><pre>/  --------------------------------------------------------\n/' r-plugin.html ;\
