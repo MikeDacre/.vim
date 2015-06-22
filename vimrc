@@ -286,7 +286,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 let g:template_basedir = "~/.vim/templates"
 
 " Last Modified function
-autocmd BufWritePre,FileWritePre *   ks|call LastMod()|'s
+" autocmd BufWritePre,FileWritePre *   ks|call LastMod()|'s
 fun LastMod()
   if line("$") > 20
     let l = 20
