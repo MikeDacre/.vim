@@ -286,16 +286,31 @@ autocmd BufWritePre * :%s/\s\+$//e
 let g:template_basedir = "~/.vim/templates"
 
 " Last Modified function
-" autocmd BufWritePre,FileWritePre *   ks|call LastMod()|'s
-fun LastMod()
-  if line("$") > 20
-    let l = 20
+let g:lastmodified = 1
+
+map <leader>lm :call ToggleMod()<CR>
+function! ToggleMod()
+  if g:lastmodified
+    let g:lastmodified = 0
+    echom "Last modified editing switched off"
   else
-    let l = line("$")
+    let g:lastmodified = 1
+    echom "Last modified editing switched on"
   endif
-  exe "1," . l . "g/Last modified: 2015-06-17 11:12
-  \ strftime("%Y-%m-%d %H:%M")
 endfun
+
+function! LastModified()
+  if &modified && g:lastmodified
+      let save_cursor = getpos(".")
+      let n = min([20, line("$")])
+      keepjumps exe '1,' . n . 's#^\(.\{,10}Last modified: \).\{16}\(.*\)#\1' .
+            \ strftime("%Y-%m-%d %H:%M") . '\2#e'
+      call histdel('search', -1)
+      call setpos('.', save_cursor)
+  endif
+endfun
+
+autocmd BufWritePre * call LastModified()
 
 " Send line to Tmux
 let g:ScreenIPython3 = 1
