@@ -303,8 +303,8 @@ function! LastModified()
   if &modified && g:lastmodified
       let save_cursor = getpos(".")
       let n = min([20, line("$")])
-      keepjumps exe '1,' . n . 's#^\(.\{,10}Last modified: \).\{16}\(.*\)#\1' .
-            \ strftime("%Y-%m-%d %H:%M") . '\2#e'
+      keepjumps exe '1,' . n . 's#^\(.\{,10}Last modified:\)\( [0-9]\{4}-[0-9]\{2}-[0-9]\{2} [0-9]\{2}:[0-9]\{2}\)\{,1}\(.*\)#\1 ' .
+            \ strftime("%Y-%m-%d %H:%M") . ' \3#e'
       call histdel('search', -1)
       call setpos('.', save_cursor)
   endif
