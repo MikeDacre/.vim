@@ -1,0 +1,9 @@
+---
+:Title: ''
+:Author: Michael D. Dacre
+:Email: %MAIL%
+:Last modified: %FDATE%
+
+...
+
+%HERE%
