@@ -1,7 +1,9 @@
-%FFILE%
-
-:Author: %USER%
+---
+:Title: ''
+:Author: Michael D. Dacre
 :Email: %MAIL%
-:Date: %FDATE%
+:Last modified: %FDATE%
+
+...
 
 %HERE%
