@@ -211,6 +211,7 @@ call s:WithConceal('html_c_e', 'syn match pandocHTMLCommentEnd /-->/ contained',
 unlet b:current_syntax
 syn include @LATEX syntax/tex.vim
 syn region pandocLaTeXInlineMath start=/\\\@<!\$[[:graph:]]\@=/ end=/\\\@<!\$/ keepend contains=@LATEX 
+syn region pandocLaTeXInlineMath start=/\\\@<!\\([[:graph:]]\@=/ end=/\\\@<!\\)/ keepend contains=@LATEX 
 syn match pandocProtectedFromInlineLaTeX /\\\@<!\${.*}\(\(\s\|[[:punct:]]\)\([^$]*\|.*\(\\\$.*\)\{2}\)\n\n\|$\)\@=/ display
 " contains=@LATEX
 syn region pandocLaTeXMathBlock start=/\$\$/ end=/\$\$/ keepend contains=@LATEX
@@ -357,7 +358,7 @@ syn match pandocGridTableHeader /\%#=2\(^.*\n\)\(+=.*\)\@=/ contained containedi
 "}}}3
 " Pipe: {{{3
 " with beginning and end pipes
-syn region pandocPipeTable start=/\%#=2\([+|]\n\)\@<!\n\@1<=|\(.*|\)\@=/ end=/|.*\n\n/ containedin=ALLBUT,pandocDelimitedCodeBlock,pandocYAMLHeader keepend 
+syn region pandocPipeTable start=/\%#=2\([+|]\n\)\@<!\n\@1<=|\(.*|\)\@=/ end=/|.*\n\(\n\|{\)/ containedin=ALLBUT,pandocDelimitedCodeBlock,pandocYAMLHeader keepend 
 " without beginning and end pipes
 syn region pandocPipeTable start=/\%#=2^.*\n-.\{-}|/ end=/|.*\n\n/ keepend
 syn match pandocPipeTableDelims /[\|\-:+]/ contained containedin=pandocPipeTable
