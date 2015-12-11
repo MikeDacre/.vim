@@ -11,10 +11,6 @@ autocmd BufRead,InsertLeave * match NoteComment /[^a-zA-Z]\?NOTE[ :]\c/
 autocmd InsertEnter * match TodoComment /[^a-zA-Z]\?TODO[ :]\c/
 autocmd BufRead,InsertLeave * match TodoComment /[^a-zA-Z]\?TODO[ :]\c/
 
-" Highlight trailing whitespace
-autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd BufRead,InsertLeave * match ExtraWhitespace /\s\+$/
-
 " Highlight too-long lines
 autocmd BufRead,InsertEnter,InsertLeave * 2match LineLengthError /\%126v.*/
 
@@ -30,9 +26,6 @@ autocmd ColorScheme * highlight TodoComment ctermbg=yellow ctermfg=black guibg=y
 
 highlight LineLengthError ctermbg=234 guibg=#242424
 autocmd ColorScheme * highlight LineLengthError ctermbg=234  guibg=#242424 
-
-" Autoremove trailing spaces when saving the buffer
-autocmd FileType ruby,c,cpp,java,php,html,python,python3,perl autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 " Command to clear whitespace highlighting (it can be annoying)
 map <silent> <LocalLeader>ws :highlight clear ExtraWhitespace<CR>

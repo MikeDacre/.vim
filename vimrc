@@ -280,7 +280,7 @@ map <leader>PP :set nopaste<CR>:set expandtab<CR>
 map <leader>ds :s/^\s\+<CR>
 
 " Delete training whitespace
-autocmd BufWritePre * :%s/\s\+$//e
+" autocmd BufWritePre * :%s/\s\+$//e
 
 " Templates
 let g:template_basedir = "~/.vim/templates"
@@ -456,7 +456,7 @@ let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive
 au BufRead,BufNewFile *.py set filetype=python
 
 " Jedi
-let g:jedi#auto_initialization    = 1
+let g:jedi#auto_initialization    = 0
 let g:jedi#force_py_version       = 3
 let g:jedi#popup_on_dot           = 1
 let g:jedi#auto_vim_configuration = 0
@@ -470,7 +470,7 @@ let g:pymode_folding            = 1
 let g:pymode_rope               = 0          " Jedi does this
 let g:pymode_rope_completion    = 0
 let g:pymode_python             = 'python3'  " Always use python3
-let g:pymode_trim_whitespaces   = 1
+let g:pymode_trim_whitespaces   = 0
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
@@ -563,10 +563,10 @@ let g:vimrplugin_vsplit = 1
 nmap <LocalLeader>ll <Plug>RSendLine
 
 " Highlight whitespace
-autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
+" autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+" highlight ExtraWhitespace ctermbg=red guibg=red
+" match ExtraWhitespace /\s\+$/
+" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+" autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+" autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+" autocmd BufWinLeave * call clearmatches()
