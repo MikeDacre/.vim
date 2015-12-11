@@ -4,15 +4,15 @@
 """
 #============================================================================#
 #                                                                            #
-#          FILE: %FILE% (python 3)                                           #
+#          FILE: %FILE% (python 3)                                                #
 #        AUTHOR: Michael D Dacre, mike.dacre@gmail.com                       #
 #  ORGANIZATION: Stanford University                                         #
 #       LICENSE: MIT License, property of Stanford, use as you wish          #
 #       VERSION: 0.1                                                         #
-#       CREATED: %FDATE%                                                     #
-# Last modified: %FDATE%                                                     #
+#       CREATED: %FDATE%                                            #
+# Last modified: 2015-12-11 15:55 %FDATE%                                            #
 #                                                                            #
-#   DESCRIPTION: %HERE%                                                      #
+#   DESCRIPTION: %HERE%                                                            #
 #                                                                            #
 #         USAGE: Run as a script or import as a module.  See '-h' or 'help'  #
 #                                                                            #

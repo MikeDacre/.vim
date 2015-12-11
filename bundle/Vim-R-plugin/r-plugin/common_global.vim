@@ -709,20 +709,20 @@ function StartR_ExternalTerm(rcmd)
 
     let rcmd = 'VIMRPLUGIN_TMPDIR=' . substitute(g:rplugin_tmpdir, ' ', '\\ ', 'g') . ' VIMRPLUGIN_COMPLDIR=' . substitute(g:rplugin_compldir, ' ', '\\ ', 'g') . ' VIMINSTANCEID=' . $VIMINSTANCEID . ' VIMRPLUGIN_SECRET=' . $VIMRPLUGIN_SECRET . ' VIMEDITOR_SVRNM=' . $VIMEDITOR_SVRNM . ' ' . a:rcmd
 
-    call system("tmux has-session -t " . g:rplugin_tmuxsname)
+    call system("tmux -L vimr has-session -t " . g:rplugin_tmuxsname)
     if v:shell_error
         if g:rplugin_is_darwin
             let $VIM_BINARY_PATH = substitute($VIMRUNTIME, "/MacVim.app/Contents/.*", "", "") . "/MacVim.app/Contents/MacOS/Vim"
             let rcmd = "VIM_BINARY_PATH=" . substitute($VIM_BINARY_PATH, ' ', '\\ ', 'g') . ' TERM=screen-256color ' . rcmd
-            let opencmd = printf("tmux -2 %s new-session -s %s '%s'", tmuxcnf, g:rplugin_tmuxsname, rcmd)
+            let opencmd = printf("tmux -L vimr -2 %s new-session -s %s '%s'", tmuxcnf, g:rplugin_tmuxsname, rcmd)
             call writefile(["#!/bin/sh", opencmd], $VIMRPLUGIN_TMPDIR . "/openR")
             call system("chmod +x '" . $VIMRPLUGIN_TMPDIR . "/openR'")
             let opencmd = "open '" . $VIMRPLUGIN_TMPDIR . "/openR'"
         else
             if g:rplugin_termcmd =~ "gnome-terminal" || g:rplugin_termcmd =~ "xfce4-terminal" || g:rplugin_termcmd =~ "terminal" || g:rplugin_termcmd =~ "iterm"
-                let opencmd = printf("%s 'tmux -2 %s new-session -s %s \"%s\"' &", g:rplugin_termcmd, tmuxcnf, g:rplugin_tmuxsname, rcmd)
+                let opencmd = printf("%s 'tmux -L vimr -2 %s new-session -s %s \"%s\"' &", g:rplugin_termcmd, tmuxcnf, g:rplugin_tmuxsname, rcmd)
             else
-                let opencmd = printf("%s tmux -2 %s new-session -s %s \"%s\" &", g:rplugin_termcmd, tmuxcnf, g:rplugin_tmuxsname, rcmd)
+                let opencmd = printf("%s tmux -L vimr -2 %s new-session -s %s \"%s\" &", g:rplugin_termcmd, tmuxcnf, g:rplugin_tmuxsname, rcmd)
             endif
         endif
     else
@@ -731,9 +731,9 @@ function StartR_ExternalTerm(rcmd)
             return
         endif
         if g:rplugin_termcmd =~ "gnome-terminal" || g:rplugin_termcmd =~ "xfce4-terminal" || g:rplugin_termcmd =~ "terminal" || g:rplugin_termcmd =~ "iterm"
-            let opencmd = printf("%s 'tmux -2 %s attach-session -d -t %s' &", g:rplugin_termcmd, tmuxcnf, g:rplugin_tmuxsname)
+            let opencmd = printf("%s 'tmux -L vimr -2 %s attach-session -d -t %s' &", g:rplugin_termcmd, tmuxcnf, g:rplugin_tmuxsname)
         else
-            let opencmd = printf("%s tmux -2 %s attach-session -d -t %s &", g:rplugin_termcmd, tmuxcnf, g:rplugin_tmuxsname)
+            let opencmd = printf("%s tmux -L vimr -2 %s attach-session -d -t %s &", g:rplugin_termcmd, tmuxcnf, g:rplugin_tmuxsname)
         endif
     endif
 
@@ -918,8 +918,13 @@ function StartR(whatr)
             endif
         endif
     endif
-
-    echon
+    if has("clientserver") && v:servername == "" && $DISPLAY != ""
+        call RWarningMsgInp("You have to restart Vim with the --servername argument otherwise Vim cannot receive messages from R.")
+        redraw
+        call RWarningMsg('Example: "vim --servername VIM ' . bufname("%") . '"')
+    else
+        echon
+    endif
 endfunction
 
 " To be called by edit() in R running in Neovim buffer.
@@ -1083,6 +1088,7 @@ function StartObjBrowser_Tmux()
                 \ 'set rulerformat=%3(%l%)',
                 \ 'set laststatus=0',
                 \ 'set noruler',
+                \ 'set updatetime=100',
                 \ 'let g:SendCmdToR = function("SendCmdToR_TmuxSplit")',
                 \ 'let g:RBrOpenCloseLs = function("RBrOpenCloseLs_TmuxOB")',
                 \ 'if has("clientserver") && v:servername != ""',
@@ -1448,7 +1454,7 @@ function SendCmdToR_Term(cmd)
 
     " Send the command to R running in an external terminal emulator
     let str = substitute(cmd, "'", "'\\\\''", "g")
-    let scmd = "tmux set-buffer '" . str . "\<C-M>' && tmux paste-buffer -t " . g:rplugin_tmuxsname . '.0'
+    let scmd = "tmux -L vimr set-buffer '" . str . "\<C-M>' && tmux -L vimr paste-buffer -t " . g:rplugin_tmuxsname . '.0'
     let rlog = system(scmd)
     if v:shell_error
         let rlog = substitute(rlog, '\n', ' ', 'g')
@@ -1530,6 +1536,17 @@ function GetROutput(outf)
     redraw
 endfunction
 
+function GetSourceArgs(e)
+    let sargs = ""
+    if g:vimrplugin_source_args != ""
+        let sargs = ", " . g:vimrplugin_source_args
+    endif
+    if a:e == "echo"
+        let sargs .= ', echo=TRUE'
+    endif
+    return sargs
+endfunction
+
 " Send sources to R
 function RSourceLines(...)
     let lines = a:1
@@ -1537,22 +1554,16 @@ function RSourceLines(...)
         let lines = map(copy(lines), 'substitute(v:val, "^\\.\\. \\?", "", "")')
     endif
     if &filetype == "rmd"
-        let lines = map(copy(lines), 'substitute(v:val, "^\\`\\`\\?", "", "")')
+        let lines = map(copy(lines), 'substitute(v:val, "^(\\`\\`)\\?", "", "")')
     endif
     call writefile(lines, g:rplugin_rsource)
-    let sargs = ""
-    if g:vimrplugin_source_args != ""
-        let sargs = ", " . g:vimrplugin_source_args
-    endif
 
     if a:0 == 3 && a:3 == "NewtabInsert"
         call SendToVimCom("\x08" . $VIMINSTANCEID . 'vimcom:::vim_capture_source_output("' . g:rplugin_rsource . '", "' . g:rplugin_tmpdir . '/Rinsert")')
         return 1
     endif
 
-    if a:2 == "echo"
-        let sargs .= ', echo=TRUE'
-    endif
+    let sargs = GetSourceArgs(a:2)
     let rcmd = 'base::source("' . g:rplugin_rsource . '"' . sargs . ')'
     let ok = g:SendCmdToR(rcmd)
     return ok
@@ -1565,11 +1576,8 @@ function SendFileToR(e)
     if has("win32") || has("win64")
         let fpath = substitute(fpath, "\\", "/", "g")
     endif
-    if a:e == "echo"
-        call g:SendCmdToR('base::source("' . fpath . '", echo=TRUE)')
-    else
-        call g:SendCmdToR('base::source("' . fpath . '")')
-    endif
+    let sargs = GetSourceArgs(a:e)
+    call g:SendCmdToR('base::source("' . fpath .  '"' . sargs . ')')
 endfunction
 
 " Send block to R
@@ -1898,7 +1906,7 @@ function SendLineToR(godown)
             call KnitChild(line, a:godown)
             return
         endif
-        let line = substitute(line, "^\\`\\`\\?", "", "")
+        let line = substitute(line, "^(\\`\\`)\\?", "", "")
         if RmdIsInRCode(1) == 0
             return
         endif
@@ -2421,7 +2429,8 @@ endfunction
 
 function RStart_Zathura(basenm)
     let a2 = 'a2 = "vim --servername ' . v:servername . " --remote-expr \\\"SyncTeX_backward('%{input}',%{line})\\\"" . '"'
-    let pycode = ["import subprocess",
+    let pycode = ["# -*- coding: " . &encoding . " -*-",
+                \ "import subprocess",
                 \ "import os",
                 \ "import sys",
                 \ "FNULL = open(os.devnull, 'w')",
@@ -2432,7 +2441,11 @@ function RStart_Zathura(basenm)
                 \ "sys.stdout.write(str(zpid))" ]
     call writefile(pycode, g:rplugin_tmpdir . "/start_zathura.py")
     let pid = system("python '" . g:rplugin_tmpdir . "/start_zathura.py" . "'")
-    let g:rplugin_zathura_pid[a:basenm] = pid
+    if pid == 0
+        call RWarningMsg("Failed to run Zathura: " . substitute(pid, "\n", " ", "g"))
+    else
+        let g:rplugin_zathura_pid[a:basenm] = pid
+    endif
     call delete(g:rplugin_tmpdir . "/start_zathura.py")
 endfunction
 
@@ -3154,7 +3167,8 @@ else
     call RSetDefaultValue("g:vimrplugin_tmux_ob", 1)
 endif
 
-if has("gui_running") || has("win32") || g:vimrplugin_applescript || !g:rplugin_do_tmux_split
+if has("gui_running") || has("win32") || g:vimrplugin_applescript
+    let g:rplugin_do_tmux_split = 0
     let g:vimrplugin_tmux_ob = 0
     if g:vimrplugin_objbr_place =~ "console"
         let g:vimrplugin_objbr_place = substitute(g:vimrplugin_objbr_place, "console", "script", "")

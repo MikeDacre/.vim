@@ -31,6 +31,7 @@ call pathogen#helptags()
 if has("gui_running") || &term == "xterm-256color" || &term == "screen-256color"
   set t_Co=256
   set selectmode=key
+  set guifont=Inconsolata\ Medium\ 15
   colo wombatmikemod
 else
   colo wombat
@@ -182,6 +183,71 @@ inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
 let g:ex_usr_name = "Mike Dacre"
 
 """ My Functions
+" Diff attempt from
+" http://vim.wikia.com/wiki/Create_patch_for_currently_editing_file
+fu! DiffUnified()
+  let diffexpr="diff -Nuar"
+  let bname=bufname("")
+  let origtemp=0
+  " Case 1: File has a filename and is not modified
+  if !&modified && !empty(bname)
+    let tempfile=0
+    let origFile=bname.".orig"
+  else
+    " Case 2: File has a filename and is modified
+    if &modified && !empty(bname)
+      if !filereadable(bname.".orig")
+        sp
+        enew
+        r #
+        0d
+        let tempfile2=tempname()
+        exe ":sil w! " .tempfile2
+        wincmd q
+        let origtemp=1
+        wincmd p
+      endif
+      let origFile=tempfile2
+      " Case 2: File is new and is modified
+    else
+      if &modified
+        let origFile=bname.".orig"
+      else
+        let origFile=""
+      endif
+    endif
+    let bname=tempname()
+    exe ":sil w! ".bname
+    let tempfile=1
+  endif
+  try
+    if !filereadable(origFile)
+      let origFile=input("With which file to diff?: ","","file")
+    endif
+    if !filereadable(bname)
+      exe ":sil w! ".bname
+    endif
+    if empty(origFile)
+      throw "nofile"
+    endif
+    exe "sil sp"
+    exe "enew"
+    set bt=nofile
+    exe "sil r!".diffexpr." ".origFile." ".bname
+    exe "0d_"
+    exe "set ft=diff"
+    " Clean up temporary files
+    if  tempfile == 1
+      exe "sil :!rm -f ". bname
+      let tempfile=0
+    endif
+    if origtemp == 1
+      exe "sil :!rm -f ". origFile
+      let origtemp=0
+    endif
+  catch
+  endtry
+endf
 
 " Fold with F
 nmap <leader>F za
@@ -303,8 +369,8 @@ function! LastModified()
   if &modified && g:lastmodified
       let save_cursor = getpos(".")
       let n = min([20, line("$")])
-      keepjumps exe '1,' . n . 's#^\(.\{,10}Last modified: \).\{16}\(.*\)#\1' .
-            \ strftime("%Y-%m-%d %H:%M") . '\2#e'
+      keepjumps exe '1,' . n . 's#^\(.\{,10}Last modified:\)\( [0-9]\{4}-[0-9]\{2}-[0-9]\{2} [0-9]\{2}:[0-9]\{2}\)\{,1}\(.*\)#\1 ' .
+            \ strftime("%Y-%m-%d %H:%M") . '\3#e'
       call histdel('search', -1)
       call setpos('.', save_cursor)
   endif
