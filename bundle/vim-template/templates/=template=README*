@@ -1,8 +1,1 @@
-#  %FFILE%
-# 
-#  Created by:    Michael Dacre
-#  Date Created:  %FDATE%
-#  Last modified: 
-#
-
-%HERE%
+../../../templates/=template=README*

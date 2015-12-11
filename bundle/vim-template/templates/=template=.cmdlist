@@ -1,12 +1,1 @@
-#  %FFILE%
-# 
-#  This file contains a list of commands used on a single project with the output
-#  of those commands in comment blocks.
-#  Notes are standalone strings
-#
-#  Created by:    Michael Dacre
-#  Date Created:  %FDATE%
-#  Last modified: 
-#
-
-%HERE%
+../../../templates/=template=.cmdlist

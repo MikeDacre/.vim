@@ -5,7 +5,7 @@
 Authors: Jakson A. Aquino   <jalvesaq@gmail.com>
          Jose Claudio Faria <joseclaudio.faria@gmail.com>
 
-Version: 1.2.6
+Version: 1.2.7
 For Vim version 7.4
 
  1. Overview                                    |r-plugin-overview|
@@ -115,7 +115,7 @@ dependencies:
 
     * R's version must be >= 3.0.0: http://www.r-project.org/
 
-    * vimcom = 1.2-6: http://www.lepem.ufc.br/jaa/vimcom.html
+    * vimcom = 1.2-7: http://www.lepem.ufc.br/jaa/vimcom.html
 
       Note: If you cannot build vimcom yourself, you will want to
       download and install the zip file.
@@ -152,7 +152,7 @@ Before installing the plugin, you should install its dependencies:
 
    R >= 3.0.0: http://www.r-project.org/
 
-   vimcom = 1.2-6: http://www.lepem.ufc.br/jaa/vimcom.html
+   vimcom = 1.2-7: http://www.lepem.ufc.br/jaa/vimcom.html
 
    Only if you edit Rnoweb files: MacTeX, BasicTeX or other LaTeX system.
 
@@ -206,7 +206,7 @@ Before installing the plugin, you should install its dependencies:
 
    R >= 3.0.0: http://www.r-project.org/
 
-   vimcom = 1.2-6: http://www.lepem.ufc.br/jaa/vimcom.html
+   vimcom = 1.2-7: http://www.lepem.ufc.br/jaa/vimcom.html
 
    Tmux >= 1.8:   http://tmux.sourceforge.net
                   Tmux is necessary to send commands from Vim to R Console.
@@ -253,23 +253,25 @@ Put the following in your `~/.bashrc`:
 Before proceeding, you have to start a new shell session to have the alias
 enabled.
 
-If you start either GVim or Vim in a terminal emulator the plugin will start R
-in a external terminal emulator. If you start Vim inside of a Tmux session,
-the plugin will split the Tmux window in two and start R in the other pane.
-
-The recommended way of running the plugin on Linux is running Vim inside a
-Tmux session. Please, read |r-plugin-tmux| for details.
+If you start Vim in a terminal emulator, inside of a Tmux session, the plugin
+will split the Tmux window in two and start R in the other pane. This is the
+recommended way of running the plugin on Linux (read |r-plugin-tmux| for
+details). If you either use GVim or Vim not inside a Tmux session the plugin
+will start R in a external terminal emulator. This is useful if you have two
+monitors.
 
 If you run Vim in a terminal emulator, it must be started with the argument
-|--servername|. Please, read the section |r-plugin-bash-setup| to know some
-tips on how to configure Bash.
+|--servername| to enable the 'clientserver' feature (please, read the section
+|r-plugin-bash-setup| to know some tips on how to configure Bash). This is not
+necessary with GVim because it always runs with the 'clientserver' feature
+enabled.
 
 
 ------------------------------------------------------------------------------
 3.4. Plugin installation (instructions for all systems)~
 
 You need to activate plugins and indentation according to 'filetype'. You
-should have at least the following options at the top or at near the very top
+should have at least the following options at the top or near the very top
 of your |vimrc| (but below `set` `runtimepath`, if you have set it):
 >
    set nocompatible
@@ -511,6 +513,10 @@ plugin sends to R the command to source the file. To send to R Console the
 line currently under the cursor you should type <LocalLeader>d. If you want to
 see what lines are being sourced when sending a selection of lines, you can
 use either <LocalLeader>se or <LocalLeader>sa instead of <LocalLeader>ss.
+
+The command <LocalLeader>o runs in the background the R command `print(line)`,
+where `line` is the line under cursor, and adds the output as commented lines
+to the source code.
 
 If the cursor is over the header of an R chunk with the `child` option (from
 Rnoweb, RMarkdown or RreStructuredText document), and you use one of the
@@ -815,9 +821,12 @@ file:
 
    # Options enable mouse support in Tmux
    set -g terminal-overrides 'xterm*:smcup@:rmcup@'
+   # For Tmux < 2.1
    set -g mode-mouse on
    set -g mouse-select-pane on
    set -g mouse-resize-pane on
+   # For Tmux >= 2.1
+   set -g mouse on
 
    # Act more like vim:
    set-window-option -g mode-keys vi
@@ -1322,7 +1331,15 @@ To completely disable this feature, put in your |vimrc|:
 <
 If you need to type many object names with underscores, you may want to change
 the value vimrplugin_assign to 2. Then, you will have to type two `_` to get
-them converted into `<-`.
+them converted into `<-`. Alternatively, if the value of vimrplugin_assign is
+3, the plugin will run the following command in each buffer containing R code
+(R, Rnoweb, Rhelp, Rrst, and Rmd):
+>
+   iabb <buffer> _ <-
+<
+That is, the underscore will be replaced with the assign operator only if it
+is preceded by a space and followed by a non-word character.
+
 
 ------------------------------------------------------------------------------
 						   *vimrplugin_objbr_place*
@@ -1662,7 +1679,7 @@ this behavior. Examples:
    let vimrplugin_latexcmd = 'latexmk -pdf -pdflatex="xelatex %O -synctex=1 %S"'
 <
 By default, vimrplugin_latexmk is 0 on Windows and 1 on other systems.
-If you want to pass arguments do the `Sweave()` function, set the value of the
+If you want to pass arguments to the `Sweave()` function, set the value of the
 vimrplugin_sweaveargs variable.
 
 If the value of `vimrplugin_texerr` is `1`, a summary of LaTeX errors
@@ -2823,6 +2840,10 @@ put in your |vimrc|:
 ==============================================================================
 							       *r-plugin-news*
 10. News~
+
+1.2.7 (2015-11-27)
+
+ * Fix incompatibility with Tmux 2.1.
 
 1.2.6 (2015-06-12)
 
