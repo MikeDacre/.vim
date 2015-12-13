@@ -542,7 +542,7 @@ let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
 let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8', 'pyflakes']
-let g:pymode_lint_ignore        = "W0611,E221,E501,E116"
+let g:pymode_lint_ignore        = "W0612,C901,W0611,E221,E501,E116"
 let g:pymode_lint_cwindow       = 0
 let g:pymode_syntax             = 1
 
