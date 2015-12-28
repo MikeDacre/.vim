@@ -11,6 +11,19 @@ if !exists("g:tmux_navigator_save_on_switch")
   let g:tmux_navigator_save_on_switch = 0
 endif
 
+function! s:TmuxOrTmateExecutable()
+  if s:StrippedSystemCall("[[ $TMUX == *'tmate'* ]] && echo 'tmate'") == 'tmate'
+    return "tmate"
+  else
+    return "tmux"
+  endif
+endfunction
+
+function! s:StrippedSystemCall(system_cmd)
+  let raw_result = system(a:system_cmd)
+  return substitute(raw_result, '^\s*\(.\{-}\)\s*\n\?$', '\1', '')
+endfunction
+
 function! s:UseTmuxNavigatorMappings()
   return !exists("g:tmux_navigator_no_mappings") || !g:tmux_navigator_no_mappings
 endfunction
@@ -19,8 +32,18 @@ function! s:InTmuxSession()
   return $TMUX != ''
 endfunction
 
+function! s:TmuxSocket()
+  " The socket path is the first value in the comma-separated list of $TMUX.
+  return split($TMUX, ',')[0]
+endfunction
+
+function! s:TmuxCommand(args)
+  let cmd = s:TmuxOrTmateExecutable() . ' -S ' . s:TmuxSocket() . ' ' . a:args
+  return system(cmd)
+endfunction
+
 function! s:TmuxPaneCurrentCommand()
-  echo system("tmux display-message -p '#{pane_current_command}'")
+  echo s:TmuxCommand("display-message -p '#{pane_current_command}'")
 endfunction
 command! TmuxPaneCurrentCommand call <SID>TmuxPaneCurrentCommand()
 
@@ -53,8 +76,8 @@ function! s:TmuxAwareNavigate(direction)
     if g:tmux_navigator_save_on_switch
       update
     endif
-    let cmd = 'tmux select-pane -' . tr(a:direction, 'phjkl', 'lLDUR')
-    silent call system(cmd)
+    let args = 'select-pane -' . tr(a:direction, 'phjkl', 'lLDUR')
+    silent call s:TmuxCommand(args)
     if s:NeedsVitalityRedraw()
       redraw!
     endif

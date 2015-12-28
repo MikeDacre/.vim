@@ -664,7 +664,7 @@ if g:Tex_PromptedEnvironments != ''
 			" the file, then a part of the file is the preamble.
 
 			" search for where the document begins.
-			let begin_line = search('\\begin{document}')
+			let begin_line = search('\\begin{document}', 'c')
 			" if the document begins after where we are presently, then we are
 			" in the preamble.
 			if start_line < begin_line
@@ -678,7 +678,7 @@ if g:Tex_PromptedEnvironments != ''
 				return Tex_DoEnvironment()
 			endif
 
-		elseif search('\\documentclass')
+		elseif search('\\documentclass', 'bW')
 			" if there is only a \documentclass but no \begin{document}, then
 			" the entire file is a preamble. Put a package.
 
@@ -708,7 +708,15 @@ if g:Tex_PromptedEnvironments != ''
 			let l = getline(".")
 			let pack = matchstr(l, '^\s*\zs.*')
 			normal!  0"_D
-			return Tex_pack_one(pack)
+
+			" If the g:Tex_PackagesMenu variable is set to zero,
+			" the function Tex_pack_one is not defined. In this case
+			" we use a very simple replacement.
+			if has('*Tex_pack_one')
+				return Tex_pack_one(pack)
+			else
+				return IMAP_PutTextWithMovement('\usepackage{'.pack."}\<CR>", '<+', '+>')
+			endif
 		endif
 	endfunction 
 	

@@ -561,12 +561,30 @@ function CountBraces(line)
     return result
 endfunction
 
+function CleanOxygenLine(line)
+    let cline = a:line
+    if cline =~ "^\s*#\\{1,2}'"
+        let synName = synIDattr(synID(line("."), col("."), 1), "name")
+        if synName == "rOExamples"
+            let cline = substitute(cline, "^\s*#\\{1,2}'", "", "")
+        endif
+    endif
+    return cline
+endfunction
+
+function CleanCurrentLine()
+    let curline = substitute(getline("."), '^\s*', "", "")
+    if &filetype == "r"
+        let curline = CleanOxygenLine(curline)
+    endif
+    return curline
+endfunction
+
 " Skip empty lines and lines whose first non blank char is '#'
 function GoDown()
     if &filetype == "rnoweb"
         let curline = getline(".")
-        let fc = curline[0]
-        if fc == '@'
+        if curline[0] == '@'
             call RnwNextChunk()
             return
         endif
@@ -586,14 +604,12 @@ function GoDown()
 
     let i = line(".") + 1
     call cursor(i, 1)
-    let curline = substitute(getline("."), '^\s*', "", "")
-    let fc = curline[0]
+    let curline = CleanCurrentLine()
     let lastLine = line("$")
-    while i < lastLine && (fc == '#' || strlen(curline) == 0)
+    while i < lastLine && (curline[0] == '#' || strlen(curline) == 0)
         let i = i + 1
         call cursor(i, 1)
-        let curline = substitute(getline("."), '^\s*', "", "")
-        let fc = curline[0]
+        let curline = CleanCurrentLine()
     endwhile
 endfunction
 
@@ -701,7 +717,11 @@ function StartR_ExternalTerm(rcmd)
         endif
 
         if g:vimrplugin_tmux_ob || !has("gui_running")
-            call extend(cnflines, ['set -g mode-mouse on', 'set -g mouse-select-pane on', 'set -g mouse-resize-pane on'])
+            if g:rplugin_tmux_version < "2.1"
+                call extend(cnflines, ['set -g mode-mouse on', 'set -g mouse-select-pane on', 'set -g mouse-resize-pane on'])
+            else
+                call extend(cnflines, ['set -g mouse on'])
+            endif
         endif
         call writefile(cnflines, g:rplugin_tmpdir . "/tmux.conf")
         let tmuxcnf = '-f "' . g:rplugin_tmpdir . "/tmux.conf" . '"'
@@ -813,7 +833,7 @@ function StartR(whatr)
     else
         let start_options += ['options(vimcom.vimpager = TRUE)']
     endif
-    let start_options += ['if(utils::packageVersion("vimcom") != "1.2.6") warning("Your version of Vim-R-plugin requires vimcom-1.2-6.", call. = FALSE)']
+    let start_options += ['if(utils::packageVersion("vimcom") != "1.2.7") warning("Your version of Vim-R-plugin requires vimcom-1.2-7.", call. = FALSE)']
 
     let rwd = ""
     if g:vimrplugin_vim_wd == 0
@@ -993,8 +1013,8 @@ function WaitVimComStart()
         if !filereadable(g:rplugin_vimcom_lib)
             call RWarningMsgInp('Could not find "' . g:rplugin_vimcom_lib . '".')
         endif
-        if g:rplugin_vimcom_version != "1.2.6"
-            call RWarningMsg('This version of Vim-R-plugin requires vimcom 1.2.6.')
+        if g:rplugin_vimcom_version != "1.2.7"
+            call RWarningMsg('This version of Vim-R-plugin requires vimcom 1.2.7.')
             sleep 1
         endif
         call delete(g:rplugin_tmpdir . "/vimcom_running_" . $VIMINSTANCEID)
@@ -1454,6 +1474,9 @@ function SendCmdToR_Term(cmd)
 
     " Send the command to R running in an external terminal emulator
     let str = substitute(cmd, "'", "'\\\\''", "g")
+    if str =~ '^-'
+        let str = ' ' . str
+    endif
     let scmd = "tmux -L vimr set-buffer '" . str . "\<C-M>' && tmux -L vimr paste-buffer -t " . g:rplugin_tmuxsname . '.0'
     let rlog = system(scmd)
     if v:shell_error
@@ -1746,6 +1769,8 @@ function SendSelectionToR(...)
         let lines[llen] = strpart(lines[llen], 0, j)
     endif
 
+    let lines = map(copy(lines), 'substitute(v:val, "^#' . "'" . '", "", "")')
+
     if a:0 == 3 && a:3 == "NewtabInsert"
         let ok = RSourceLines(lines, a:1, "NewtabInsert")
     else
@@ -1943,6 +1968,10 @@ function SendLineToR(godown)
 
     if &filetype == "rhelp" && RhelpIsInRCode(1) == 0
         return
+    endif
+
+    if &filetype == "r"
+        let line = CleanOxygenLine(line)
     endif
 
     let ok = g:SendCmdToR(line)
@@ -2837,16 +2866,16 @@ function RCreateEditMaps()
     call RCreateMaps("v", '<Plug>RRightComment',    ';', ':call MovePosRCodeComment("selection")')
     " Replace 'underline' with '<-'
     if g:vimrplugin_assign == 1 || g:vimrplugin_assign == 2
-        silent exe 'imap <buffer><silent> ' . g:vimrplugin_assign_map . ' <Esc>:call ReplaceUnderS()<CR>a'
+        silent exe 'inoremap <buffer><silent> ' . g:vimrplugin_assign_map . ' <Esc>:call ReplaceUnderS()<CR>a'
     endif
     if g:vimrplugin_args_in_stline
-        imap <buffer><silent> ( <Esc>:call DisplayArgs()<CR>a
-        imap <buffer><silent> ) <Esc>:call RestoreStatusLine()<CR>a
+        inoremap <buffer><silent> ( <Esc>:call DisplayArgs()<CR>a
+        inoremap <buffer><silent> ) <Esc>:call RestoreStatusLine()<CR>a
     endif
     if hasmapto("<Plug>RCompleteArgs", "i")
-        imap <buffer><silent> <Plug>RCompleteArgs <C-R>=RCompleteArgs()<CR>
+        inoremap <buffer><silent> <Plug>RCompleteArgs <C-R>=RCompleteArgs()<CR>
     else
-        imap <buffer><silent> <C-X><C-A> <C-R>=RCompleteArgs()<CR>
+        inoremap <buffer><silent> <C-X><C-A> <C-R>=RCompleteArgs()<CR>
     endif
 endfunction
 
@@ -2889,6 +2918,7 @@ function RCreateSendMaps()
     call RCreateMaps("ni", '<Plug>RSendLine', 'l', ':call SendLineToR("stay")')
     call RCreateMaps('ni0', '<Plug>RDSendLine', 'd', ':call SendLineToR("down")')
     call RCreateMaps('ni0', '<Plug>RDSendLineAndInsertOutput', 'o', ':call SendLineToRAndInsertOutput()')
+    call RCreateMaps('v', '<Plug>RDSendLineAndInsertOutput', 'o', ':call RWarningMsg("This command does not work over a selection of lines.")')
     call RCreateMaps('i', '<Plug>RSendLAndOpenNewOne', 'q', ':call SendLineToR("newline")')
     call RCreateMaps('n', '<Plug>RNLeftPart', 'r<left>', ':call RSendPartOfLine("left", 0)')
     call RCreateMaps('n', '<Plug>RNRightPart', 'r<right>', ':call RSendPartOfLine("right", 0)')
@@ -3160,7 +3190,10 @@ endif
 
 if $TMUX == ""
     let g:rplugin_do_tmux_split = 0
-    call RSetDefaultValue("g:vimrplugin_tmux_ob", 0)
+    let g:vimrplugin_tmux_ob = 0
+    if g:vimrplugin_objbr_place =~ "console"
+        let g:vimrplugin_objbr_place = substitute(g:vimrplugin_objbr_place, "console", "script", "")
+    endif
 else
     let g:rplugin_do_tmux_split = 1
     let g:vimrplugin_applescript = 0
@@ -3190,17 +3223,16 @@ if !has("win32") && !has("win64") && !has("gui_win32") && !has("gui_win64") && !
         finish
     endif
 
-    let s:tmuxversion = system("tmux -V")
-    let s:tmuxversion = substitute(s:tmuxversion, '.*tmux \([0-9]\.[0-9]\).*', '\1', '')
-    if strlen(s:tmuxversion) != 3
-        let s:tmuxversion = "1.0"
+    let g:rplugin_tmux_version = system("tmux -V")
+    let g:rplugin_tmux_version = substitute(g:rplugin_tmux_version, '.*tmux \([0-9]\.[0-9]\).*', '\1', '')
+    if strlen(g:rplugin_tmux_version) != 3
+        let g:rplugin_tmux_version = "1.0"
     endif
-    if s:tmuxversion < "1.8" && g:vimrplugin_source !~ "screenR"
+    if g:rplugin_tmux_version < "1.8" && g:vimrplugin_source !~ "screenR"
         call RWarningMsgInp("Vim-R-plugin requires Tmux >= 1.8")
         let g:rplugin_failed = 1
         finish
     endif
-    unlet s:tmuxversion
 endif
 
 " Start with an empty list of objects in the workspace
@@ -3255,9 +3287,9 @@ let g:rplugin_termcmd = g:vimrplugin_term . " -e"
 if g:vimrplugin_term == "gnome-terminal" || g:vimrplugin_term == "xfce4-terminal" || g:vimrplugin_term == "terminal" || g:vimrplugin_term == "lxterminal"
     " Cannot set gnome-terminal icon: http://bugzilla.gnome.org/show_bug.cgi?id=126081
     if g:vimrplugin_vim_wd
-        let g:rplugin_termcmd = g:vimrplugin_term . " --title R -e"
+        let g:rplugin_termcmd = g:vimrplugin_term . " -e"
     else
-        let g:rplugin_termcmd = g:vimrplugin_term . " --working-directory='" . expand("%:p:h") . "' --title R -e"
+        let g:rplugin_termcmd = g:vimrplugin_term . " --working-directory='" . expand("%:p:h") . "' -e"
     endif
 endif
 
