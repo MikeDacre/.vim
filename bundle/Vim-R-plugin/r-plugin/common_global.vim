@@ -126,7 +126,7 @@ function ReplaceUnderS()
     endif
 endfunction
 
-function! ReadEvalReply()
+function ReadEvalReply()
     let reply = "No reply"
     let haswaitwarn = 0
     let ii = 0
@@ -149,10 +149,14 @@ function! ReadEvalReply()
         echon "\r                 "
         redraw
     endif
-    return reply
+    if reply == "No reply" || reply =~ "^Error" || reply == "INVALID" || reply == "ERROR" || reply == "EMPTY" || reply == "NO_ARGS" || reply == "NOT_EXISTS" || reply == ""
+        return "R error: " . reply
+    else
+        return reply
+    endif
 endfunction
 
-function! CompleteChunkOptions()
+function CompleteChunkOptions()
     let cline = getline(".")
     let cpos = getpos(".")
     let idx1 = cpos[2] - 2
@@ -197,11 +201,11 @@ function! CompleteChunkOptions()
     call sort(ktopt)
 
     for kopt in ktopt
-      if kopt =~ newbase
-        let tmp1 = split(kopt, ";")
-        let tmp2 = {'word': tmp1[0], 'menu': tmp1[1]}
-        call add(rr, tmp2)
-      endif
+        if kopt =~ newbase
+            let tmp1 = split(kopt, ";")
+            let tmp2 = {'word': tmp1[0], 'menu': tmp1[1]}
+            call add(rr, tmp2)
+        endif
     endfor
     call complete(idx1 + 1, rr)
 endfunction
@@ -257,9 +261,7 @@ function RCompleteArgs()
         if np == 0
             call cursor(lnum, idx)
             let rkeyword0 = RGetKeyWord()
-            let classfor = RGetClassFor(rkeyword0)
-            let classfor = substitute(classfor, '\\', "", "g")
-            let classfor = substitute(classfor, '\(.\)"\(.\)', '\1\\"\2', "g")
+            let objclass = RGetFirstObjClass(rkeyword0)
             let rkeyword = '^' . rkeyword0 . "\x06"
             call cursor(cpos[1], cpos[2])
 
@@ -267,10 +269,10 @@ function RCompleteArgs()
             if string(g:SendCmdToR) != "function('SendCmdToR_fake')"
                 call delete(g:rplugin_tmpdir . "/eval_reply")
                 let msg = 'vimcom:::vim.args("'
-                if classfor == ""
+                if objclass == ""
                     let msg = msg . rkeyword0 . '", "' . argkey . '"'
                 else
-                    let msg = msg . rkeyword0 . '", "' . argkey . '", classfor = ' . classfor
+                    let msg = msg . rkeyword0 . '", "' . argkey . '", objclass = ' . objclass
                 endif
                 if rkeyword0 == "library" || rkeyword0 == "require"
                     let isfirst = IsFirstRArg(lnum, cpos)
@@ -286,7 +288,7 @@ function RCompleteArgs()
 
                 if g:rplugin_vimcomport > 0
                     let g:rplugin_lastev = ReadEvalReply()
-                    if g:rplugin_lastev != "NOT_EXISTS" && g:rplugin_lastev != "NO_ARGS" && g:rplugin_lastev != "R is busy." && g:rplugin_lastev != "NOANSWER" && g:rplugin_lastev != "INVALID" && g:rplugin_lastev != "" && g:rplugin_lastev != "No reply"
+                    if g:rplugin_lastev !~ "^R error: "
                         let args = []
                         if g:rplugin_lastev[0] == "\x04" && len(split(g:rplugin_lastev, "\x04")) == 1
                             return ''
@@ -615,23 +617,24 @@ endfunction
 
 " Adapted from screen plugin:
 function TmuxActivePane()
-  let line = system("tmux list-panes | grep \'(active)$'")
-  let paneid = matchstr(line, '\v\%\d+ \(active\)')
-  if !empty(paneid)
-    return matchstr(paneid, '\v^\%\d+')
-  else
-    return matchstr(line, '\v^\d+')
-  endif
+    let line = system("tmux list-panes | grep \'(active)$'")
+    let paneid = matchstr(line, '\v\%\d+ \(active\)')
+    if !empty(paneid)
+        return matchstr(paneid, '\v^\%\d+')
+    else
+        return matchstr(line, '\v^\d+')
+    endif
 endfunction
 
 function DelayedFillLibList()
     autocmd! RStarting
     augroup! RStarting
-    let g:rplugin_starting_R = 0
-    if exists("g:rplugin_fillrliblist_called") && g:rplugin_fillrliblist_called
-        let g:rplugin_fillrliblist_called = 0
-        call FillRLibList()
-    endif
+        let g:rplugin_starting_R = 0
+        if exists("g:rplugin_fillrliblist_called") && g:rplugin_fillrliblist_called
+            let g:rplugin_fillrliblist_called = 0
+            call FillRLibList()
+        endif
+    augroup END
 endfunction
 
 function StartR_TmuxSplit(rcmd)
@@ -713,7 +716,7 @@ function StartR_ExternalTerm(rcmd)
 
         if g:vimrplugin_term == "rxvt" || g:vimrplugin_term == "urxvt"
             let cnflines = cnflines + [
-                    \ "set terminal-overrides 'rxvt*:smcup@:rmcup@'" ]
+                        \ "set terminal-overrides 'rxvt*:smcup@:rmcup@'" ]
         endif
 
         if g:vimrplugin_tmux_ob || !has("gui_running")
@@ -833,7 +836,7 @@ function StartR(whatr)
     else
         let start_options += ['options(vimcom.vimpager = TRUE)']
     endif
-    let start_options += ['if(utils::packageVersion("vimcom") != "1.2.7") warning("Your version of Vim-R-plugin requires vimcom-1.2-7.", call. = FALSE)']
+    let start_options += ['if(utils::packageVersion("vimcom") != "1.2.7.2") warning("Your version of Vim-R-plugin requires vimcom-1.2-7.2.", call. = FALSE)']
 
     let rwd = ""
     if g:vimrplugin_vim_wd == 0
@@ -842,10 +845,17 @@ function StartR(whatr)
         let rwd = getcwd()
     endif
     if rwd != ""
-        if has("win32") || has("win64")
+        if has("win32")
             let rwd = substitute(rwd, '\\', '/', 'g')
         endif
-        let start_options += ['setwd("' . rwd . '")']
+        if has("win32") && &encoding == "utf-8"
+            let start_options += ['.vim.rwd <- "' . rwd . '"']
+            let start_options += ['Encoding(.vim.rwd) <- "UTF-8"']
+            let start_options += ['setwd(.vim.rwd)']
+            let start_options += ['rm(.vim.rwd)']
+        else
+            let start_options += ['setwd("' . rwd . '")']
+        endif
     endif
     call writefile(start_options, g:rplugin_tmpdir . "/start_options.R")
 
@@ -1013,8 +1023,8 @@ function WaitVimComStart()
         if !filereadable(g:rplugin_vimcom_lib)
             call RWarningMsgInp('Could not find "' . g:rplugin_vimcom_lib . '".')
         endif
-        if g:rplugin_vimcom_version != "1.2.7"
-            call RWarningMsg('This version of Vim-R-plugin requires vimcom 1.2.7.')
+        if g:rplugin_vimcom_version != "1.2.7.2"
+            call RWarningMsg('This version of Vim-R-plugin requires vimcom 1.2.7.2.')
             sleep 1
         endif
         call delete(g:rplugin_tmpdir . "/vimcom_running_" . $VIMINSTANCEID)
@@ -1385,7 +1395,7 @@ function RFormatCode() range
     call delete(g:rplugin_tmpdir . "/eval_reply")
     call SendToVimCom("\x08" . $VIMINSTANCEID . 'formatR::tidy_source("' . g:rplugin_tmpdir . '/unformatted_code", file = "' . g:rplugin_tmpdir . '/formatted_code", width.cutoff = ' . wco . ')')
     let g:rplugin_lastev = ReadEvalReply()
-    if g:rplugin_lastev == "R is busy." || g:rplugin_lastev == "UNKNOWN" || g:rplugin_lastev =~ "^Error" || g:rplugin_lastev == "INVALID" || g:rplugin_lastev == "ERROR" || g:rplugin_lastev == "EMPTY" || g:rplugin_lastev == "No reply"
+    if g:rplugin_lastev =~ "^R error: "
         call RWarningMsg(g:rplugin_lastev)
         return
     endif
@@ -1404,7 +1414,7 @@ function RInsert(...)
     call delete(g:rplugin_tmpdir . "/Rinsert")
     call SendToVimCom("\x08" . $VIMINSTANCEID . 'capture.output(' . a:1 . ', file = "' . g:rplugin_tmpdir . '/Rinsert")')
     let g:rplugin_lastev = ReadEvalReply()
-    if g:rplugin_lastev == "R is busy." || g:rplugin_lastev == "UNKNOWN" || g:rplugin_lastev =~ "^Error" || g:rplugin_lastev == "INVALID" || g:rplugin_lastev == "ERROR" || g:rplugin_lastev == "EMPTY" || g:rplugin_lastev == "No reply"
+    if g:rplugin_lastev =~ "^R error: "
         call RWarningMsg(g:rplugin_lastev)
         return 0
     else
@@ -1731,6 +1741,7 @@ function SendSelectionToR(...)
         let j = col("'>") - i
         let l = getline("'<")
         let line = strpart(l, i, j)
+        let line = CleanOxygenLine(line)
         let ok = g:SendCmdToR(line)
         if ok && a:2 =~ "down"
             call GoDown()
@@ -1769,7 +1780,14 @@ function SendSelectionToR(...)
         let lines[llen] = strpart(lines[llen], 0, j)
     endif
 
-    let lines = map(copy(lines), 'substitute(v:val, "^#' . "'" . '", "", "")')
+    let curpos = getpos(".")
+    let curline = line("'<")
+    for idx in range(0, len(lines) - 1)
+        call setpos(".", [0, curline, 1, 0])
+        let lines[idx] = CleanOxygenLine(lines[idx])
+        let curline += 1
+    endfor
+    call setpos(".", curpos)
 
     if a:0 == 3 && a:3 == "NewtabInsert"
         let ok = RSourceLines(lines, a:1, "NewtabInsert")
@@ -1864,7 +1882,7 @@ function SendFHChunkToR()
                 " Next run child chunk and continue
                 call KnitChild(curbuf[idx], 'stay')
                 let idx += 1
-            " Regular R chunk
+                " Regular R chunk
             else
                 let idx += 1
                 while curbuf[idx] !~ endchk && idx < here
@@ -2109,7 +2127,7 @@ function RQuit(how)
 endfunction
 
 " knit the current buffer content
-function! RKnit()
+function RKnit()
     update
     if has("win32") || has("win64")
         call g:SendCmdToR('require(knitr); .vim_oldwd <- getwd(); setwd("' . substitute(expand("%:p:h"), '\\', '/', 'g') . '"); knit("' . expand("%:t") . '"); setwd(.vim_oldwd); rm(.vim_oldwd)')
@@ -2172,8 +2190,8 @@ function SetRTextWidth(rkeyword)
     endif
 endfunction
 
-function RGetClassFor(rkeyword)
-    let classfor = ""
+function RGetFirstObjClass(rkeyword)
+    let firstobj = ""
     let line = substitute(getline("."), '#.*', '', "")
     let begin = col(".")
     if strlen(line) > begin
@@ -2184,7 +2202,7 @@ function RGetClassFor(rkeyword)
         endwhile
         let line = piece
         if line !~ '^\k*\s*('
-            return classfor
+            return firstobj
         endif
         let begin = 1
         let linelen = strlen(line)
@@ -2218,7 +2236,7 @@ function RGetClassFor(rkeyword)
                     let len = strlen(line)
                 endif
             endwhile
-            let classfor = strpart(line, 0, idx)
+            let firstobj = strpart(line, 0, idx)
         elseif line =~ '^\(\k\|\$\)*\s*[' || line =~ '^\(k\|\$\)*\s*=\s*\(\k\|\$\)*\s*[.*('
             let idx = 0
             while line[idx] != '['
@@ -2243,18 +2261,38 @@ function RGetClassFor(rkeyword)
                     let len = strlen(line)
                 endif
             endwhile
-            let classfor = strpart(line, 0, idx)
+            let firstobj = strpart(line, 0, idx)
         else
-            let classfor = substitute(line, ').*', '', "")
-            let classfor = substitute(classfor, ',.*', '', "")
-            let classfor = substitute(classfor, ' .*', '', "")
+            let firstobj = substitute(line, ').*', '', "")
+            let firstobj = substitute(firstobj, ',.*', '', "")
+            let firstobj = substitute(firstobj, ' .*', '', "")
         endif
     endif
-    if classfor =~ "^'" && classfor =~ "'$"
-        let classfor = substitute(classfor, "^'", '"', "")
-        let classfor = substitute(classfor, "'$", '"', "")
+
+    " Fix some problems
+    if firstobj =~ '^"' && firstobj !~ '"$'
+        let firstobj = firstobj . '"'
+    elseif firstobj =~ "^'" && firstobj !~ "'$"
+        let firstobj = firstobj . "'"
     endif
-    return classfor
+    if firstobj =~ "^'" && firstobj =~ "'$"
+        let firstobj = substitute(firstobj, "^'", '"', "")
+        let firstobj = substitute(firstobj, "'$", '"', "")
+    endif
+    if firstobj =~ '='
+        let firstobj = "eval(expression(" . firstobj . "))"
+    endif
+
+    let objclass = ""
+    call SendToVimCom("\x08" . $VIMINSTANCEID . "vimcom:::vim.getclass(" . firstobj . ")")
+    if g:rplugin_vimcomport > 0
+        let g:rplugin_lastev = ReadEvalReply()
+        if g:rplugin_lastev !~ "^R error: "
+            let objclass = '"' . g:rplugin_lastev . '"'
+        endif
+    endif
+
+    return objclass
 endfunction
 
 " Show R's help doc in Vim's buffer
@@ -2264,7 +2302,7 @@ function AskRDoc(rkeyword, package, getclass)
         call delete(g:rplugin_docfile)
     endif
 
-    let classfor = ""
+    let objclass = ""
     if bufname("%") =~ "Object_Browser"
         let savesb = &switchbuf
         set switchbuf=useopen,usetab
@@ -2272,24 +2310,18 @@ function AskRDoc(rkeyword, package, getclass)
         exe "set switchbuf=" . savesb
     else
         if a:getclass
-            let classfor = RGetClassFor(a:rkeyword)
+            let objclass = RGetFirstObjClass(a:rkeyword)
         endif
-    endif
-
-    if classfor =~ '='
-        let classfor = "eval(expression(" . classfor . "))"
     endif
 
     call SetRTextWidth(a:rkeyword)
 
-    if classfor == "" && a:package == ""
+    if objclass == "" && a:package == ""
         let rcmd = 'vimcom:::vim.help("' . a:rkeyword . '", ' . g:rplugin_htw . 'L)'
     elseif a:package != ""
         let rcmd = 'vimcom:::vim.help("' . a:rkeyword . '", ' . g:rplugin_htw . 'L, package="' . a:package  . '")'
     else
-        let classfor = substitute(classfor, '\\', "", "g")
-        let classfor = substitute(classfor, '\(.\)"\(.\)', '\1\\"\2', "g")
-        let rcmd = 'vimcom:::vim.help("' . a:rkeyword . '", ' . g:rplugin_htw . 'L, ' . classfor . ')'
+        let rcmd = 'vimcom:::vim.help("' . a:rkeyword . '", ' . g:rplugin_htw . 'L, ' . objclass . ')'
     endif
 
     call SendToVimCom("\x08" . $VIMINSTANCEID . rcmd)
@@ -2590,14 +2622,14 @@ endfunction
 
 function PrintRObject(rkeyword)
     if bufname("%") =~ "Object_Browser"
-        let classfor = ""
+        let objclass = ""
     else
-        let classfor = RGetClassFor(a:rkeyword)
+        let objclass = RGetFirstObjClass(a:rkeyword)
     endif
-    if classfor == ""
+    if objclass == ""
         call g:SendCmdToR("print(" . a:rkeyword . ")")
     else
-        call g:SendCmdToR('vim.print("' . a:rkeyword . '", ' . classfor . ")")
+        call g:SendCmdToR('vim.print("' . a:rkeyword . '", ' . objclass . ")")
     endif
 endfunction
 
@@ -2648,12 +2680,12 @@ function RAction(rcmd)
         endif
         let rfun = a:rcmd
         if a:rcmd == "args"
-          if g:vimrplugin_listmethods == 1
-            call g:SendCmdToR('vim.list.args("' . rkeyword . '")')
-          else
-            call g:SendCmdToR('args("' . rkeyword . '")')
-          endif
-          return
+            if g:vimrplugin_listmethods == 1
+                call g:SendCmdToR('vim.list.args("' . rkeyword . '")')
+            else
+                call g:SendCmdToR('args("' . rkeyword . '")')
+            endif
+            return
         endif
         if a:rcmd == "plot" && g:vimrplugin_specialplot == 1
             let rfun = "vim.plot"
@@ -3323,7 +3355,7 @@ if g:vimrplugin_term == "roxterm"
 endif
 
 if g:vimrplugin_term == "xterm" || g:vimrplugin_term == "uxterm"
-    let g:rplugin_termcmd = g:vimrplugin_term . " -xrm '*iconPixmap: " . g:rplugin_home . "/bitmaps/ricon.xbm' -e"
+    let g:rplugin_termcmd = g:vimrplugin_term . " -e"
 endif
 
 if g:vimrplugin_term == "rxvt" || g:vimrplugin_term == "urxvt"
