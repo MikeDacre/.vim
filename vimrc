@@ -185,6 +185,17 @@ let g:ex_usr_name = "Mike Dacre"
 """ My Functions
 " Diff attempt from
 " http://vim.wikia.com/wiki/Create_patch_for_currently_editing_file
+
+fu! TextWrapOn()
+  set tw=79
+  set formatoptions+=t
+endf
+fu! TextWrapOff()
+  set tw=0
+endf
+nmap <leader>ww :call TextWrapOn()<cr>
+nmap <leader>we :call TextWrapOff()<cr>
+
 fu! DiffUnified()
   let diffexpr="diff -Nuar"
   let bname=bufname("")
