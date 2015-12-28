@@ -1,5 +1,5 @@
 " Name:    gnupg.vim
-" Last Change: 2015 Mar 21
+" Last Change: 2015 Dec 04
 " Maintainer:  James McCoy <vega.james@gmail.com>
 " Original Author:  Markus Braun <markus.braun@krawel.de>
 " Summary: Vim plugin for transparent editing of gpg encrypted files.
@@ -76,7 +76,7 @@
 "
 "   g:GPGExecutable
 "     If set used as gpg executable, otherwise the system chooses what is run
-"     when "gpg" is called. Defaults to "gpg".
+"     when "gpg" is called. Defaults to "gpg --trust-model always".
 "
 "   g:GPGUseAgent
 "     If set to 0 a possible available gpg-agent won't be used. Defaults to 1.
@@ -98,7 +98,8 @@
 "   g:GPGPossibleRecipients
 "     If set, these contents are loaded into the recipients dialog. This
 "     allows to add commented lines with possible recipients to the list,
-"     which can be uncommented to select the actual recipients. Example:
+"     which can be uncommented to select the actual recipients. Default is
+"     unset. Example:
 "
 "       let g:GPGPossibleRecipients=[
 "         \"Example User <example@example.com>",
@@ -114,7 +115,7 @@
 "   g:GPGHomedir
 "     If set, specifies the directory that will be used for GPG's homedir.
 "     This corresponds to gpg's --homedir option.  This variable is a Vim
-"     string.
+"     string. Default is unset.
 "
 "   g:GPGFilePattern
 "     If set, overrides the default set of file patterns that determine
@@ -142,6 +143,13 @@
 "     - gpgagent and pinentry:
 "         you will get a popup window the first time you open a file that
 "         needs to be decrypted.
+"
+"   If you're using Vim <7.4.959, after the plugin runs any external command,
+"   Vim will no longer be able to yank to/paste from the X clipboard or
+"   primary selections.  This is caused by a workaround for a different bug
+"   where Vim no longer recognizes the key codes for keys such as the arrow
+"   keys after running GnuPG.  See the discussion at
+"   https://github.com/jamessan/vim-gnupg/issues/36 for more details.
 "
 " Credits: {{{2
 "
@@ -186,7 +194,7 @@ augroup GnuPG
 
   " do the decryption
   exe "autocmd BufReadCmd " . g:GPGFilePattern .  " call s:GPGInit(1) |" .
-                                                \ " call s:GPGDecrypt(1) |"
+                                                \ " call s:GPGDecrypt(1)"
   exe "autocmd FileReadCmd " . g:GPGFilePattern . " call s:GPGInit(0) |" .
                                                 \ " call s:GPGDecrypt(0)"
 
@@ -213,6 +221,29 @@ highlight default link GPGError ErrorMsg
 highlight default link GPGHighlightUnknownRecipient ErrorMsg
 
 " Section: Functions {{{1
+
+" Function: s:shellescape(s[, special]) {{{2
+"
+" Calls shellescape(), also taking into account 'shellslash'
+" when on Windows and using $COMSPEC as the shell.
+"
+" Returns: shellescaped string
+"
+function s:shellescape(s, ...)
+  let special = a:0 ? a:1 : 0
+  if exists('+shellslash') && &shell == $COMSPEC
+    let ssl = &shellslash
+    set noshellslash
+
+    let escaped = shellescape(a:s, special)
+
+    let &shellslash = ssl
+  else
+    let escaped = shellescape(a:s, special)
+  endif
+
+  return escaped
+endfunction
 
 " Function: s:GPGInit(bufread) {{{2
 "
@@ -298,8 +329,58 @@ function s:GPGInit(bufread)
   " print version
   call s:GPGDebug(1, "gnupg.vim ". g:loaded_gnupg)
 
+  let s:GPGCommand = g:GPGExecutable
+
+  " don't use tty in gvim except for windows: we get their a tty for free.
+  " FIXME find a better way to avoid an error.
+  "       with this solution only --use-agent will work
+  if (has("gui_running") && !has("gui_win32"))
+    let s:GPGCommand .= " --no-tty"
+  endif
+
+  " setup shell environment for unix and windows
+  let s:shellredirsave = &shellredir
+  let s:shellsave = &shell
+  let s:shelltempsave = &shelltemp
+  " noshelltemp isn't currently supported on Windows, but it doesn't cause any
+  " errors and this future proofs us against requiring changes if Windows
+  " gains noshelltemp functionality
+  let s:shelltemp = !g:GPGUsePipes
+  if (has("unix"))
+    " unix specific settings
+    let s:shellredir = ">%s 2>&1"
+    let s:shell = '/bin/sh'
+    let s:stderrredirnull = '2>/dev/null'
+  else
+    " windows specific settings
+    let s:shellredir = '>%s'
+    let s:shell = &shell
+    let s:stderrredirnull = '2>nul'
+  endif
+
+  call s:GPGDebug(3, "shellredirsave: " . s:shellredirsave)
+  call s:GPGDebug(3, "shellsave: " . s:shellsave)
+  call s:GPGDebug(3, "shelltempsave: " . s:shelltempsave)
+
+  call s:GPGDebug(3, "shell: " . s:shell)
+  call s:GPGDebug(3, "shellcmdflag: " . &shellcmdflag)
+  call s:GPGDebug(3, "shellxquote: " . &shellxquote)
+  call s:GPGDebug(3, "shellredir: " . s:shellredir)
+  call s:GPGDebug(3, "stderrredirnull: " . s:stderrredirnull)
+
+  call s:GPGDebug(3, "shell implementation: " . resolve(s:shell))
+
+  " find the supported algorithms
+  let output = s:GPGSystem({ 'level': 2, 'args': '--version' })
+
+  let gpgversion = substitute(output, '^gpg (GnuPG) \([0-9]\+\.\d\+\).*', '\1', '')
+  let s:GPGPubkey = substitute(output, ".*Pubkey: \\(.\\{-}\\)\n.*", "\\1", "")
+  let s:GPGCipher = substitute(output, ".*Cipher: \\(.\\{-}\\)\n.*", "\\1", "")
+  let s:GPGHash = substitute(output, ".*Hash: \\(.\\{-}\\)\n.*", "\\1", "")
+  let s:GPGCompress = substitute(output, ".*Compress.\\{-}: \\(.\\{-}\\)\n.*", "\\1", "")
+
   " determine if gnupg can use the gpg-agent
-  if (exists("$GPG_AGENT_INFO") && g:GPGUseAgent == 1)
+  if (str2float(gpgversion) >= 2.1 || (exists("$GPG_AGENT_INFO") && g:GPGUseAgent == 1))
     if (!exists("$GPG_TTY") && !has("gui_running"))
       " Need to determine the associated tty by running a command in the
       " shell.  We can't use system() here because that doesn't run in a shell
@@ -324,58 +405,10 @@ function s:GPGInit(bufread)
         echohl None
       endif
     endif
-    let s:GPGCommand = g:GPGExecutable . " --use-agent"
+    let s:GPGCommand .= " --use-agent"
   else
-    let s:GPGCommand = g:GPGExecutable . " --no-use-agent"
+    let s:GPGCommand .= " --no-use-agent"
   endif
-
-  " don't use tty in gvim except for windows: we get their a tty for free.
-  " FIXME find a better way to avoid an error.
-  "       with this solution only --use-agent will work
-  if (has("gui_running") && !has("gui_win32"))
-    let s:GPGCommand = s:GPGCommand . " --no-tty"
-  endif
-
-  " setup shell environment for unix and windows
-  let s:shellredirsave = &shellredir
-  let s:shellsave = &shell
-  let s:shelltempsave = &shelltemp
-  " noshelltemp isn't currently supported on Windows, but it doesn't cause any
-  " errors and this future proofs us against requiring changes if Windows
-  " gains noshelltemp functionality
-  let s:shelltemp = !g:GPGUsePipes
-  if (has("unix"))
-    " unix specific settings
-    let s:shellredir = ">%s 2>&1"
-    let s:shell = '/bin/sh'
-    let s:stderrredirnull = '2>/dev/null'
-    let s:GPGCommand = "LANG=C LC_ALL=C " . s:GPGCommand
-  else
-    " windows specific settings
-    let s:shellredir = '>%s'
-    let s:shell = &shell
-    let s:stderrredirnull = '2>nul'
-  endif
-
-  call s:GPGDebug(3, "shellredirsave: " . s:shellredirsave)
-  call s:GPGDebug(3, "shellsave: " . s:shellsave)
-  call s:GPGDebug(3, "shelltempsave: " . s:shelltempsave)
-
-  call s:GPGDebug(3, "shell: " . s:shell)
-  call s:GPGDebug(3, "shellcmdflag: " . &shellcmdflag)
-  call s:GPGDebug(3, "shellxquote: " . &shellxquote)
-  call s:GPGDebug(3, "shellredir: " . s:shellredir)
-  call s:GPGDebug(3, "stderrredirnull: " . s:stderrredirnull)
-
-  call s:GPGDebug(3, "shell implementation: " . resolve(s:shell))
-
-  " find the supported algorithms
-  let output = s:GPGSystem({ 'level': 2, 'args': '--version' })
-
-  let s:GPGPubkey = substitute(output, ".*Pubkey: \\(.\\{-}\\)\n.*", "\\1", "")
-  let s:GPGCipher = substitute(output, ".*Cipher: \\(.\\{-}\\)\n.*", "\\1", "")
-  let s:GPGHash = substitute(output, ".*Hash: \\(.\\{-}\\)\n.*", "\\1", "")
-  let s:GPGCompress = substitute(output, ".*Compress.\\{-}: \\(.\\{-}\\)\n.*", "\\1", "")
 
   call s:GPGDebug(2, "public key algorithms: " . s:GPGPubkey)
   call s:GPGDebug(2, "cipher algorithms: " . s:GPGCipher)
@@ -421,17 +454,20 @@ function s:GPGDecrypt(bufread)
   endif
   let b:GPGOptions = []
 
+  " file name minus extension
+  let autocmd_filename = fnameescape(expand('<afile>:r'))
+
   " File doesn't exist yet, so nothing to decrypt
   if !filereadable(filename)
     " Allow the user to define actions for GnuPG buffers
     silent doautocmd User GnuPG
     " call the autocommand for the file minus .gpg$
-    silent execute ':doautocmd BufNewFile ' . fnameescape(expand('<afile>:r'))
-    call s:GPGDebug(2, 'called BufNewFile autocommand for ' . fnameescape(expand('<afile>:r')))
+    silent execute ':doautocmd BufNewFile ' . autocmd_filename
+    call s:GPGDebug(2, 'called BufNewFile autocommand for ' . autocmd_filename)
 
     " This is a new file, so force the user to edit the recipient list if
     " they open a new file and public keys are preferred
-    if (exists("g:GPGPreferSymmetric") && g:GPGPreferSymmetric == 0)
+    if (g:GPGPreferSymmetric == 0)
         call s:GPGEditRecipients()
     endif
 
@@ -445,7 +481,7 @@ function s:GPGDecrypt(bufread)
 
   " find the recipients of the file
   let cmd = { 'level': 3 }
-  let cmd.args = '--verbose --decrypt --list-only --dry-run --batch --no-use-agent --logger-fd 1 ' . shellescape(filename)
+  let cmd.args = '--verbose --decrypt --list-only --dry-run --no-use-agent --logger-fd 1 ' . s:shellescape(filename)
   let output = s:GPGSystem(cmd)
 
   " Suppress the "N more lines" message when editing a file, not when reading
@@ -485,15 +521,25 @@ function s:GPGDecrypt(bufread)
       let start = start + strlen("gpg: public key is ")
       let recipient = matchstr(output, s:keyPattern, start)
       call s:GPGDebug(1, "recipient is " . recipient)
-      let name = s:GPGNameToID(recipient)
-      if !empty(name)
-        let b:GPGRecipients += [name]
-        call s:GPGDebug(1, "name of recipient is " . name)
-      else
-        let b:GPGRecipients += [recipient]
-        echohl GPGWarning
-        echom "The recipient \"" . recipient . "\" is not in your public keyring!"
-        echohl None
+      " In order to support anonymous communication, GnuPG allows eliding
+      " information in the encryption metadata specifying what keys the file
+      " was encrypted to (c.f., --throw-keyids and --hidden-recipient).  In
+      " that case, the recipient(s) will be listed as having used a key of all
+      " zeroes.
+      " Since this will obviously never actually be in a keyring, only try to
+      " convert to an ID or add to the recipients list if it's not a hidden
+      " recipient.
+      if recipient !~? '^0x0\+$'
+        let name = s:GPGNameToID(recipient)
+        if !empty(name)
+          let b:GPGRecipients += [name]
+          call s:GPGDebug(1, "name of recipient is " . name)
+        else
+          let b:GPGRecipients += [recipient]
+          echohl GPGWarning
+          echom "The recipient \"" . recipient . "\" is not in your public keyring!"
+          echohl None
+        end
       end
       let start = match(output, asymmPattern, start)
     endwhile
@@ -510,11 +556,11 @@ function s:GPGDecrypt(bufread)
   endif
 
   if a:bufread
-    silent execute ':doautocmd BufReadPre ' . fnameescape(expand('<afile>:r'))
-    call s:GPGDebug(2, 'called BufReadPre autocommand for ' . fnameescape(expand('<afile>:r')))
+    silent execute ':doautocmd BufReadPre ' . autocmd_filename
+    call s:GPGDebug(2, 'called BufReadPre autocommand for ' . autocmd_filename)
   else
-    silent execute ':doautocmd FileReadPre ' . fnameescape(expand('<afile>:r'))
-    call s:GPGDebug(2, 'called FileReadPre autocommand for ' . fnameescape(expand('<afile>:r')))
+    silent execute ':doautocmd FileReadPre ' . autocmd_filename
+    call s:GPGDebug(2, 'called FileReadPre autocommand for ' . autocmd_filename)
   endif
 
   " check if the message is armored
@@ -528,7 +574,7 @@ function s:GPGDecrypt(bufread)
   " we must redirect stderr (using shell temporarily)
   call s:GPGDebug(1, "decrypting file")
   let cmd = { 'level': 1, 'ex': silent . 'r !' }
-  let cmd.args = '--quiet --decrypt ' . shellescape(filename, 1)
+  let cmd.args = '--quiet --decrypt ' . s:shellescape(filename, 1)
   call s:GPGExecute(cmd)
 
   if (v:shell_error) " message could not be decrypted
@@ -558,13 +604,14 @@ function s:GPGDecrypt(bufread)
     1mark [
     $mark ]
     let &undolevels = levels
+    let &readonly = filereadable(filename) && filewritable(filename) == 0
     " call the autocommand for the file minus .gpg$
-    silent execute ':doautocmd BufReadPost ' . fnameescape(expand('<afile>:r'))
-    call s:GPGDebug(2, 'called BufReadPost autocommand for ' . fnameescape(expand('<afile>:r')))
+    silent execute ':doautocmd BufReadPost ' . autocmd_filename
+    call s:GPGDebug(2, 'called BufReadPost autocommand for ' . autocmd_filename)
   else
     " call the autocommand for the file minus .gpg$
-    silent execute ':doautocmd FileReadPost ' . fnameescape(expand('<afile>:r'))
-    call s:GPGDebug(2, 'called FileReadPost autocommand for ' . fnameescape(expand('<afile>:r')))
+    silent execute ':doautocmd FileReadPost ' . autocmd_filename
+    call s:GPGDebug(2, 'called FileReadPost autocommand for ' . autocmd_filename)
   endif
 
   " Allow the user to define actions for GnuPG buffers
@@ -593,8 +640,11 @@ function s:GPGEncrypt()
     let auType = 'FileWrite'
   endif
 
-  silent exe ':doautocmd '. auType .'Pre '. fnameescape(expand('<afile>:r'))
-  call s:GPGDebug(2, 'called '. auType .'Pre autocommand for ' . fnameescape(expand('<afile>:r')))
+  " file name minus extension
+  let autocmd_filename = fnameescape(expand('<afile>:r'))
+
+  silent exe ':doautocmd '. auType .'Pre '. autocmd_filename
+  call s:GPGDebug(2, 'called '. auType .'Pre autocommand for ' . autocmd_filename)
 
   " store encoding and switch to a safe one
   if (&fileencoding != &encoding)
@@ -664,7 +714,7 @@ function s:GPGEncrypt()
   let destfile = tempname()
   let cmd = { 'level': 1, 'ex': "'[,']w !" }
   let cmd.args = '--quiet --no-encrypt-to ' . options
-  let cmd.redirect = '>' . shellescape(destfile, 1)
+  let cmd.redirect = '>' . s:shellescape(destfile, 1)
   silent call s:GPGExecute(cmd)
 
   " restore encoding
@@ -683,13 +733,15 @@ function s:GPGEncrypt()
     return
   endif
 
-  call rename(destfile, resolve(expand('<afile>')))
+  let filename = resolve(expand('<afile>'))
+  call rename(destfile, filename)
   if auType == 'BufWrite'
     setl nomodified
+    let &readonly = filereadable(filename) && filewritable(filename) == 0
   endif
 
-  silent exe ':doautocmd '. auType .'Post '. fnameescape(expand('<afile>:r'))
-  call s:GPGDebug(2, 'called '. auType .'Post autocommand for ' . fnameescape(expand('<afile>:r')))
+  silent exe ':doautocmd '. auType .'Post '. autocmd_filename
+  call s:GPGDebug(2, 'called '. auType .'Post autocommand for ' . autocmd_filename)
 
   call s:GPGDebug(3, "<<<<<<<< Leaving s:GPGEncrypt()")
 endfunction
@@ -1155,7 +1207,7 @@ function s:GPGNameToID(name)
 
   " ask gpg for the id for a name
   let cmd = { 'level': 2 }
-  let cmd.args = '--quiet --with-colons --fixed-list-mode --list-keys ' . shellescape(a:name)
+  let cmd.args = '--quiet --with-colons --fixed-list-mode --list-keys ' . s:shellescape(a:name)
   let output = s:GPGSystem(cmd)
 
   " when called with "--with-colons" gpg encodes its output _ALWAYS_ as UTF-8,
@@ -1276,16 +1328,29 @@ function s:GPGIDToName(identity)
   return uid
 endfunction
 
+" Function: s:GPGPreCmd() {{{2
+"
+" Setup the environment for running the gpg command
+"
 function s:GPGPreCmd()
   let &shellredir = s:shellredir
   let &shell = s:shell
   let &shelltemp = s:shelltemp
+  " Force C locale so GPG output is consistent
+  let s:messages = v:lang
+  language messages C
 endfunction
 
+
+" Function: s:GPGPostCmd() {{{2
+"
+" Restore the user's environment after running the gpg command
+"
 function s:GPGPostCmd()
   let &shellredir = s:shellredirsave
   let &shell = s:shellsave
   let &shelltemp = s:shelltempsave
+  execute 'language messages' s:messages
   " Workaround a bug in the interaction between console vim and
   " pinentry-curses by forcing Vim to re-detect and setup its terminal
   " settings
@@ -1307,7 +1372,7 @@ endfunction
 function s:GPGSystem(dict)
   let commandline = s:GPGCommand
   if (!empty(g:GPGHomedir))
-    let commandline .= ' --homedir ' . shellescape(g:GPGHomedir)
+    let commandline .= ' --homedir ' . s:shellescape(g:GPGHomedir)
   endif
   let commandline .= ' ' . a:dict.args
   let commandline .= ' ' . s:stderrredirnull
@@ -1334,7 +1399,7 @@ endfunction
 function s:GPGExecute(dict)
   let commandline = printf('%s%s', a:dict.ex, s:GPGCommand)
   if (!empty(g:GPGHomedir))
-    let commandline .= ' --homedir ' . shellescape(g:GPGHomedir, 1)
+    let commandline .= ' --homedir ' . s:shellescape(g:GPGHomedir, 1)
   endif
   let commandline .= ' ' . a:dict.args
   if (has_key(a:dict, 'redirect'))

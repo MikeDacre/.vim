@@ -31,6 +31,7 @@ call pathogen#helptags()
 if has("gui_running") || &term == "xterm-256color" || &term == "screen-256color"
   set t_Co=256
   set selectmode=key
+  set guifont=Inconsolata\ Medium\ 15
   colo wombatmikemod
 else
   colo wombat
@@ -182,6 +183,71 @@ inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
 let g:ex_usr_name = "Mike Dacre"
 
 """ My Functions
+" Diff attempt from
+" http://vim.wikia.com/wiki/Create_patch_for_currently_editing_file
+fu! DiffUnified()
+  let diffexpr="diff -Nuar"
+  let bname=bufname("")
+  let origtemp=0
+  " Case 1: File has a filename and is not modified
+  if !&modified && !empty(bname)
+    let tempfile=0
+    let origFile=bname.".orig"
+  else
+    " Case 2: File has a filename and is modified
+    if &modified && !empty(bname)
+      if !filereadable(bname.".orig")
+        sp
+        enew
+        r #
+        0d
+        let tempfile2=tempname()
+        exe ":sil w! " .tempfile2
+        wincmd q
+        let origtemp=1
+        wincmd p
+      endif
+      let origFile=tempfile2
+      " Case 2: File is new and is modified
+    else
+      if &modified
+        let origFile=bname.".orig"
+      else
+        let origFile=""
+      endif
+    endif
+    let bname=tempname()
+    exe ":sil w! ".bname
+    let tempfile=1
+  endif
+  try
+    if !filereadable(origFile)
+      let origFile=input("With which file to diff?: ","","file")
+    endif
+    if !filereadable(bname)
+      exe ":sil w! ".bname
+    endif
+    if empty(origFile)
+      throw "nofile"
+    endif
+    exe "sil sp"
+    exe "enew"
+    set bt=nofile
+    exe "sil r!".diffexpr." ".origFile." ".bname
+    exe "0d_"
+    exe "set ft=diff"
+    " Clean up temporary files
+    if  tempfile == 1
+      exe "sil :!rm -f ". bname
+      let tempfile=0
+    endif
+    if origtemp == 1
+      exe "sil :!rm -f ". origFile
+      let origtemp=0
+    endif
+  catch
+  endtry
+endf
 
 " Fold with F
 nmap <leader>F za
@@ -280,7 +346,7 @@ map <leader>PP :set nopaste<CR>:set expandtab<CR>
 map <leader>ds :s/^\s\+<CR>
 
 " Delete training whitespace
-autocmd BufWritePre * :%s/\s\+$//e
+" autocmd BufWritePre * :%s/\s\+$//e
 
 " Templates
 let g:template_basedir = "~/.vim/templates"
@@ -303,8 +369,8 @@ function! LastModified()
   if &modified && g:lastmodified
       let save_cursor = getpos(".")
       let n = min([20, line("$")])
-      keepjumps exe '1,' . n . 's#^\(.\{,10}Last modified: \).\{16}\(.*\)#\1' .
-            \ strftime("%Y-%m-%d %H:%M") . '\2#e'
+      keepjumps exe '1,' . n . 's#^\(.\{,10}Last modified:\)\( [0-9]\{4}-[0-9]\{2}-[0-9]\{2} [0-9]\{2}:[0-9]\{2}\)\{,1}\(.*\)#\1 ' .
+            \ strftime("%Y-%m-%d %H:%M") . '\3#e'
       call histdel('search', -1)
       call setpos('.', save_cursor)
   endif
@@ -456,7 +522,7 @@ let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive
 au BufRead,BufNewFile *.py set filetype=python
 
 " Jedi
-let g:jedi#auto_initialization    = 1
+let g:jedi#auto_initialization    = 0
 let g:jedi#force_py_version       = 3
 let g:jedi#popup_on_dot           = 1
 let g:jedi#auto_vim_configuration = 0
@@ -470,13 +536,13 @@ let g:pymode_folding            = 1
 let g:pymode_rope               = 0          " Jedi does this
 let g:pymode_rope_completion    = 0
 let g:pymode_python             = 'python3'  " Always use python3
-let g:pymode_trim_whitespaces   = 1
+let g:pymode_trim_whitespaces   = 0
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
 let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8', 'pyflakes']
-let g:pymode_lint_ignore        = "W0611,E221,E501,E116"
+let g:pymode_lint_ignore        = "W0612,C901,W0611,E221,E501,E116"
 let g:pymode_lint_cwindow       = 0
 let g:pymode_syntax             = 1
 
@@ -563,10 +629,10 @@ let g:vimrplugin_vsplit = 1
 nmap <LocalLeader>ll <Plug>RSendLine
 
 " Highlight whitespace
-autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
+" autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+" highlight ExtraWhitespace ctermbg=red guibg=red
+" match ExtraWhitespace /\s\+$/
+" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+" autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+" autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+" autocmd BufWinLeave * call clearmatches()

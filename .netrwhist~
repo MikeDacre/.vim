@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/Users/Mike/.my-zsh'
+let g:netrw_dirhist_2='/Volumes/x2/Users/mike/.my-zsh/zkbd'
+let g:netrw_dirhist_3='/Library/LaunchAgents'
+let g:netrw_dirhist_4='/home/mike/.my-zsh'
+let g:netrw_dirhist_5='/science/mike/Mito/GWAS/phs000021v3p2-GAIN-Schizophrenia/phg000013v1/phs000021-phg000013-mito-analysis/pbs-scripts'
+let g:netrw_dirhist_6='/science/mike/Mito/SNPMapping/ILLUMINA_Human610_Quadv1_B'
+let g:netrw_dirhist_7='/science/mike/Mito/GWAS/phs000336v1p1-CGEMS-Cancer-Lung/phenotype/phs000336.v1.p1.data_dictionary.MULTI'
+let g:netrw_dirhist_8='/science/mike/Mito/SNPMapping/AFFYMETRIX_AFFY_6.0'
+let g:netrw_dirhist_9='/home/dacre/.vim/bundle/ack'
