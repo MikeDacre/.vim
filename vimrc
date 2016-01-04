@@ -152,7 +152,7 @@ endif
 set undolevels=1000
 
 set wildmenu
-set wildmode=list:longest,full
+set wildmode=longest,list,full
 
 set scrolloff=8
 
@@ -533,21 +533,21 @@ let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive
 au BufRead,BufNewFile *.py set filetype=python
 
 " Jedi
-let g:jedi#auto_initialization    = 0
+let g:jedi#auto_initialization    = 1
 let g:jedi#force_py_version       = 3
 let g:jedi#popup_on_dot           = 1
-let g:jedi#auto_vim_configuration = 0
+let g:jedi#auto_vim_configuration = 1
 noremap <leader>gg :call jedi#goto_assignments()<cr>
 noremap <leader>gd :call jedi#goto_definitions()<cr>
 noremap <leader>rn :call jedi#rename()<cr>
 
 " Python Mode
 let g:pymode                    = 1
-let g:pymode_folding            = 1
+let g:pymode_folding            = 0
 let g:pymode_rope               = 0          " Jedi does this
 let g:pymode_rope_completion    = 0
 let g:pymode_python             = 'python3'  " Always use python3
-let g:pymode_trim_whitespaces   = 0
+let g:pymode_trim_whitespaces   = 1
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
