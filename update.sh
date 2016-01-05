@@ -13,7 +13,7 @@
 #       LICENCE: Open Source
 #       CREATED: 11/10/2011 22:16:34 PST
 #      REVISION: 1.1
-# Last modified: 2016-01-05 14:25
+# Last modified: 2016-01-05 14:49
 #===============================================================================
 
 VIM_HOME="$HOME/.vim"
@@ -26,25 +26,20 @@ fix_plugin_bugs () {
   rm $VIM_HOME/bundle/perl-support.vim/perl-support/templates/Templates  2>/dev/null
   cp $VIM_HOME/templates/perl-support-TEMPLATE $VIM_HOME/bundle/perl-support.vim/perl-support/templates/Templates
 
-  # Remove builtin snippets that I have replaces
-  cd $VIM_HOME/snippets
-  for i in *; do
-    rm $VIM_HOME/bundle/snipmate.vim/snippets/$i 2>/dev/null
-  done
+  # Link new templates
+  echo "Taking care of templates"
+  cd $VIM_HOME/bundle/vim-template/
+  rm -rf templates
+  ln -f -s ../../templates .
   cd $VIM_HOME
 
-  # Link new templates
-  cd $VIM_HOME/templates
-  for i in \=template\=*; do
-    cd $VIM_HOME/bundle/vim-template/templates/
-    rm $i 2>/dev/null
-    ln -f -s ../../../templates/$i $i
-  done
-  # cd $VIM_HOME/bundle/snipmate/
-  # patch < $VIM_HOME/patches/table-mode.patch
-  cd $VIM_HOME
+  # Prevent snipmate from taking tab
+  echo "Patching snipmate"
+  rm $VIM_HOME/bundle/vim-snipmate/after/plugin/snipMate.vim
+  cp $VIM_HOME/patches/snipMate.vim $VIM_HOME/bundle/vim-snipmate/after/plugin/snipMate.vim
 
   # Delete broken links
+  echo "Removing any broken symlinks"
   find -L bundle -type l | xargs rm
 }
 

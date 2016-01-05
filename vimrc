@@ -639,8 +639,8 @@ noremap <leader>so :SessionOpen
 
 " SnipMate
 let g:snips_author = 'Mike Dacre'
-imap <C-j> <esc>a<Plug>snipMateNextOrTrigger
-smap <C-j> <Plug>snipMateNextOrTrigger
+imap <c-j> <esc>a<Plug>snipMateNextOrTrigger
+smap <c-j> <Plug>snipMateNextOrTrigger
 
 " vim-ipython
 
