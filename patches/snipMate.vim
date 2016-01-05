@@ -5,8 +5,8 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-imap sss <esc>a<Plug>snipMateNextOrTrigger
-smap sss <Plug>snipMateNextOrTrigger
+imap <c-a> <esc>a<Plug>snipMateNextOrTrigger
+smap <c-a> <Plug>snipMateNextOrTrigger
 
 let &cpo = s:save_cpo
 
