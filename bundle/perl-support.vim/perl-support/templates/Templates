@@ -2,12 +2,12 @@
 §  User Macros
 § ==========================================================
 
-SetMacro( 'AUTHOR',      'YOUR NAME' )
+SetMacro( 'AUTHOR',      'Michael D Dacre' )
 SetMacro( 'AUTHORREF',   '' )
-SetMacro( 'COMPANY',     '' )
-SetMacro( 'COPYRIGHT',   '' )
-SetMacro( 'EMAIL',       '' )
-SetMacro( 'LICENSE',     '' )
+SetMacro( 'COMPANY',     'Stanford' )
+SetMacro( 'COPYRIGHT',   'Copyright (c) |YEAR|, |AUTHOR|' )
+SetMacro( 'EMAIL',       'mike.dacre@gmail.com' )
+SetMacro( 'LICENSE',     'GNU General Public License' )
 SetMacro( 'ORGANIZATION','' )
 
 SetStyle( 'default' )

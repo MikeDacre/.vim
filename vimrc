@@ -16,7 +16,6 @@ Plugin 'bling/vim-bufferline'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'ervandew/screen'
-Plugin 'ervandew/supertab'
 Plugin 'gerw/vim-latex-suite'
 Plugin 'jamessan/vim-gnupg'
 Plugin 'jcfaria/Vim-R-plugin'
@@ -24,7 +23,6 @@ Plugin 'jlanzarotta/bufexplorer'
 Plugin 'jngeist/vim-multimarkdown'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'MikeDacre/vim_todo_highlight'
-Plugin 'msanders/snipmate.vim'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'othree/html5.vim'
 Plugin 'Rykka/riv.vim'
@@ -40,6 +38,14 @@ Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/taglist.vim'
 
+" Snipmate
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+
+" Python stuff
+Plugin 'ervandew/supertab'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'klen/python-mode'
 Plugin 'Valloric/YouCompleteMe'
@@ -433,7 +439,7 @@ fun StartScreenTmux()
       let g:ScreenShellSendSuffix = '--'
       let g:ScreenShellSendVarsRestore = 1
       call screen#ScreenShell('ipython3', 'vertical')
-      call g:ScreenShellSend('%pylab')
+      " call g:ScreenShellSend('%pylab')
     else
       call screen#ScreenShell('zsh', 'vertical')
     endif
@@ -584,7 +590,7 @@ noremap <leader>gd :call jedi#goto_definitions()<cr>
 noremap <leader>rn :call jedi#rename()<cr>
 
 " Diable for YouCompleteMe
-let g:jedi#completions_enabled = 1
+let g:jedi#completions_enabled = 0
 
 " Python Mode
 let g:pymode                    = 1
@@ -633,6 +639,8 @@ noremap <leader>so :SessionOpen
 
 " SnipMate
 let g:snips_author = 'Mike Dacre'
+imap <C-j> <esc>a<Plug>snipMateNextOrTrigger
+smap <C-j> <Plug>snipMateNextOrTrigger
 
 " vim-ipython
 

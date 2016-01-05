@@ -13,7 +13,7 @@
 #       LICENCE: Open Source
 #       CREATED: 11/10/2011 22:16:34 PST
 #      REVISION: 1.1
-# Last modified: 2015-04-15 10:03
+# Last modified: 2016-01-05 14:25
 #===============================================================================
 
 VIM_HOME="$HOME/.vim"
@@ -40,8 +40,8 @@ fix_plugin_bugs () {
     rm $i 2>/dev/null
     ln -f -s ../../../templates/$i $i
   done
-  cd $VIM_HOME/bundle/vim-table-mode/plugin/
-  patch < $VIM_HOME/patches/table-mode.patch
+  # cd $VIM_HOME/bundle/snipmate/
+  # patch < $VIM_HOME/patches/table-mode.patch
   cd $VIM_HOME
 
   # Delete broken links
@@ -53,28 +53,28 @@ if [ -d $VIM_HOME/bundle ]; then
   # Go to vim folder
   cd $VIM_HOME
 
-  # Update pathogen
-  cd $VIM_HOME/vim-pathogen
-  git checkout master
-  git pull
-  cd $VIM_HOME
-  rm $VIM_HOME/autoload/pathogen.vim
-  mkdir -p autoload
-  cd autoload
-  ln -s ../vim-pathogen/autoload/pathogen.vim .
-  cd ..
+  # # Update pathogen
+  # cd $VIM_HOME/vim-pathogen
+  # git checkout master
+  # git pull
+  # cd $VIM_HOME
+  # rm $VIM_HOME/autoload/pathogen.vim
+  # mkdir -p autoload
+  # cd autoload
+  # ln -s ../vim-pathogen/autoload/pathogen.vim .
+  # cd ..
 
-  # Update vim-bundle
-  cd $VIM_HOME/vim-bundle
-  git checkout master
-  git pull
-  cd $VIM_HOME
+  # # Update vim-bundle
+  # cd $VIM_HOME/vim-bundle
+  # git checkout master
+  # git pull
+  # cd $VIM_HOME
 
-  # Update every module
-  while read p; do
-    $VIM_HOME/vim-bundle/vim-bundle update $p
-    printf "\033[0m"
-  done < plugin-list
+  # # Update every module
+  # while read p; do
+    # $VIM_HOME/vim-bundle/vim-bundle update $p
+    # printf "\033[0m"
+  # done < plugin-list
 
   # Do my stuff to bundles
   fix_plugin_bugs
