@@ -1,5 +1,84 @@
 set nocompatible
 
+" Vundle
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" Plugins
+Plugin 'aperezdc/vim-template'
+Plugin 'benmills/vimux'
+Plugin 'bling/vim-airline'
+Plugin 'bling/vim-bufferline'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'dhruvasagar/vim-table-mode'
+Plugin 'ervandew/screen'
+Plugin 'ervandew/supertab'
+Plugin 'gerw/vim-latex-suite'
+Plugin 'jamessan/vim-gnupg'
+Plugin 'jcfaria/Vim-R-plugin'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'jngeist/vim-multimarkdown'
+Plugin 'junegunn/vim-easy-align'
+Plugin 'MikeDacre/vim_todo_highlight'
+Plugin 'msanders/snipmate.vim'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'othree/html5.vim'
+Plugin 'Rykka/riv.vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'sjl/gundo.vim'
+Plugin 'Spaceghost/vim-matchit'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-surround'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plugin 'vim-scripts/perl-support.vim'
+Plugin 'vim-scripts/sessionman.vim'
+Plugin 'vim-scripts/taglist.vim'
+
+Plugin 'davidhalter/jedi-vim'
+Plugin 'klen/python-mode'
+Plugin 'Valloric/YouCompleteMe'
+
+" Finish up
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+"General
+if has("gui_running") || &term == "xterm-256color" || &term == "screen-256color"
+  set t_Co=256
+  set selectmode=key
+  set guifont=Inconsolata\ Medium\ 15
+  colo wombatmikemod
+else
+  colo wombat
+  let vimrplugin_screenplugin = 0
+  let vimrplugin_conqueplugin = 1
+endif
+
+syntax enable
+syntax on
+syntax sync fromstart
+
+set guioptions-=b
+set guioptions-=r
+set guioptions-=R
+set guioptions-=l
+set guioptions-=L
+set guioptions-=T
+set guicursor=
+
+set encoding=utf-8
+
+set ai "autoindent
+set si "smartindent
+
+set ofu=syntaxcomplete#Complete
+ 
 ""Tell vim to remember certain things when we exit
 "  '10  :  marks will be remembered for up to 10 previously edited files
 "  "100 :  will save up to 100 lines for each register
@@ -18,49 +97,7 @@ endif
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
-
-"Macros
-
-" Pathogen
-filetype off
-call pathogen#infect('bundle/{}')
-call pathogen#helptags()
-
-
-"General
-if has("gui_running") || &term == "xterm-256color" || &term == "screen-256color"
-  set t_Co=256
-  set selectmode=key
-  set guifont=Inconsolata\ Medium\ 15
-  colo wombatmikemod
-else
-  colo wombat
-  let vimrplugin_screenplugin = 0
-  let vimrplugin_conqueplugin = 1
-endif
-
-syntax enable
-syntax on
-syntax sync fromstart
-
-filetype plugin on
-filetype indent on
-
-set guioptions-=b
-set guioptions-=r
-set guioptions-=R
-set guioptions-=l
-set guioptions-=L
-set guioptions-=T
-set guicursor=
-
-set encoding=utf-8
-
-set ai "autoindent
-set si "smartindent
-
-set ofu=syntaxcomplete#Complete
-
+ 
 autocmd BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
   \   exe "normal! g`\"" |
@@ -155,12 +192,6 @@ set wildmenu
 set wildmode=longest,list,full
 
 set scrolloff=8
-
-
-"if has("gui")
-  " MacVim Fullscreen
-  "set fuopt+=maxhorz
-"endif
 
 if $VIM_CRONTAB == "true"
   set nobackup
@@ -273,9 +304,9 @@ nmap Q gqap
 
 " Tab stuff
 map <leader>tn :tabnew<cr>
-map <leader>te :tabedit
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove
+" map <leader>te :tabedit
+" map <leader>tc :tabclose<cr>
+" map <leader>tm :tabmove
 
 " Add cmdlst syntax
 fun CaptureLine()
@@ -485,9 +516,18 @@ nnoremap <unique> <silent><leader>sw "_yiw:s/\(\%#\w\+\)\(\W\+\)\(\w\+\)/\3\2\1/
 
 """ Language and Plugin Config
 
+" Easy Align
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
 " Indent guides
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size  = 1
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors           = 0
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=8
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkgrey
 
 " Template for specific files
 au BufNewFile  *Process.txt 0r ~/.vim/templates/process_TEMPLATE
@@ -526,27 +566,32 @@ let g:syntastic_aggregate_errors         = 1
 
 let g:syntastic_python_python_exec       = 'python3'
 let g:syntastic_python_checkers          = ['python', 'pep8', 'py3kwarn', 'pyflakes', 'pylint']
+let g:syntastic_quiet_messages = { 'regex': "\(W0612\)\|\(C901\)\|\(W0611\)\|\(E221\)\|\(E501\)\|\(E116\)"}
 
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
 
 " Python
 au BufRead,BufNewFile *.py set filetype=python
+autocmd FileType python setlocal completeopt+=preview
 
 " Jedi
 let g:jedi#auto_initialization    = 1
-let g:jedi#force_py_version       = 3
+" let g:jedi#force_py_version       = 3
 let g:jedi#popup_on_dot           = 1
 let g:jedi#auto_vim_configuration = 1
 noremap <leader>gg :call jedi#goto_assignments()<cr>
 noremap <leader>gd :call jedi#goto_definitions()<cr>
 noremap <leader>rn :call jedi#rename()<cr>
 
+" Diable for YouCompleteMe
+let g:jedi#completions_enabled = 1
+
 " Python Mode
 let g:pymode                    = 1
 let g:pymode_folding            = 0
-let g:pymode_rope               = 0          " Jedi does this
+let g:pymode_rope               = 0 " Jedi does this
 let g:pymode_rope_completion    = 0
-let g:pymode_python             = 'python3'  " Always use python3
+" let g:pymode_python             = 'python3'  " Always use python3
 let g:pymode_trim_whitespaces   = 1
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
@@ -555,7 +600,7 @@ let g:pymode_lint_on_write      = 1
 let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8', 'pyflakes']
 let g:pymode_lint_ignore        = "W0612,C901,W0611,E221,E501,E116"
 let g:pymode_lint_cwindow       = 0
-let g:pymode_syntax             = 1
+let g:pymode_syntax             = 0
 
 nmap <silent> <LocalLeader>pl :SyntasticCheck<cr>
 nmap <silent> <LocalLeader>pu :SyntasticReset<cr>
@@ -567,9 +612,11 @@ autocmd FileType perl set omnifunc=perlcomplete#Complete
 let g:SuperTabDefaultCompletionType = "context"
 
 " Table Mode
-let g:table_mode_fillchar = '='
-let g:table_mode_separator = '#'
-let g:table_mode_toggle_map = '<leader>tb'
+let g:table_mode_corner_corner="+"
+let g:table_mode_header_fillchar="="
+
+
+" Pandoc
 let g:pandoc_no_folding = 1
 let g:pandoc_bibfiles = ['/Users/dacre/bib/Altitude.bib']
 
@@ -613,7 +660,7 @@ let tlist_python_settings = 'Python;c:classes;f:functions;m:class_members;v:vari
 map <leader>tl <Plug>TaskList
 
 " Gundo
-map <leader>gu :GundoToggle<CR>
+nnoremap <F4> :GundoToggle<CR>
 
 " mark (special) text
 let g:ex_todo_keyword = 'NOTE REF EXAMPLE SAMPLE CHECK TIPS HINT'

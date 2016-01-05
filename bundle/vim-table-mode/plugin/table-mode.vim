@@ -81,8 +81,8 @@ command! TableModeRealign call tablemode#table#Realign('.')
 command! TableEvalFormulaLine call tablemode#spreadsheet#formula#EvaluateFormulaLine()
 
 " '|' is a special character, we need to map <Bar> instead
-"if g:table_mode_separator ==# '|' | let separator_map = '<Bar>' | endif
-"execute 'inoremap <silent> <Plug>(table-mode-tableize)' separator_map . '<Esc>:call tablemode#TableizeInsertMode()<CR>a'
+if g:table_mode_separator ==# '|' | let separator_map = '<Bar>' | endif
+execute 'inoremap <silent> <Plug>(table-mode-tableize)' separator_map . '<Esc>:call tablemode#TableizeInsertMode()<CR>a'
 
 nnoremap <silent> <Plug>(table-mode-tableize) :Tableize<CR>
 xnoremap <silent> <Plug>(table-mode-tableize) :Tableize<CR>

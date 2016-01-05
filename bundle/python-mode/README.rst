@@ -40,7 +40,7 @@ See (very old) screencast here: http://www.youtube.com/watch?v=67OZNp9Z0CQ
 (sorry for quality, this is my first screencast) Another old presentation here:
 http://www.youtube.com/watch?v=YhqsjUUHj6g
 
-**To read python-mode documentation in Vim, see** ``:help pymode.txt``
+**To read python-mode documentation in Vim, see** ``:help pymode``
 
 
 .. contents::
@@ -56,13 +56,13 @@ Requirements
 How to install
 ==============
 
-Using pathogen (recomended)
+Using pathogen (recommended)
 ----------------------------
 ::
 
     % cd ~/.vim
     % mkdir -p bundle && cd bundle
-    % git clone git://github.com/klen/python-mode.git
+    % git clone https://github.com/klen/python-mode.git
 
 - Enable `pathogen <https://github.com/tpope/vim-pathogen>`_
   in your ``~/.vimrc``: ::
@@ -81,7 +81,7 @@ Manually
 --------
 ::
 
-    % git clone git://github.com/klen/python-mode.git
+    % git clone https://github.com/klen/python-mode.git
     % cd python-mode
     % cp -R * ~/.vim
 
@@ -107,7 +107,7 @@ Install with commands:
      apt-get update
      apt-get install vim-python-mode
 
-If you are getting the message: "The following signatures couldn' be verified because the public key is not available": ::
+If you are getting the message: "The following signatures couldn't be verified because the public key is not available": ::
 
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B5DF65307000E266
 
@@ -126,7 +126,7 @@ If your python-mode doesn't work:
 
     vim -u <path_to_pymode>/debug.vim
 
-And try to repeat your case. If no error occurs, seems like problem isnt in the
+And try to repeat your case. If no error occurs, seems like problem isn't in the
 plugin.
 
 2. Type `:PymodeTroubleshooting`
@@ -134,6 +134,21 @@ plugin.
 And fix any warnings or copy the output and send it to me. (For example, by
 creating a `new github issue <https://github.com/klen/python-mode/issues/new>`_
 if one does not already exist for the problem).
+
+
+Customization
+=============
+
+You can override the default key bindings by redefining them in your `.vimrc`, for example: ::
+
+    " Override go-to.definition key shortcut to Ctrl-]
+    let g:pymode_rope_goto_definition_bind = "<C-]>"
+
+    " Override run current python file key shortcut to Ctrl-Shift-e
+    let g:pymode_run_bind = "<C-S-e>"
+
+    " Override view python doc key shortcut to Ctrl-Shift-d
+    let g:pymode_doc_bind = "<C-S-d>"
 
 
 Documentation
@@ -172,8 +187,8 @@ License
 
 Licensed under a `GNU lesser general public license`_.
 
-If you like this plugin, you can send me postcard :)
-My address is here: "Russia, 143401, Krasnogorsk, Shkolnaya 1-19" to "Kirill Klenov".
+If you like this plugin, I would very appreciated if you kindly send me a postcard :)
+My address is here: "Russia, 143500, MO, Istra, pos. Severny 8-3" to "Kirill Klenov".
 **Thanks for support!**
 
 .. _GNU lesser general public license: http://www.gnu.org/copyleft/lesser.html
