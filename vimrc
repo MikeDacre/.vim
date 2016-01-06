@@ -587,18 +587,21 @@ let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive
 
 " Python
 au BufRead,BufNewFile *.py set filetype=python
-autocmd FileType python setlocal completeopt+=preview
+autocmd FileType python setlocal completeopt=menuone,longest,preview
 
 " Jedi
 let g:jedi#auto_initialization    = 1
-" let g:jedi#force_py_version       = 3
+if has( 'python3' )
+  let g:jedi#force_py_version     = 3
+endif
 let g:jedi#popup_on_dot           = 1
 let g:jedi#auto_vim_configuration = 1
+let g:jedi#popup_select_first     = 0
 noremap <leader>gg :call jedi#goto_assignments()<cr>
 noremap <leader>gd :call jedi#goto_definitions()<cr>
 noremap <leader>rn :call jedi#rename()<cr>
 
-" Diable for YouCompleteMe
+" Disable for YouCompleteMe
 if has( 'python' )
   let g:jedi#completions_enabled = 0
 endif
@@ -608,7 +611,9 @@ let g:pymode                    = 1
 let g:pymode_folding            = 0
 let g:pymode_rope               = 0 " Jedi does this
 let g:pymode_rope_completion    = 0
-" let g:pymode_python             = 'python3'  " Always use python3
+if has( 'python3' )
+  let g:pymode_python           = 'python3'  " Always use python3
+endif
 let g:pymode_trim_whitespaces   = 1
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
