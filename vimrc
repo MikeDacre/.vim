@@ -684,6 +684,7 @@ let tlist_python_settings = 'Python;c:classes;f:functions;m:class_members;v:vari
 map <leader>tl <Plug>TaskList
 
 " Gundo
+let g:gundo_prefer_python3 = 1
 nnoremap <F4> :GundoToggle<CR>
 
 " mark (special) text
