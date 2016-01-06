@@ -38,10 +38,8 @@ Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/taglist.vim'
 
-" Snipmate
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
+" Utilisnips
+Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
 " Python stuff
@@ -653,10 +651,9 @@ set sessionoptions=blank,buffers,curdir,folds,globals,help,localoptions,options,
 noremap <leader>ss :SessionSave<CR>
 noremap <leader>so :SessionOpen
 
-" SnipMate
+" SnipMate/Utilisnps
 let g:snips_author = 'Mike Dacre'
-imap <c-j> <esc>a<Plug>snipMateNextOrTrigger
-smap <c-j> <Plug>snipMateNextOrTrigger
+let g:UltiSnipsExpandTrigger="<c-a>"
 
 " vim-ipython
 
