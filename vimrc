@@ -46,9 +46,11 @@ Plugin 'honza/vim-snippets'
 
 " Python stuff
 Plugin 'ervandew/supertab'
-Plugin 'davidhalter/jedi-vim'
 Plugin 'klen/python-mode'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'davidhalter/jedi-vim'
+if has( 'python' )
+  Plugin 'Valloric/YouCompleteMe'
+endif
 
 " Finish up
 call vundle#end()            " required
@@ -397,7 +399,14 @@ map <leader>ds :s/^\s\+<CR>
 " autocmd BufWritePre * :%s/\s\+$//e
 
 " Templates
-let g:template_basedir = "~/.vim/templates"
+let g:templates_directory = "~/.vim/templates"
+let g:templates_user_variables = [
+        \   ['CWD', 'getcwd'],
+        \ ]
+
+" function! GetFullPath()
+  " return expand('%:p')
+" endfunction
 
 " Last Modified function
 let g:lastmodified = 1
@@ -590,7 +599,9 @@ noremap <leader>gd :call jedi#goto_definitions()<cr>
 noremap <leader>rn :call jedi#rename()<cr>
 
 " Diable for YouCompleteMe
-let g:jedi#completions_enabled = 0
+if has( 'python' )
+  let g:jedi#completions_enabled = 0
+endif
 
 " Python Mode
 let g:pymode                    = 1
