@@ -9,11 +9,10 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
-Plugin 'aperezdc/vim-template'
+" Plugin 'aperezdc/vim-template'
 Plugin 'benmills/vimux'
 Plugin 'bling/vim-airline'
 Plugin 'bling/vim-bufferline'
-Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'ervandew/screen'
 Plugin 'gerw/vim-latex-suite'
@@ -49,6 +48,9 @@ Plugin 'davidhalter/jedi-vim'
 if has( 'python' )
   Plugin 'Valloric/YouCompleteMe'
 endif
+
+" Do tmux navigator last
+Plugin 'christoomey/vim-tmux-navigator'
 
 " Finish up
 call vundle#end()            " required
@@ -651,9 +653,12 @@ set sessionoptions=blank,buffers,curdir,folds,globals,help,localoptions,options,
 noremap <leader>ss :SessionSave<CR>
 noremap <leader>so :SessionOpen
 
-" SnipMate/Utilisnps
+" SnipMate/UltiSnpis
 let g:snips_author = 'Mike Dacre'
 let g:UltiSnipsExpandTrigger="<c-a>"
+let g:UltiSnipsEditSplit = "vertical"
+let g:UltiSnipsJumpForwardTrigger="<c-J>"
+let g:UltiSnipsJumpBackwardTrigger="<c-K>"
 
 " vim-ipython
 
