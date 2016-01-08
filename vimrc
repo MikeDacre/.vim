@@ -620,7 +620,7 @@ let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
 let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8', 'pyflakes']
-let g:pymode_lint_ignore        = "W0612,C901,W0611,E221,E501,E116"
+let g:pymode_lint_ignore        = "W0612,C0301,C901,C0326,W0611,E221,E501,E116"
 let g:pymode_lint_cwindow       = 0
 let g:pymode_syntax             = 0
 
@@ -657,8 +657,8 @@ noremap <leader>so :SessionOpen
 let g:snips_author = 'Mike Dacre'
 let g:UltiSnipsExpandTrigger="<c-a>"
 let g:UltiSnipsEditSplit = "vertical"
-let g:UltiSnipsJumpForwardTrigger="<c-J>"
-let g:UltiSnipsJumpBackwardTrigger="<c-K>"
+" let g:UltiSnipsJumpForwardTrigger="<c-]>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-[>"
 
 " vim-ipython
 

@@ -1,3 +1,9 @@
+snippet ffile "For i in file, split" b
+for i ${1:infile}:
+	f = i.rstrip().split('${2:\t}')
+	$0
+endsnippet
+
 snippet longdesc "Long Description" b
 """
 ============================================================================
@@ -9,7 +15,7 @@ ${1:
        LICENSE: MIT License, property of Stanford, use as you wish}${8:
        VERSION: ${9:0.1}}
        CREATED: `date +"%Y-%M-%d %H:%m"`
- Last modified:  ${10:
+ Last modified: ${10:
 
    DESCRIPTION: ${11}}${12:
 
@@ -43,24 +49,56 @@ endsnippet
 
 snippet gzipped
 def open_gzipped(infile, mode='rb'):
-    """ Return file handle of file regardless of gzipped or not """
-    ${1:import gzip}
-    mode = 'rb' if mode == 'r' else mode
-    mode = 'wb' if mode == 'w' else mode
-    mode = 'ab' if mode == 'a' else mode
-    return gzip.open(infile, 'rb') if infile.endswith('.gz') \
-        else open(infile, 'rb')
+	""" Return file handle of file regardless of gzipped or not """
+	import gzip
+	import bz2
+	mode = 'rb' if mode == 'r' else mode
+	mode = 'wb' if mode == 'w' else mode
+	mode = 'ab' if mode == 'a' else mode
+	if hasattr(infile, 'write'):
+		return infile
+	if isinstance(infile, str):
+		if infile.endswith('.gz'):
+			return gzip.open(infile, mode)
+		if infile.endswith('.bz2'):
+			return bz2.open(infile, mode)
 
 endsnippet
 
-snippet stdarg
+snippet stdarg "Optional positional files" b
+def $10(infile=sys.stdin, outfile=sys.stdout${12:, logfile=sys.stderr}):
+	""" ${13:Run everything} """
+	$0
+
+if __name__ == '__main__' and '__file__' in globals():
+	import argparse
+
+	f_class = argparse.RawDescriptionHelpFormatter
+	parser  = argparse.ArgumentParser(description=__doc__,
+	                                  formatter_class=f_class)
+
+	# Optional positional files${1:
+	parser.add_argument('${2:infile}', nargs='?', default=sys.stdin,
+	                    type=argparse.FileType('r'),
+	                    help="${3:Input file} (Default: STDIN)")}${4:
+	parser.add_argument('${5:outfile}', nargs='?', default=sys.stdout,
+	                    type=argparse.FileType('w'),
+	                    help="${6:Output file} (Default: STDOUT)")}${7:
+	parser.add_argument('${8:logfile}', nargs='?', default=sys.stderr,
+	                    type=argparse.FileType('a'),
+	                    help="${9:Log file} (Default: STDERR)")}
+	args = parser.parse_args()
+	${10:main}(infile=args.$2, outfile=args.$5${11:, logfile=args.$8})
+
+endsnippet
+
+snippet args "General Command Line Arguments"
 def main($25):
     """ ${26:Run everything} """
     $27
 
 if __name__ == '__main__' and '__file__' in globals():
-    """ ${1:Command Line Argument Parsing} """
-    import argparse
+    ${1:import argparse}
 
     f_class = argparse.RawDescriptionHelpFormatter
     parser  = argparse.ArgumentParser(description=__doc__,
