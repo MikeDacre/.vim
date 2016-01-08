@@ -27,7 +27,7 @@ Plugin 'othree/html5.vim'
 Plugin 'Rykka/riv.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 Plugin 'sjl/gundo.vim'
 Plugin 'Spaceghost/vim-matchit'
 Plugin 'tpope/vim-fugitive'
@@ -46,7 +46,7 @@ Plugin 'ervandew/supertab'
 Plugin 'klen/python-mode'
 Plugin 'davidhalter/jedi-vim'
 if has( 'python' )
-  Plugin 'Valloric/YouCompleteMe'
+  " Plugin 'Valloric/YouCompleteMe'
 endif
 
 " Do tmux navigator last
@@ -573,17 +573,17 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list            = 1
-let g:syntastic_check_on_open            = 0
-let g:syntastic_check_on_wq              = 0
-let g:syntastic_aggregate_errors         = 1
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list            = 1
+" let g:syntastic_check_on_open            = 0
+" let g:syntastic_check_on_wq              = 0
+" let g:syntastic_aggregate_errors         = 1
 
-let g:syntastic_python_python_exec       = 'python3'
-let g:syntastic_python_checkers          = ['python', 'pep8', 'py3kwarn', 'pyflakes', 'pylint']
-let g:syntastic_quiet_messages = { 'regex': "\(W0612\)\|\(C901\)\|\(W0611\)\|\(E221\)\|\(E501\)\|\(E116\)"}
+" let g:syntastic_python_python_exec       = 'python3'
+" let g:syntastic_python_checkers          = ['python', 'pep8', 'py3kwarn', 'pyflakes', 'pylint']
+" let g:syntastic_quiet_messages = { 'regex': "\(W0612\)\|\(C901\)\|\(W0611\)\|\(E221\)\|\(E501\)\|\(E116\)"}
 
-let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
+" let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
 
 " Python
 au BufRead,BufNewFile *.py set filetype=python
@@ -620,7 +620,7 @@ let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
 let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8', 'pyflakes']
-let g:pymode_lint_ignore        = "W0612,C0301,C901,C0326,W0611,E221,E501,E116"
+let g:pymode_lint_ignore        = "F0002,W0612,C0301,C901,C0326,W0611,E221,E501,E116"
 let g:pymode_lint_cwindow       = 0
 let g:pymode_syntax             = 0
 
