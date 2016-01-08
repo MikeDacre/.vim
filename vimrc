@@ -42,11 +42,13 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
 " Python stuff
-Plugin 'ervandew/supertab'
 Plugin 'klen/python-mode'
 Plugin 'davidhalter/jedi-vim'
+Plugin 'ervandew/supertab'
 if has( 'python' )
   Plugin 'Valloric/YouCompleteMe'
+else
+  Plugin 'Shougo/neocomplete.vim'
 endif
 
 " Do tmux navigator last
@@ -604,6 +606,11 @@ noremap <leader>rn :call jedi#rename()<cr>
 " Disable for YouCompleteMe
 if has( 'python' )
   let g:jedi#completions_enabled = 0
+else
+  let g:neocomplete#enable_at_startup = 1
+  let g:neocomplete#enable_smart_case = 1
+  " Set minimum syntax keyword length.
+  let g:neocomplete#sources#syntax#min_keyword_length = 3
 endif
 
 " Python Mode
@@ -617,15 +624,15 @@ endif
 let g:pymode_trim_whitespaces   = 1
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
-let g:pymode_lint_on_write      = 1
+let g:pymode_lint_on_write      = 0
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
 let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8', 'pyflakes']
 let g:pymode_lint_ignore        = "F0002,W0612,C0301,C901,C0326,W0611,E221,E501,E116"
 let g:pymode_lint_cwindow       = 0
 let g:pymode_syntax             = 0
 
-nmap <silent> <LocalLeader>pl :SyntasticCheck<cr>
-nmap <silent> <LocalLeader>pu :SyntasticReset<cr>
+nmap <silent> <LocalLeader>pl :PymodeLint<cr>
+nmap <silent> <LocalLeader>pu :PymodeToggle<cr>
 
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
