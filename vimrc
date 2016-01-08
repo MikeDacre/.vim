@@ -46,7 +46,7 @@ Plugin 'ervandew/supertab'
 Plugin 'klen/python-mode'
 Plugin 'davidhalter/jedi-vim'
 if has( 'python' )
-  " Plugin 'Valloric/YouCompleteMe'
+  Plugin 'Valloric/YouCompleteMe'
 endif
 
 " Do tmux navigator last
@@ -569,9 +569,9 @@ let php_folding=1
 au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 
 " let g:syntastic_always_populate_loc_list = 1
 " let g:syntastic_auto_loc_list            = 1
@@ -587,7 +587,7 @@ set statusline+=%*
 
 " Python
 au BufRead,BufNewFile *.py set filetype=python
-autocmd FileType python setlocal completeopt=menuone,longest,preview
+autocmd FileType python setlocal completeopt=menuone,longest
 
 " Jedi
 let g:jedi#auto_initialization    = 1
