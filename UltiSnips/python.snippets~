@@ -15,7 +15,11 @@ ${1:
        LICENSE: MIT License, property of Stanford, use as you wish}${8:
        VERSION: ${9:0.1}}
        CREATED: `date +"%Y-%M-%d %H:%m"`
+<<<<<<< HEAD
  Last modified: ${10:
+=======
+ Last modified: 2016-01-06 16:52  ${10:
+>>>>>>> 9c35fe7848776cdf34670ba3455ae4d676fa2af4
 
    DESCRIPTION: ${11}}${12:
 
