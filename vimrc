@@ -27,19 +27,26 @@ Plugin 'othree/html5.vim'
 Plugin 'Rykka/riv.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
-" Plugin 'scrooloose/syntastic'
 Plugin 'sjl/gundo.vim'
 Plugin 'Spaceghost/vim-matchit'
-Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/taglist.vim'
 
+" Git support
+Plugin 'tpope/vim-fugitive'
+
+" C Support
+Plugin 'MikeDacre/c-vim'
+
 " Utilisnips
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+
+" Syntax checking
+Plugin 'scrooloose/syntastic'
 
 " Python stuff
 Plugin 'klen/python-mode'
@@ -95,9 +102,9 @@ set ofu=syntaxcomplete#Complete
 "  :20  :  up to 20 lines of command-line history will be remembered
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files
-set viminfo='10,\"100,:20,%,n~/.viminfo"'
+set viminfo='10,\"1000,:90,%,n~/.temp/viminfo"'
 set nofoldenable
-set foldmethod=manual
+set foldmethod=syntax
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 set ttymouse=xterm2
@@ -201,7 +208,7 @@ set undolevels=1000
 set wildmenu
 set wildmode=longest,list,full
 
-set scrolloff=8
+" set scrolloff=8
 
 if $VIM_CRONTAB == "true"
   set nobackup
@@ -210,13 +217,13 @@ endif
 
 " Make completion easier
 
+" Common path includers for file opening with gf
+let &path.="src/include,include,"
+
 set completeopt=menuone,longest
-
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
 inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
   \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-
 inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
   \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
@@ -571,21 +578,79 @@ let php_folding=1
 au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Syntastic
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list            = 1
-" let g:syntastic_check_on_open            = 0
-" let g:syntastic_check_on_wq              = 0
-" let g:syntastic_aggregate_errors         = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list            = 1
+let g:syntastic_check_on_open            = 0
+let g:syntastic_check_on_wq              = 0
+let g:syntastic_aggregate_errors         = 1
 
-" let g:syntastic_python_python_exec       = 'python3'
-" let g:syntastic_python_checkers          = ['python', 'pep8', 'py3kwarn', 'pyflakes', 'pylint']
-" let g:syntastic_quiet_messages = { 'regex': "\(W0612\)\|\(C901\)\|\(W0611\)\|\(E221\)\|\(E501\)\|\(E116\)"}
+if findfile('/usr/bin/pyflakes-python2')
+  let pyflakes_python2 = 'pyflakes-python2'
+else
+  let pyflakes_python2 = 'pyflakes'
+endif
 
-" let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
+let g:syntastic_python3_checkers         = ['python', 'pep8', 'py3kwarn', 'pyflakes3k', 'pylint']
+let g:syntastic_python2_checkers         = ['python', 'pep8', 'py3kwarn', pyflakes_python2, 'pylint']
+let g:syntastic_python3_small_checkers   = ['python', 'pep8', 'py3kwarn', 'pyflakes3k']
+let g:syntastic_python2_small_checkers   = ['python', 'pep8', 'py3kwarn', pyflakes_python2]
+
+let g:syntastic_quiet_messages = { 'regex': "\(bad-whitespace\)|\(W0612\)\|\(C901\)\|\(W0611\)\|\(E221\)\|\(E501\)\|\(E116\)"}
+
+let g:syntastic_mode_map = { "mode": "passive" }
+
+if has( 'python3' )
+  let g:python_version = 3
+  let g:syntastic_python_python_exec     = 'python3'
+  let g:syntastic_python_checkers        = g:syntastic_python3_small_checkers
+  let g:syntastic_python_checker         = 'long'
+else
+  let g:python_version = 2
+  let g:syntastic_python_checkers        = g:syntastic_python2_small_checkers
+  let g:syntastic_python_checker         = 'long'
+endif
+
+fun SynPy2()
+  let g:python_version = 2
+  let g:syntastic_python_python_exec     = 'python2'
+  let g:syntastic_python_checkers        = g:syntastic_python2_checkers
+endfun
+fun SynPy3()
+  let g:python_version = 3
+  let g:syntastic_python_python_exec     = 'python3'
+  let g:syntastic_python_checkers        = g:syntastic_python3_checkers
+endfun
+
+fun TogglePyCheckers()
+  if g:syntastic_python_checker == 'long'
+    if g:python_version == 2
+      let g:syntastic_python_checkers    = g:syntastic_python2_small_checkers
+    elseif g:python_mode == 3
+      let g:syntastic_python_checkers    = g:syntastic_python3_small_checkers
+    endif
+    let g:syntastic_python_checker = 'short'
+  elseif g:syntastic_python_checker == 'short'
+    if g:python_version == 2
+      let g:syntastic_python_checkers    = g:syntastic_python2_checkers
+    elseif g:python_mode == 3
+      let g:syntastic_python_checkers    = g:syntastic_python3_checkers
+    endif
+    let g:syntastic_python_checker = 'long'
+  endif
+endfun
+
+nmap <silent> <LocalLeader>pl :SyntasticCheck<cr>
+nmap <silent> <LocalLeader>pu :SyntasticReset<cr>
+nmap <silent> <LocalLeader>p2 :call SynPy2()<cr>
+nmap <silent> <LocalLeader>p3 :call SynPy3()<cr>
+nmap <silent> <LocalLeader>pt :call TogglePyCheckers()<cr>
+
+let g:syntastic_check_on_open            = 0
+let g:syntastic_check_on_wq              = 0
 
 " Python
 au BufRead,BufNewFile *.py set filetype=python
@@ -631,8 +696,6 @@ let g:pymode_lint_ignore        = "F0002,W0612,C0301,C901,C0326,W0611,E221,E501,
 let g:pymode_lint_cwindow       = 0
 let g:pymode_syntax             = 0
 
-nmap <silent> <LocalLeader>pl :PymodeLint<cr>
-nmap <silent> <LocalLeader>pu :PymodeToggle<cr>
 
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
