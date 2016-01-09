@@ -676,6 +676,7 @@ else
   let g:neocomplete#enable_smart_case = 1
   " Set minimum syntax keyword length.
   let g:neocomplete#sources#syntax#min_keyword_length = 3
+  let g:neocomplete_omni_function_list = ['python3complete#Complete']
 endif
 
 " Python Mode
