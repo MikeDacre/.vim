@@ -645,6 +645,7 @@ endfun
 
 nmap <silent> <LocalLeader>pl :SyntasticCheck<cr>
 nmap <silent> <LocalLeader>pu :SyntasticReset<cr>
+nmap <silent> <LocalLeader>pm :PymodeLint<cr>
 nmap <silent> <LocalLeader>p2 :call SynPy2()<cr>
 nmap <silent> <LocalLeader>p3 :call SynPy3()<cr>
 nmap <silent> <LocalLeader>pt :call TogglePyCheckers()<cr>
