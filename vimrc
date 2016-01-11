@@ -312,8 +312,8 @@ endf
 nmap <leader>F za
 
 " Sort
-map <leader>ss :sort<cr>
-map <leader>su :!sort -u<cr>
+vmap <leader>ss :sort<cr>
+vmap <leader>su :!sort -u<cr>
 
 " Tidy up pargraphs
 vmap Q gq
@@ -722,8 +722,8 @@ let g:NERDTreeWinPos = "right"
 set sessionoptions=blank,buffers,curdir,folds,globals,help,localoptions,options,resize,tabpages,winsize,winpos
 
 " Session
-noremap <leader>ss :SessionSave<CR>
-noremap <leader>so :SessionOpen
+nmap <leader>ss :SessionSave<CR>
+nmap <leader>so :SessionOpen
 
 " SnipMate/UltiSnpis
 let g:snips_author = 'Mike Dacre'
