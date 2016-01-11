@@ -15,7 +15,7 @@ ${1:
        LICENSE: MIT License, property of Stanford, use as you wish}${8:
        VERSION: ${9:0.1}}
        CREATED: `date +"%Y-%M-%d %H:%m"`
- Last modified: 2016-01-07 20:34 ${10:
+ Last modified: 2016-01-09 08:23 ${10:
 
    DESCRIPTION: ${11}}${12:
 
@@ -65,73 +65,126 @@ def open_gzipped(infile, mode='rb'):
 
 endsnippet
 
-snippet stdarg "Optional positional files" b
-def $15(infile=sys.stdin, outfile=sys.stdout${18:, logfile=sys.stderr}):
-	""" ${19:Run everything} """
-	$0
+snippet parg "Positional argument" b
+	${1:parser}.add_argument('${2:file}'${3:, type=argparse.FileType('${4:r}'),}
+	              ${1/./ /g}help="${5:Input file}")
+endsnippet
 
-if __name__ == '__main__' and '__file__' in globals():
-	import argparse
+snippet oarg "Optional argument" b
+	${1:parser}.add_argument('-${2:v}', '--${3:verbose}'${4:, action="${5:store_true}"},
+	              ${1/./ /g}help="${6:Verbose output}")
+endsnippet
 
-	f_class = argparse.RawDescriptionHelpFormatter
-	parser  = argparse.ArgumentParser(description=__doc__,
-	                                  formatter_class=f_class)
-${1:
-	# Optional arguments
-	parser.add_argument('-${2:f}', '--${3:flag}',${4: action='store_true',}
-	                    help='${5:A flag}')}
+snippet garg1 "Argument group one member" b
+	# ${1:Arguments}
+	${2:group} = parser.add_argument_group('${3:Group}')
+	$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
+	              ${2/./ /g}help="${6:Input file, Default STDIN}")
+endsnippet
 
-	# Optional positional files${6:
-	parser.add_argument('${7:infile}', nargs='?', default=sys.stdin,
-	                    type=argparse.FileType('r'),
-	                    help="${8:Input file} (Default: STDIN)")}${9:
-	parser.add_argument('${10:outfile}', nargs='?', default=sys.stdout,
-	                    type=argparse.FileType('w'),
-	                    help="${11:Output file} (Default: STDOUT)")}${12:
-	parser.add_argument('-l', '--${13:logfile}', nargs='?', default=sys.stderr,
-	                    type=argparse.FileType('a'),
-	                    help="${14:Log file} (Default: STDERR)")}
-	args = parser.parse_args()
-	${15:main}(infile=args.$7, outfile=args.$10${16:, logfile=args.$13}${17:,
-	           args.$3})
+snippet garg2 "Argument group two members" b
+	# ${1:Arguments}
+	${2:group} = parser.add_argument_group('${3:Group}')
+	$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
+	              ${2/./ /g}help="$7")
+	$2.add_argument(${8:'-${9:b}', }'${8/.+/--/}${10:bob}',
+	              ${2/./ /g}help="$11")
+endsnippet
 
+snippet garg3 "Argument group three members" b
+	# ${1:Arguments}
+	${2:group} = parser.add_argument_group('${3:Group}')
+	$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
+	              ${2/./ /g}help="$7")
+	$2.add_argument(${8:'-${9:b}', }'${8/.+/--/}${10:bob}',
+	              ${2/./ /g}help="$11")
+	$2.add_argument(${12:'-${13:b}', }'${12/.+/--/}${14:bob}',
+	              ${2/./ /g}help="$15")
+endsnippet
+
+snippet garg4 "Argument group four members" b
+	# ${1:Arguments}
+	${2:group} = parser.add_argument_group('${3:Group}')
+	$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
+	              ${2/./ /g}help="$7")
+	$2.add_argument(${8:'-${9:b}', }'${8/.+/--/}${10:bob}',
+	              ${2/./ /g}help="$11")
+	$2.add_argument(${12:'-${13:b}', }'${12/.+/--/}${14:bob}',
+	              ${2/./ /g}help="$15")
+	$2.add_argument(${16:'-${17:b}', }'${16/.+/--/}${18:bob}',
+	              ${2/./ /g}help="$19")
 endsnippet
 
 snippet args "General Command Line Arguments"
-def main($25):
-	""" ${26:Run everything} """
-	$27
+import argparse
+def main(argv=None):
+	""" ${1:Run as a script} """
+	if not argv:
+	    argv = sys.argv
 
-if __name__ == '__main__' and '__file__' in globals():
-	${1:import argparse}
-
-	f_class = argparse.RawDescriptionHelpFormatter
-	parser  = argparse.ArgumentParser(description=__doc__,
-	                                  formatter_class=f_class)
+	parser  = argparse.ArgumentParser(
+	    description=__doc__,
+	    formatter_class=argparse.RawDescriptionHelpFormatter)
 ${2:
 	# ${3:Positional arguments}
 	parser.add_argument('${4:files}'${5:, nargs='+',}
 	                    help="${6:Input files}")}
 ${7:
 	# ${8:Optional flags}
-	parser.add_argument('${9:-b}', '${10:--bob}'${11:, action="${12:store_true}"},
+	parser.add_argument('-${9:b}', '--${10:bob}'${11:, action="${12:store_true}"},
 	                    help="${13:Verbose output}")}
-	${14
-}${15:
-	# ${16:Optional Files}
-	optfiles = add_argument_group('${17:Optional Files}')${18:
-	optfiles.add_argument('-o', '--outfile',
-	                      help="${19:Output file, Default STDOUT}")}${20:
-	optfiles.add_argument('-l', '--logfile',
-	                      help="${21:Log File, Default STDERR (append mode)}")}}
-${22:
-	# ${23:Debugging flags}
-	parser.add_argument('-v', '--verbose', action="store_true",
-	                    help="Verbose output")}
-	${24}
+${14:
+	# ${15:Optional Files}
+	optfiles = parser.add_argument_group('${16:Optional Files}')${17:
+	optfiles.add_argument('-i', '--infile', nargs='?', default=sys.stdin,
+	                      help="${18:Input file, Default STDIN}")}${19:
+	optfiles.add_argument('-o', '--outfile', nargs='?', default=sys.stdout,
+	                      help="${20:Output file, Default STDOUT}")}${21:
+	optfiles.add_argument('-l', '--logfile', nargs='?', default=sys.stderr,
+	                      help="${22:Log File, Default STDERR (append mode)}")}}
 
-	args = parser.parse_args()
+	args = parser.parse_args(argv)
 
-	# Run the script
-	main(${25})
+if __name__ == '__main__' and '__file__' in globals():
+	sys.exit(main())
+endsnippet
+
+snippet stdarg "Optional positional files" b
+import argparse
+	$18
+	""" ${21:Run everything} """
+	$0
+
+def main(argv=None):
+	""" ${1:Run as a script} """
+	if not argv:
+	    argv = sys.argv
+
+	parser  = argparse.ArgumentParser(
+	    description=__doc__,
+	    formatter_class=argparse.RawDescriptionHelpFormatter)
+
+${2:
+	# Optional arguments
+	parser.add_argument('-${3:f}', '--${4:flag}',${5: action='store_true',}
+	                    help='${6:A flag}')}
+
+	# Optional files${7:
+	parser.add_argument(${8:'-i', }'${8/.+/--/}${9:infile}'${8/.+/, nargs='?'/}, default=sys.stdin,
+	                    type=argparse.FileType('r'),
+	                    help="${10:Input file} (Default: STDIN)")}${11:
+	parser.add_argument(${12:'-o', }'${12/.+/--/}${13:outfile}'${12/.+/, nargs='?'/}, default=sys.stdout,
+	                    type=argparse.FileType('w'),
+	                    help="${14:Output file} (Default: STDOUT)")}${15:
+	parser.add_argument('-l', '--${16:logfile}', nargs='?', default=sys.stderr,
+	                    type=argparse.FileType('a'),
+	                    help="${17:Log file} (Default: STDERR)")}
+
+	args = parser.parse_args(argv)
+
+	${18:${19:`!v expand('%:r')`}(${7/.+/infile=args./}$9${7/.+/, /}${11/.+/outfile=args./}$13${16/.+/:, logfile=args./}$16${2/.+/,
+	 /}${20:${19/./ /g}}${2/.+/args./}$4)}
+
+if __name__ == '__main__' and '__file__' in globals():
+	sys.exit(main())
 endsnippet
