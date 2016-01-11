@@ -599,7 +599,11 @@ let g:syntastic_python2_checkers         = ['python', 'pep8', 'py3kwarn', pyflak
 let g:syntastic_python3_small_checkers   = ['python', 'pep8', 'py3kwarn', 'pyflakes3k']
 let g:syntastic_python2_small_checkers   = ['python', 'pep8', 'py3kwarn', pyflakes_python2]
 
-let g:syntastic_quiet_messages = { 'regex': "\(bad-whitespace\)|\(W0612\)\|\(C901\)\|\(W0611\)\|\(E221\)\|\(E501\)\|\(E116\)"}
+let g:syntastic_quiet_messages = { 
+    \ 'regex': ['bad-whitespace', 'W0612', 'C901', 'W0611', 'E221', 'E501', 'E116'] 
+    \ }
+let g:syntastic_python_pep8_quiet_messages = {'regex': 'E2[27]1'}
+let g:syntastic_python_pylint_quiet_messages = {'regex': ['superfluous-parens', 'bad-whitespace']}
 
 let g:syntastic_mode_map = { "mode": "passive" }
 
