@@ -39,7 +39,7 @@ Plugin 'vim-scripts/taglist.vim'
 Plugin 'tpope/vim-fugitive'
 
 " C Support
-Plugin 'MikeDacre/c-vim'
+" Plugin 'MikeDacre/c-vim'
 
 " Utilisnips
 Plugin 'SirVer/ultisnips'

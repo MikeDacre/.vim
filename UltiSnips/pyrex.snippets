@@ -1,87 +1,23 @@
+snippet impstring "Import c++ string" b
+from libcpp.string cimport string
+endsnippet
+
 global !p
-def first_blank_line():
-	""" Search current vim buffer for first blank line. If not found return current line """
-	b = snip.buffer
+def first_import():
+	b = vim.current.buffer
 	index = 0
-	break_index = 100
-	com_delim  = re.compile(r'^(\s+)?(""")')
-	in_comment = False
 	for line in b:
-		index += 1
-		if index == break_index:
-			return -1
-		if com_delim.match(line):
-			in_comment = False if in_comment else True
-		if in_comment:
-			continue
-		if re.match(r'^\s*$', line):
+		if re.search(r'^(from (\w) )?import \w', line):
 			return index
-	return -1
-
-def search_imports(impt, frm='', end=True):
-	""" Look for first instance of import impt or from frm import impt in the currrent
-	    vim buffer, if found return -1. If not found return start of imports, if end
-	    is true, return end of imports instead. """
-	b = snip.buffer
-	if frm:
-		sch = re.compile(r'^from ' + frm + r' import ' + impt)
-	else:
-		sch = re.compile(r'^(from \w )?import ' + impt)
-	index = 0
-	start = 0
-	imp_found = False
-	break_len = 2  # Maximum number of line breaks between imports before termination
-	break_ind = 0
-	last_ind  = 0
-	for line in b:
 		index += 1
-		if sch.match(line):
-			return -1
-		elif re.match(r'^(from \w )?import \w', line):
-			if not imp_found:
-				start = index
-			imp_found = True
-			break_ind = 0
-			last_ind  = index
-		else:
-			if imp_found:
-				if not last_ind:
-					last_ind = index
-				if break_ind == break_len:
-					break
-				else:
-					break_ind += 1
-	if imp_found:
-		if end:
-			return last_ind + 1 if last_ind else index + 1
-		else:
-			return start
-	else:
-		return -2
 
-def add_import(impt, frm='', end=True):
-	""" Add an import if it does not already exist, default is to add to end """
-	imp_loc = search_imports(impt, frm, end)
-	if imp_loc == -1:
-		return
-	if imp_loc == -2:
-		imp_loc = first_blank_line()
-	if imp_loc == -1:
-		imp_loc = vim.current.window.cursor[0]
-	imp_loc = imp_loc - 1
-	imp_string = 'from {} import {}'.format(frm, impt) if frm else 'import {}'.format(impt)
-	snip.buffer.append(imp_string, imp_loc)
-
-def add_imports(impts, end=True):
-	""" Add a list of imports
-	    If you want to import as from ... import ..., then use a tuple for the import:
-	    [(import, from), import, (import, from), ...] """
-	for impt in impts:
-		if type(impt) is tuple:
-			add_import(*impt, end=end)
-		else:
-			add_import(impt, end=end)
+def add_line(line_string, index):
+	vim.current.buffer.append(line_string, index)
 endglobal
+
+snippet firstimport "Description" b
+`!p add_line('hi', 8)`
+endsnippet
 
 snippet ffile "For i in file, split" b
 for i in ${1:infile}:
@@ -130,11 +66,12 @@ bamfile = subprocess.Popen('samtools view '+BAMFILE, stdout=subprocess.PIPE, she
 for line in bamfile.stdout:
 endsnippet
 
-pre_expand "add_imports(['gzip', 'bz2'])"
 snippet zipped
 def open_zipped(infile, mode='r'):
 	""" Return file handle of file regardless of zipped or not
 	    Text mode enforced for compatibility with python2 """
+	${1:import gzip}
+	${2:import bz2}
 	mode   = mode[0] + 't'
 	p2mode = mode
 	if hasattr(infile, 'write'):
@@ -148,7 +85,6 @@ def open_zipped(infile, mode='r'):
 			else:
 				return bz2.BZ2File(infile, p2mode)
 		return open(infile, p2mode)
-$0
 endsnippet
 
 snippet parg "Positional argument" b
@@ -201,9 +137,9 @@ snippet garg4 "Argument group four members" b
 	              ${2/./ /g}help="$19")
 endsnippet
 
-pre_expand "add_imports(['sys', 'argparse'])"
 snippet args "General Command Line Arguments"
-${2:import sys
+${1:import argparse
+}${2:import sys
 
 
 }def main(argv=None):
@@ -240,8 +176,11 @@ if __name__ == '__main__' and '__file__' in globals():
 	sys.exit(main())
 endsnippet
 
-pre_expand "add_imports(['sys', 'argparse'])"
 snippet stdarg "Optional positional files" b
+${24:import sys
+}${25:import argparse
+}
+
 def ${20/=[^,)]+|args.//g}:
 	""" ${23:Run everything} """
 	$0
@@ -250,7 +189,7 @@ def ${20/=[^,)]+|args.//g}:
 def main(argv=None):
 	""" ${1:Run as a script} """
 	if not argv:
-	    argv = sys.argv[1:]
+	    argv = sys.argv
 
 	parser  = argparse.ArgumentParser(
 	    description=__doc__,
