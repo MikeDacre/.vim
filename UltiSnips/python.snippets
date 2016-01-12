@@ -80,7 +80,7 @@ def open_zipped(infile, mode='r'):
 				return bz2.open(infile, mode)
 			else:
 				return bz2.BZ2File(infile, p2mode)
-		return open(infile, o2mode)
+		return open(infile, p2mode)
 endsnippet
 
 snippet parg "Positional argument" b
@@ -185,7 +185,7 @@ def ${20/=[^,)]+|args.//g}:
 def main(argv=None):
 	""" ${1:Run as a script} """
 	if not argv:
-	    argv = sys.argv
+	    argv = sys.argv[1:]
 
 	parser  = argparse.ArgumentParser(
 	    description=__doc__,
