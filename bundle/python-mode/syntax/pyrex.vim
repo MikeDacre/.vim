@@ -39,9 +39,9 @@ endif
 
 " This deletes "from" from the keywords and re-adds it as a
 " match with lower priority than pyrexForFrom
-syn clear   pythonInclude
-syn keyword pythonInclude     import
-syn match   pythonInclude     "\<from\>"
+" syn clear   pythonInclude
+" syn keyword pythonInclude     import
+" syn match   pythonInclude     "\<from\>"
 
 " With "for[^:]*\zsfrom" VIM does not match "for" anymore, so
 " I used the slower "\@<=" form
