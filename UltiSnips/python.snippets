@@ -59,9 +59,10 @@ def search_imports(impt, frm='', end=True):
 	else:
 		return -2
 
-def add_import(impt, frm='', end=True):
+def add_import(impt, frm='', asstr='',end=True):
 	""" Add an import if it does not already exist, default is to add to end """
 	imp_loc = search_imports(impt, frm, end)
+	impt = impt.strip()
 	if imp_loc == -1:
 		return
 	if imp_loc == -2:
@@ -70,6 +71,8 @@ def add_import(impt, frm='', end=True):
 		imp_loc = vim.current.window.cursor[0]
 	imp_loc = imp_loc - 1
 	imp_string = 'from {} import {}'.format(frm, impt) if frm else 'import {}'.format(impt)
+	if asstr:
+		imp_string = imp_string + ' as ' + asstr
 	snip.buffer.append(imp_string, imp_loc)
 
 def add_imports(impts, end=True):
@@ -81,7 +84,33 @@ def add_imports(impts, end=True):
 			add_import(*impt, end=end)
 		else:
 			add_import(impt, end=end)
+
+def add_import_and_delete():
+	cur = int(vim.current.window.cursor[0])
+	col = int(vim.current.window.cursor[1])
+	pos = snip.cursor.preserve()
+	line, column = snip.line, snip.column
+	ln = vim.current.line.strip()
+	indent = re.findall(r'^(\W*)', vim.current.line.rstrip())[0]
+	if ln:
+		add_import(ln)
+		snip.buffer[cur] = indent
+		snip.cursor.set(line + 1, column)
+
+def plot_import():
+	add_import('numpy', asstr='np')
+	add_import('matplotlib.pyplot', asstr='plt')
 endglobal
+
+post_jump "add_import_and_delete()"
+snippet imptop "Import at top" b
+$1
+endsnippet
+
+post_jump "plot_import()"
+snippet plot "Import at top" b
+$1
+endsnippet
 
 snippet ffile "For i in file, split" b
 for i in ${1:infile}:
