@@ -49,9 +49,9 @@ Plugin 'honza/vim-snippets'
 Plugin 'scrooloose/syntastic'
 
 " Python stuff
-Plugin 'klen/python-mode'
-Plugin 'davidhalter/jedi-vim'
 Plugin 'ervandew/supertab'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'klen/python-mode'
 if has( 'python' )
   Plugin 'Valloric/YouCompleteMe'
 else
@@ -648,6 +648,7 @@ fun TogglePyCheckers()
 endfun
 
 nmap <silent> <LocalLeader>pl :SyntasticCheck<cr>
+nmap <silent> <LocalLeader>pk :SyntasticCheck pylint<cr>
 nmap <silent> <LocalLeader>pu :SyntasticReset<cr>
 nmap <silent> <LocalLeader>pm :PymodeLint<cr>
 nmap <silent> <LocalLeader>p2 :call SynPy2()<cr>
@@ -660,6 +661,7 @@ let g:syntastic_check_on_wq              = 0
 " Python
 au BufRead,BufNewFile *.py set filetype=python
 autocmd FileType python setlocal completeopt=menuone,longest
+autocmd FileType python setlocal et sw=4 ts=4 tw=79 
 
 " Jedi
 let g:jedi#auto_initialization    = 1
@@ -686,7 +688,7 @@ endif
 
 " Python Mode
 let g:pymode                    = 1
-let g:pymode_folding            = 0
+let g:pymode_folding            = 1
 let g:pymode_rope               = 0 " Jedi does this
 let g:pymode_rope_completion    = 0
 if has( 'python3' )
@@ -695,12 +697,12 @@ endif
 let g:pymode_trim_whitespaces   = 1
 let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
-let g:pymode_lint_on_write      = 0
+let g:pymode_lint_on_write      = 1
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
-let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pep8', 'pyflakes']
+let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pyflakes']
 let g:pymode_lint_ignore        = "F0002,W0612,C0301,C901,C0326,W0611,E221,E501,E116"
 let g:pymode_lint_cwindow       = 0
-let g:pymode_syntax             = 0
+let g:pymode_syntax             = 1
 
 
 " Perl

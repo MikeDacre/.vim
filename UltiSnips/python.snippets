@@ -191,75 +191,72 @@ snippet oarg "Optional argument" b
 endsnippet
 
 snippet garg1 "Argument group one member" b
-	# ${1:Arguments}
-	${2:group} = parser.add_argument_group('${3:Group}')
-	$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
-	              ${2/./ /g}help="${6:Input file, Default STDIN}")
+# ${1:Arguments}
+${2:group} = parser.add_argument_group('${3:Group}')
+$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
+              ${2/./ /g}help="${6:Input file, Default STDIN}")
 endsnippet
 
 snippet garg2 "Argument group two members" b
-	# ${1:Arguments}
-	${2:group} = parser.add_argument_group('${3:Group}')
-	$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
-	              ${2/./ /g}help="$7")
-	$2.add_argument(${8:'-${9:b}', }'${8/.+/--/}${10:bob}',
-	              ${2/./ /g}help="$11")
+# ${1:Arguments}
+${2:group} = parser.add_argument_group('${3:Group}')
+$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
+              ${2/./ /g}help="$7")
+$2.add_argument(${8:'-${9:b}', }'${8/.+/--/}${10:bob}',
+              ${2/./ /g}help="$11")
 endsnippet
 
 snippet garg3 "Argument group three members" b
-	# ${1:Arguments}
-	${2:group} = parser.add_argument_group('${3:Group}')
-	$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
-	              ${2/./ /g}help="$7")
-	$2.add_argument(${8:'-${9:b}', }'${8/.+/--/}${10:bob}',
-	              ${2/./ /g}help="$11")
-	$2.add_argument(${12:'-${13:b}', }'${12/.+/--/}${14:bob}',
-	              ${2/./ /g}help="$15")
+# ${1:Arguments}
+${2:group} = parser.add_argument_group('${3:Group}')
+$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
+              ${2/./ /g}help="$7")
+$2.add_argument(${8:'-${9:b}', }'${8/.+/--/}${10:bob}',
+              ${2/./ /g}help="$11")
+$2.add_argument(${12:'-${13:b}', }'${12/.+/--/}${14:bob}',
+              ${2/./ /g}help="$15")
 endsnippet
 
 snippet garg4 "Argument group four members" b
-	# ${1:Arguments}
-	${2:group} = parser.add_argument_group('${3:Group}')
-	$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
-	              ${2/./ /g}help="$7")
-	$2.add_argument(${8:'-${9:b}', }'${8/.+/--/}${10:bob}',
-	              ${2/./ /g}help="$11")
-	$2.add_argument(${12:'-${13:b}', }'${12/.+/--/}${14:bob}',
-	              ${2/./ /g}help="$15")
-	$2.add_argument(${16:'-${17:b}', }'${16/.+/--/}${18:bob}',
-	              ${2/./ /g}help="$19")
+# ${1:Arguments}
+${2:group} = parser.add_argument_group('${3:Group}')
+$2.add_argument(${4:'-${5:b}', }'${4/.+/--/}${6:bob}',
+              ${2/./ /g}help="$7")
+$2.add_argument(${8:'-${9:b}', }'${8/.+/--/}${10:bob}',
+              ${2/./ /g}help="$11")
+$2.add_argument(${12:'-${13:b}', }'${12/.+/--/}${14:bob}',
+              ${2/./ /g}help="$15")
+$2.add_argument(${16:'-${17:b}', }'${16/.+/--/}${18:bob}',
+              ${2/./ /g}help="$19")
 endsnippet
 
 pre_expand "add_imports(['sys', 'argparse'])"
 snippet args "General Command Line Arguments"
-${2:import sys
-
-
-}def main(argv=None):
-	""" ${3:Run as a script} """
+def main(argv=None):
+	""" ${1:Run as a script} """
 	if not argv:
 	    argv = sys.argv[1:]
 
 	parser  = argparse.ArgumentParser(
 	    description=__doc__,
 	    formatter_class=argparse.RawDescriptionHelpFormatter)
-${4:
-	# ${5:Positional arguments}
-	parser.add_argument('${6:files}'${7:, nargs='+',}
-	                    help="${8:Input files}")}
-${9:
-	# ${10:Optional flags}
-	parser.add_argument('-${11:b}', '--${12:bob}'${13:, action="${14:store_true}"},
-	                    help="${15:Verbose output}")}
-${16:
-	# ${17:Optional Files}
-	optfiles = parser.add_argument_group('${18:Optional Files}')${19:
-	optfiles.add_argument('-${20:i}', '--${21:infile}', default=sys.stdin,
-	                      help="${22:Input file, Default STDIN}")}${23:
-	optfiles.add_argument('-${24:o}', '--${25:outfile}', default=sys.stdout,
-	                      help="${26:Output file, Default STDOUT}")}${27:
+${2:
+	# ${3:Positional arguments}
+	parser.add_argument('${4:files}'${5:, nargs='+',}
+	                    help="${6:Input files}")}
+${7:
+	# ${8:Optional flags}
+	parser.add_argument('-${9:b}', '--${10:bob}'${11:, action="${12:store_true}"},
+	                    help="${13:Verbose output}")}
+${14:
+	# ${15:Optional Files}
+	optfiles = parser.add_argument_group('${16:Optional Files}')${17:
+	optfiles.add_argument('-${18:i}', '--${19:infile}', default=sys.stdin,
+	                      help="${20:Input file, Default STDIN}")}${21:
+	optfiles.add_argument('-${22:o}', '--${23:outfile}', default=sys.stdout,
+	                      help="${24:Output file, Default STDOUT}")}${25:
 	optfiles.add_argument('-l', '--logfile', default=sys.stderr,
-	                      help="${28:Log File, Default STDERR (append mode)}")}}
+	                      help="${26:Log File, Default STDERR (append mode)}")}}
 
 	args = parser.parse_args(argv)
 
