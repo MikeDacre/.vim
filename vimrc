@@ -47,7 +47,6 @@ Plugin 'honza/vim-snippets'
 
 " Python stuff
 Plugin 'ervandew/supertab'
-Plugin 'davidhalter/jedi-vim'
 Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
 if has( 'python' )
@@ -55,6 +54,7 @@ if has( 'python' )
 else
   Plugin 'Shougo/neocomplete.vim'
 endif
+Plugin 'davidhalter/jedi-vim'
 
 " Do tmux navigator last
 Plugin 'christoomey/vim-tmux-navigator'
@@ -665,6 +665,8 @@ autocmd FileType python setlocal et sw=4 ts=4 tw=79
 let g:jedi#auto_initialization    = 1
 if has( 'python3' )
   let g:jedi#force_py_version     = 3
+else
+  let g:jedi#force_py_version     = 2
 endif
 let g:jedi#popup_on_dot           = 1
 let g:jedi#auto_vim_configuration = 1
