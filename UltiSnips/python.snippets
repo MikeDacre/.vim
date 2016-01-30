@@ -120,20 +120,22 @@ endsnippet
 
 snippet longdesc "Long Description" b
 """
+${1:What am I?}
+
 ============================================================================
-${1:
-          FILE: ${2:`!v expand('%:t')`}}${3:
-           DIR: ${4:`!v expand('%:p:h')`}}${5:
-        AUTHOR: Michael D Dacre, mike.dacre@gmail.com}${6:
-  ORGANIZATION: Stanford University}${7:
-       LICENSE: MIT License, property of Stanford, use as you wish}${8:
-       VERSION: ${9:0.1}}
+${2:
+          FILE: ${3:`!v expand('%:t')`}}${4:
+           DIR: ${5:`!v expand('%:p:h')`}}${6:
+        AUTHOR: Michael D Dacre, mike.dacre@gmail.com}${7:
+  ORGANIZATION: Stanford University}${8:
+       LICENSE: MIT License, property of Stanford, use as you wish}${9:
+       VERSION: ${10:0.1}}
        CREATED: `date +"%Y-%M-%d %H:%m"`
- Last modified: 2016-01-11 13:17 ${10:
+ Last modified: ${11:
 
-   DESCRIPTION: ${11}}${12:
+   DESCRIPTION: ${12}}${13:
 
-         USAGE: ${13:Import as a module or run as a script}}
+         USAGE: ${14:Import as a module or run as a script}}
 
 ============================================================================
 """
@@ -141,10 +143,12 @@ endsnippet
 
 snippet desc "Short Docstring" b
 """
-       CREATED: `date +"%Y-%M-%d %H:%m"`
- Last modified:
+$1
 
- ${1}
+       Created: `date +"%Y-%M-%d %H:%m"`
+ Last modified: ${2:
+
+ $3}
 """
 endsnippet
 

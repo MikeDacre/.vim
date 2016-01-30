@@ -45,13 +45,11 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
-" Syntax checking
-Plugin 'scrooloose/syntastic'
-
 " Python stuff
 Plugin 'ervandew/supertab'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'klen/python-mode'
+Plugin 'scrooloose/syntastic'
 if has( 'python' )
   Plugin 'Valloric/YouCompleteMe'
 else
@@ -647,10 +645,16 @@ fun TogglePyCheckers()
   endif
 endfun
 
+fun ResetCheckers()
+  SyntasticReset
+  sign unplace *
+  let g:pymode_lint_checkers = ['mccabe', 'pep257']
+endfun
+ 
+
 nmap <silent> <LocalLeader>pl :SyntasticCheck<cr>
 nmap <silent> <LocalLeader>pk :SyntasticCheck pylint<cr>
-nmap <silent> <LocalLeader>pu :SyntasticReset<cr>
-nmap <silent> <LocalLeader>pm :PymodeLint<cr>
+nmap <silent> <LocalLeader>pu :call ResetCheckers()<cr>
 nmap <silent> <LocalLeader>p2 :call SynPy2()<cr>
 nmap <silent> <LocalLeader>p3 :call SynPy3()<cr>
 nmap <silent> <LocalLeader>pt :call TogglePyCheckers()<cr>
@@ -699,11 +703,18 @@ let g:pymode_breakpoint         = 1
 let g:pymode_breakpoint_bind    = '<leader>bb'
 let g:pymode_lint_on_write      = 1
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
-let g:pymode_lint_checkers      = ['pylint', 'mccabe', 'pyflakes']
+let g:pymode_lint_checkers      = ['mccabe', 'pyflakes']
 let g:pymode_lint_ignore        = "F0002,W0612,C0301,C901,C0326,W0611,E221,E501,E116"
-let g:pymode_lint_cwindow       = 0
+let g:pymode_lint_cwindow       = 1
 let g:pymode_syntax             = 1
 
+fun PymodeLintAll()
+  let g:pymode_lint_checkers = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
+  PymodeLint
+  let g:pymode_lint_checkers = ['mccabe', 'pep257']
+endfun
+ 
+nmap <silent> <LocalLeader>pm :call PymodeLintAll()<cr>
 
 " Perl
 autocmd FileType perl set omnifunc=perlcomplete#Complete
@@ -733,6 +744,7 @@ nmap <leader>so :SessionOpen
 
 " SnipMate/UltiSnpis
 let g:snips_author = 'Mike Dacre'
+let g:ultisnips_python_style = 'NORMAL'
 let g:UltiSnipsExpandTrigger="<c-a>"
 let g:UltiSnipsEditSplit = "vertical"
 " let g:UltiSnipsJumpForwardTrigger="<c-]>"
