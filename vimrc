@@ -9,7 +9,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
-" Plugin 'aperezdc/vim-template'
+Plugin 'aperezdc/vim-template'
 Plugin 'benmills/vimux'
 Plugin 'bling/vim-airline'
 Plugin 'bling/vim-bufferline'
@@ -51,9 +51,9 @@ Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
 Plugin 'davidhalter/jedi-vim'
 if has( 'python' )
-  Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 else
-  Plugin 'Shougo/neocomplete.vim'
+" Plugin 'Shougo/neocomplete.vim'
 endif
 
 " Do tmux navigator last
@@ -669,7 +669,9 @@ autocmd FileType python setlocal et sw=4 ts=4 tw=79
 
 " Jedi
 let g:jedi#auto_initialization    = 1
-if has( 'python3' )
+if has( 'python' ) && has( 'python3' )
+  let g:jedi#force_py_version     = 2
+elseif has( 'python3' )
   let g:jedi#force_py_version     = 3
 else
   let g:jedi#force_py_version     = 2
@@ -683,7 +685,7 @@ noremap <leader>rn :call jedi#rename()<cr>
 
 " Disable for YouCompleteMe
 if has( 'python' )
-  let g:jedi#completions_enabled = 0
+  " let g:jedi#completions_enabled = 0
 else
   let g:neocomplete#enable_at_startup = 1
   let g:neocomplete#enable_smart_case = 1
