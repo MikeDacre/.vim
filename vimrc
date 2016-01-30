@@ -49,12 +49,12 @@ Plugin 'honza/vim-snippets'
 Plugin 'ervandew/supertab'
 Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
+Plugin 'davidhalter/jedi-vim'
 if has( 'python' )
   Plugin 'Valloric/YouCompleteMe'
 else
   Plugin 'Shougo/neocomplete.vim'
 endif
-Plugin 'davidhalter/jedi-vim'
 
 " Do tmux navigator last
 Plugin 'christoomey/vim-tmux-navigator'

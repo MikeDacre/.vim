@@ -657,7 +657,11 @@ function! s:interactive(range, modes, n, d, opts, rules, vis, bvis)
     let check = 0
     let warn = ''
 
-    let c  = getchar()
+    try
+      let c = getchar()
+    catch /^Vim:Interrupt$/
+      let c = 27
+    endtry
     let ch = nr2char(c)
     if c == 3 || c == 27 " CTRL-C / ESC
       if undo
@@ -1125,7 +1129,13 @@ endfunction
 function! easy_align#align(bang, live, visualmode, expr) range
   try
     call s:align(a:bang, a:live, a:visualmode, a:firstline, a:lastline, a:expr)
-  catch 'exit'
+  catch /^\%(Vim:Interrupt\|exit\)$/
+    if empty(a:visualmode)
+      echon "\r"
+      echon "\r"
+    else
+      normal! gv
+    endif
   endtry
 endfunction
 
