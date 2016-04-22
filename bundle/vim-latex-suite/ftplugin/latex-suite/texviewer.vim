@@ -90,9 +90,9 @@ function! Tex_Complete(what, where)
 			let s:refprefix = '\eqref{'
 		elseif s:curline =~ otherpattern
 			" User want to complete theorem/remark/... reference
-			let s:type = 'autoref'
+			let s:type = 'ref'
 			let s:prefix = substitute(s:curline, otherpattern, '\1', '')
-			let s:refprefix = '\autoref{'
+			let s:refprefix = '\' . Tex_GetVarValue('Tex_RefCompletionCommand', 'ref') . '{'
 		elseif s:curline =~ commandpattern
 			let s:type = substitute(s:curline, commandpattern, '\1', 'e')
 			let s:typeoption = substitute(s:curline, commandpattern, '\2', 'e')
@@ -582,7 +582,7 @@ function! Tex_ScanFileForCite(prefix)
 	" First find out if this file has a \(no)bibliography or a \addbibresource
 	" (biblatex) command in it. If so, assume that this is the only file
 	" in the project which defines a bibliography.
-	if search('\\\(\(no\)\?bibliography\|addbibresource\(\[.*\]\)\?\){', 'w')
+	if search('\(%.*\)\@<!\\\(\(no\)\?bibliography\|addbibresource\(\[.*\]\)\?\){', 'w')
 		call Tex_Debug('Tex_ScanFileForCite: found bibliography command in '.bufname('%'), 'view')
 		" convey that we have found a bibliography command. we do not need to
 		" proceed any further.
@@ -880,7 +880,7 @@ function! Tex_FindBibFiles()
 	split
 	exec 'silent! e '.fnameescape(mainfname)
 
-	if search('\\\(\(no\)\?bibliography\|addbibresource\(\[.*\]\)\?\){', 'w')
+	if search('\(%.*\)\@<!\\\(\(no\)\?bibliography\|addbibresource\(\[.*\]\)\?\){', 'w')
 
 		call Tex_Debug('Tex_FindBibFiles: found bibliography command in '.bufname('%'), 'view')
 

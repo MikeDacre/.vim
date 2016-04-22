@@ -22,7 +22,7 @@
 
 
 PLUGINHOME=`pwd`
-PLUGINVERSION=1.2.7
+PLUGINVERSION=1.3.1
 DEBIANTIME=`date -R`
 PLUGINRELEASEDATE=`date +"%Y-%m-%d"`
 VIM2HTML=/usr/local/share/vim/vim74/doc/vim2html.pl 
@@ -72,6 +72,9 @@ deb:
 	  - r-plugin/setcompldir.vim\n\
 	  - r-plugin/synctex_evince_backward.py\n\
 	  - r-plugin/synctex_evince_forward.py\n\
+	  - r-plugin/tmux.vim\n\
+	  - r-plugin/tmux_split.vim\n\
+	  - r-plugin/extern_term.vim\n\
 	  - syntax/rbrowser.vim\n\
 	  - syntax/rdoc.vim\n\
 	  - syntax/rout.vim\n\
@@ -167,7 +170,6 @@ htmldoc:
 	    sed -i -e 's/\( *\)\(http\S*\)/\1<a href="\2">\2<\/a>/' r-plugin.html ;\
 	    sed -i -e 's/<\/pre><hr><pre>/  --------------------------------------------------------\n/' r-plugin.html ;\
 	    mv r-plugin.html vim-stylesheet.css /tmp )
-	rm -f doc/tags-te
 
 all: vimball deb htmldoc
 

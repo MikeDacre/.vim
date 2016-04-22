@@ -123,7 +123,11 @@ function! airline#extensions#load()
 
   if exists('g:airline_extensions')
     for ext in g:airline_extensions
-      call airline#extensions#{ext}#init(s:ext)
+      try
+        call airline#extensions#{ext}#init(s:ext)
+      catch /^Vim\%((\a\+)\)\=:E117/	" E117, function does not exist
+        call airline#util#warning("Extension '".ext."' not installed, ignoring!")
+      endtry
     endfor
     return
   endif
@@ -150,7 +154,7 @@ function! airline#extensions#load()
     call airline#extensions#ctrlp#init(s:ext)
   endif
 
-  if get(g:, 'ctrlspace_loaded', 0)
+  if get(g:, 'CtrlSpaceLoaded', 0)
     call airline#extensions#ctrlspace#init(s:ext)
   endif
 
@@ -210,6 +214,10 @@ function! airline#extensions#load()
     call airline#extensions#whitespace#init(s:ext)
   endif
 
+  if get(g:, 'airline#extensions#po#enabled', 1) && executable('msgfmt')
+    call airline#extensions#po#init(s:ext)
+  endif
+
   if get(g:, 'airline#extensions#wordcount#enabled', 1)
     call airline#extensions#wordcount#init(s:ext)
   endif
@@ -228,6 +236,10 @@ function! airline#extensions#load()
 
   if get(g:, 'airline#extensions#nrrwrgn#enabled', 1) && exists(':NR') == 2
       call airline#extensions#nrrwrgn#init(s:ext)
+  endif
+
+  if get(g:, 'airline#extensions#unicode#enabled', 1) && exists(':UnicodeTable') == 2
+      call airline#extensions#unicode#init(s:ext)
   endif
 
   if (get(g:, 'airline#extensions#capslock#enabled', 1) && exists('*CapsLockStatusline'))

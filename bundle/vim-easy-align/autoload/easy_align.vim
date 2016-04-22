@@ -38,6 +38,7 @@ let s:easy_align_delimiters_default = {
 \  '|': { 'pattern': '|',  'left_margin': 1, 'right_margin': 1, 'stick_to_left': 0 },
 \  '.': { 'pattern': '\.', 'left_margin': 0, 'right_margin': 0, 'stick_to_left': 0 },
 \  '#': { 'pattern': '#\+', 'delimiter_align': 'l', 'ignore_groups': ['!Comment']  },
+\  '"': { 'pattern': '"\+', 'delimiter_align': 'l', 'ignore_groups': ['!Comment']  },
 \  '&': { 'pattern': '\\\@<!&\|\\\\',
 \                          'left_margin': 1, 'right_margin': 1, 'stick_to_left': 0 },
 \  '{': { 'pattern': '(\@<!{',
@@ -828,10 +829,11 @@ function! s:valid_regexp(regexp)
 endfunction
 
 function! s:test_regexp(regexp)
-  if !s:valid_regexp(a:regexp)
-    call s:exit('Invalid regular expression: '. a:regexp)
+  let regexp = empty(a:regexp) ? @/ : a:regexp
+  if !s:valid_regexp(regexp)
+    call s:exit('Invalid regular expression: '. regexp)
   endif
-  return a:regexp
+  return regexp
 endfunction
 
 let s:shorthand_regex =

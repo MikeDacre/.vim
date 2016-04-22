@@ -9,7 +9,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
-Plugin 'aperezdc/vim-template'
+" Plugin 'aperezdc/vim-template'
 Plugin 'benmills/vimux'
 Plugin 'bling/vim-airline'
 Plugin 'bling/vim-bufferline'
@@ -49,11 +49,11 @@ Plugin 'honza/vim-snippets'
 Plugin 'ervandew/supertab'
 Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
-Plugin 'davidhalter/jedi-vim'
 if has( 'python' )
-" Plugin 'Valloric/YouCompleteMe'
+  Plugin 'Valloric/YouCompleteMe'
 else
-" Plugin 'Shougo/neocomplete.vim'
+  Plugin 'Shougo/neocomplete.vim'
+" Plugin 'davidhalter/jedi-vim'
 endif
 
 " Do tmux navigator last
@@ -601,7 +601,8 @@ let g:syntastic_quiet_messages = {
     \ 'regex': ['bad-whitespace', 'W0612', 'C901', 'W0611', 'E221', 'E501', 'E116'] 
     \ }
 let g:syntastic_python_pep8_quiet_messages = {'regex': 'E2[27]1'}
-let g:syntastic_python_pylint_quiet_messages = {'regex': ['superfluous-parens', 'bad-whitespace']}
+let g:syntastic_python_pylint_quiet_messages = {'regex': ['too-few-public-methods', 'too-many-statements', 'too-many-nested-blocks', 'superfluous-parens', 'bad-whitespace', 'too-many-instance-attributes', 'invalid-name', 'too-many-arguments', 'too-many-locals', 'too-many-branches', 'too-many-statements']}
+let g:syntastic_python_pyflakes_quiet_messages = {'regex': ['']}
 
 let g:syntastic_mode_map = { "mode": "passive" }
 
@@ -668,7 +669,7 @@ autocmd FileType python setlocal completeopt=menuone,longest
 autocmd FileType python setlocal et sw=4 ts=4 tw=79 
 
 " Jedi
-let g:jedi#auto_initialization    = 1
+let g:jedi#auto_initialization    = 0
 if has( 'python' ) && has( 'python3' )
   let g:jedi#force_py_version     = 2
 elseif has( 'python3' )
@@ -676,16 +677,16 @@ elseif has( 'python3' )
 else
   let g:jedi#force_py_version     = 2
 endif
-let g:jedi#popup_on_dot           = 1
-let g:jedi#auto_vim_configuration = 1
-let g:jedi#popup_select_first     = 0
+" let g:jedi#popup_on_dot           = 1
+" let g:jedi#auto_vim_configuration = 1
+" let g:jedi#popup_select_first     = 0
 noremap <leader>gg :call jedi#goto_assignments()<cr>
 noremap <leader>gd :call jedi#goto_definitions()<cr>
 noremap <leader>rn :call jedi#rename()<cr>
 
 " Disable for YouCompleteMe
 if has( 'python' )
-  " let g:jedi#completions_enabled = 0
+  let g:jedi#completions_enabled = 0
 else
   let g:neocomplete#enable_at_startup = 1
   let g:neocomplete#enable_smart_case = 1
@@ -696,21 +697,21 @@ endif
 
 " Python Mode
 let g:pymode                    = 1
-let g:pymode_folding            = 1
+let g:pymode_folding            = 0
 let g:pymode_rope               = 0 " Jedi does this
 let g:pymode_rope_completion    = 0
 if has( 'python3' )
   let g:pymode_python           = 'python3'  " Always use python3
 endif
-let g:pymode_trim_whitespaces   = 1
-let g:pymode_breakpoint         = 1
+let g:pymode_trim_whitespaces   = 0
+let g:pymode_breakpoint         = 0
 let g:pymode_breakpoint_bind    = '<leader>bb'
-let g:pymode_lint_on_write      = 1
+let g:pymode_lint_on_write      = 0
 "let g:pymode_lint_checkers      = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
 let g:pymode_lint_checkers      = ['mccabe', 'pyflakes']
 let g:pymode_lint_ignore        = "F0002,W0612,C0301,C901,C0326,W0611,E221,E501,E116"
 let g:pymode_lint_cwindow       = 1
-let g:pymode_syntax             = 1
+let g:pymode_syntax             = 0
 
 fun PymodeLintAll()
   let g:pymode_lint_checkers = ['pylint', 'pep8', 'mccabe', 'pep257', 'pyflakes']
@@ -815,3 +816,4 @@ nmap <LocalLeader>ll <Plug>RSendLine
 " autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 " autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 " autocmd BufWinLeave * call clearmatches()
+

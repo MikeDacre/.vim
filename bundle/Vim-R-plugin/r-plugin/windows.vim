@@ -1,7 +1,6 @@
 " This file contains code used only on Windows
 
 let g:rplugin_sumatra_path = ""
-let g:rplugin_python_initialized = 0
 
 call RSetDefaultValue("g:vimrplugin_sleeptime", 100)
 call RSetDefaultValue("g:vimrplugin_set_home_env", 1)
@@ -156,11 +155,8 @@ function StartR_Windows()
     let g:SendCmdToR = function('SendCmdToR_Windows')
     if WaitVimComStart()
         call foreground()
-        if g:vimrplugin_arrange_windows && v:servername != "" && filereadable(g:rplugin_compldir . "/win_pos")
-            let repl = libcall(g:rplugin_vimcom_lib, "ArrangeWindows", $VIMRPLUGIN_COMPLDIR)
-            if repl != "OK"
-                call RWarningMsg(repl)
-            endif
+        if g:vimrplugin_arrange_windows && filereadable(g:rplugin_compldir . "/win_pos")
+            call ch_sendraw(g:rplugin_channel, "\005" . g:rplugin_compldir . "\n")
         endif
         if g:vimrplugin_after_start != ''
             call system(g:vimrplugin_after_start)
@@ -176,18 +172,14 @@ function SendCmdToR_Windows(cmd)
     endif
     let save_clip = getreg('+')
     call setreg('+', cmd)
-    if g:vimrplugin_Rterm
-        let repl = libcall(g:rplugin_vimcom_lib, "SendToRTerm", cmd)
-    else
-        let repl = libcall(g:rplugin_vimcom_lib, "SendToRConsole", cmd)
-    endif
+
+    let repl = libcall(g:rplugin_vimcom_lib, "SendToRConsole", cmd)
     if repl != "OK"
         call RWarningMsg(repl)
         call ClearRInfo()
     endif
-    exe "sleep " . g:rplugin_sleeptime
     call foreground()
+
     call setreg('+', save_clip)
     return 1
 endfunction
-

@@ -5,6 +5,7 @@ scriptencoding utf-8
 
 let s:buffer_idx_mode = get(g:, 'airline#extensions#tabline#buffer_idx_mode', 0)
 let s:show_tab_type = get(g:, 'airline#extensions#tabline#show_tab_type', 1)
+let s:buffers_label = get(g:, 'airline#extensions#tabline#buffers_label', 'buffers')
 let s:spc = g:airline_symbols.space
 
 let s:current_bufnr = -1
@@ -37,6 +38,8 @@ function! airline#extensions#tabline#buffers#on()
   augroup airline_tabline_buffers
     autocmd!
     autocmd BufDelete * call airline#extensions#tabline#buffers#invalidate()
+    autocmd User BufMRUChange call airline#extensions#tabline#buflist#invalidate()
+    autocmd User BufMRUChange call airline#extensions#tabline#buffers#invalidate()
   augroup END
 endfunction
 
@@ -62,23 +65,16 @@ function! airline#extensions#tabline#buffers#get()
       continue
     endif
 
-    if cur == nr
-      if g:airline_detect_modified && getbufvar(nr, '&modified')
-        let group = 'airline_tabmod'
-      else
-        let group = 'airline_tabsel'
-      endif
+    let group = airline#extensions#tabline#group_of_bufnr(tab_bufs, nr)
+
+    if nr == cur
       let s:current_modified = (group == 'airline_tabmod') ? 1 : 0
-    else
-      if g:airline_detect_modified && getbufvar(nr, '&modified')
-        let group = 'airline_tabmod_unsel'
-      elseif index(tab_bufs, nr) > -1
-        let group = 'airline_tab'
-      else
-        let group = 'airline_tabhid'
-      endif
     endif
 
+    " Neovim feature: Have clickable buffers
+    if has("tablineat")
+      call b.add_raw('%'.nr.'@airline#extensions#tabline#buffers#clickbuf@')
+    endif
     if s:buffer_idx_mode
       if len(s:number_map) > 0
         call b.add_section(group, s:spc . get(s:number_map, l:index, '') . '%(%{airline#extensions#tabline#get_buffer_name('.nr.')}%)' . s:spc)
@@ -89,13 +85,16 @@ function! airline#extensions#tabline#buffers#get()
     else
       call b.add_section(group, s:spc.'%(%{airline#extensions#tabline#get_buffer_name('.nr.')}%)'.s:spc)
     endif
+    if has("tablineat")
+      call b.add_raw('%X')
+    endif
   endfor
 
   call b.add_section('airline_tabfill', '')
   call b.split()
   call b.add_section('airline_tabfill', '')
   if s:show_tab_type
-    call b.add_section('airline_tabtype', ' buffers ')
+    call b.add_section_spaced('airline_tabtype', s:buffers_label)
   endif
 
   let s:current_bufnr = cur
@@ -181,7 +180,7 @@ function! s:jump_to_tab(offset)
     endif
 endfunction
 
-function s:map_keys()
+function! s:map_keys()
   if s:buffer_idx_mode
     noremap <silent> <Plug>AirlineSelectTab1 :call <SID>select_tab(0)<CR>
     noremap <silent> <Plug>AirlineSelectTab2 :call <SID>select_tab(1)<CR>
@@ -195,4 +194,20 @@ function s:map_keys()
     noremap <silent> <Plug>AirlineSelectPrevTab :<C-u>call <SID>jump_to_tab(-v:count1)<CR>
     noremap <silent> <Plug>AirlineSelectNextTab :<C-u>call <SID>jump_to_tab(v:count1)<CR>
   endif
+endfunction
+
+function! airline#extensions#tabline#buffers#clickbuf(minwid, clicks, button, modifiers) abort
+    " Clickable buffers
+    " works only in recent NeoVim with has('tablineat')
+
+    " single mouse button click without modifiers pressed
+    if a:clicks == 1 && a:modifiers !~# '[^ ]'
+      if a:button is# 'l'
+        " left button - switch to buffer
+        silent execute 'buffer' a:minwid
+      elseif a:button is# 'm'
+        " middle button - delete buffer
+        silent execute 'bdelete' a:minwid
+      endif
+    endif
 endfunction

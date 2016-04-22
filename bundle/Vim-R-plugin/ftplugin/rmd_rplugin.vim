@@ -3,6 +3,10 @@ if exists("g:disable_r_ftplugin") || has("nvim")
     finish
 endif
 
+runtime R/flag.vim
+if exists("g:NvimR_installed")
+    finish
+endif
 
 " Source scripts common to R, Rrst, Rnoweb, Rhelp and Rdoc:
 runtime r-plugin/common_global.vim
@@ -97,7 +101,7 @@ function! RMakeRmd(t)
     else
         let rcmd = 'vim.interlace.rmd("' . expand("%:t") . '", outform = "' . a:t .'", rmddir = "' . rmddir . '"'
     endif
-    if (g:vimrplugin_openhtml  == 0 && a:t == "html_document") || (g:vimrplugin_openpdf == 0 && (a:t == "pdf_document" || a:t == "beamer_presentation"))
+    if (g:vimrplugin_openhtml  == 0 && a:t == "html_document") || (g:vimrplugin_openpdf == 0 && (a:t == "pdf_document" || a:t == "beamer_presentation" || a:t == "word_document"))
         let rcmd .= ", view = FALSE"
     endif
     let rcmd = rcmd . ', envir = ' . g:vimrplugin_rmd_environment . ')'
@@ -141,6 +145,7 @@ call RCreateMaps("nvi", '<Plug>RKnit',          'kn', ':call RKnit()')
 call RCreateMaps("nvi", '<Plug>RMakeRmd',       'kr', ':call RMakeRmd("default")')
 call RCreateMaps("nvi", '<Plug>RMakePDFK',      'kp', ':call RMakeRmd("pdf_document")')
 call RCreateMaps("nvi", '<Plug>RMakePDFKb',     'kl', ':call RMakeRmd("beamer_presentation")')
+call RCreateMaps("nvi", '<Plug>RMakeWord',      'kw', ':call RMakeRmd("word_document")')
 call RCreateMaps("nvi", '<Plug>RMakeHTML',      'kh', ':call RMakeRmd("html_document")')
 call RCreateMaps("nvi", '<Plug>RMakeODT',       'ko', ':call RMakeRmd("odt")')
 call RCreateMaps("ni",  '<Plug>RSendChunk',     'cc', ':call b:SendChunkToR("silent", "stay")')
