@@ -34,6 +34,7 @@ Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/taglist.vim'
+Plugin 'neilagabriel/vim-geeknote'
 
 " Git support
 Plugin 'tpope/vim-fugitive'
