@@ -2,8 +2,8 @@ set nocompatible
 
 " Vundle
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+set rtp+=~/.vim/Vundle.vim
+call vundle#begin('~/.vim/bundle')
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
@@ -11,6 +11,8 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugins
 " Plugin 'aperezdc/vim-template'
 Plugin 'benmills/vimux'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
 Plugin 'bling/vim-airline'
 Plugin 'bling/vim-bufferline'
 Plugin 'dhruvasagar/vim-table-mode'
@@ -34,7 +36,6 @@ Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/taglist.vim'
-Plugin 'neilagabriel/vim-geeknote'
 
 " Git support
 Plugin 'tpope/vim-fugitive'
@@ -52,6 +53,7 @@ Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
 if has( 'python' )
   Plugin 'Valloric/YouCompleteMe'
+  Plugin 'neilagabriel/vim-geeknote'
 else
   Plugin 'Shougo/neocomplete.vim'
 " Plugin 'davidhalter/jedi-vim'
@@ -575,6 +577,14 @@ let php_folding=1
 
 " PgSQL
 au BufNewFile,BufRead *.pgsql                   setf pgsql
+
+" Geeknote
+let g:GeeknoteFormat="markdown"
+let g:GeeknoteScratchDirectory="/home/dacre/.notes"
+
+" Markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+let g:vim_markdown_folding_disabled = 1
 
 " Syntastic
 set statusline+=%#warningmsg#
