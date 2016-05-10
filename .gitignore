@@ -4,4 +4,4 @@ __pycache__
 sessions
 .AppleDouble
 tags*
-bundle
+bundle/*
