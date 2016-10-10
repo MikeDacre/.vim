@@ -36,6 +36,8 @@ Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/taglist.vim'
+Plugin 'lepture/vim-jinja'
+Plugin 'pangloss/vim-javascript'
 
 " Git support
 Plugin 'tpope/vim-fugitive'
@@ -580,7 +582,6 @@ au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Geeknote
 let g:GeeknoteFormat="markdown"
-let g:GeeknoteScratchDirectory="/home/dacre/.notes"
 
 " Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
