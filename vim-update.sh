@@ -9,15 +9,31 @@ VIMLOCATION=$HOME
 
 mkdir -p $VIMLOCATION
 
-hg clone https://vim.googlecode.com/hg/ vim-program
+git clone https://github.com/vim/vim.git vim-program
 
 cd vim-program
 
-./configure --with-features=huge --prefix=/usr/local --enable-perlinterp=yes --enable-rubyinterp --enable-python3interp --enable-cscope --with-compiledby=Mike --enable-multibyte
+./configure \
+  --prefix=$HOME/usr \
+  --with-features=huge \
+  --with-compiledby='Mike Dacre' \
+  --enable-gpm \
+  --enable-acl \
+  --with-x=no \
+  --disable-gui \
+  --enable-multibyte \
+  --enable-cscope \
+  --enable-netbeans \
+  --enable-perlinterp=dynamic \
+  --enable-pythoninterp=dynamic \
+  --enable-python3interp=dynamic \
+  --enable-rubyinterp=dynamic \
+  --enable-luainterp=dynamic \
+  --enable-tclinterp=dynamic
 
 make
 
-#make install
+make install
 
 cd ..
 #rm -rf vim-program
