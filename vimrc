@@ -10,6 +10,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
 " Plugin 'aperezdc/vim-template'
+Plugin 'tpope/vim-obsession'
 Plugin 'benmills/vimux'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
@@ -37,6 +38,8 @@ Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
 Plugin 'vim-scripts/taglist.vim'
+Plugin 'lepture/vim-jinja'
+Plugin 'pangloss/vim-javascript'
 Plugin 'tmux-plugins/vim-tmux-focus-events'
 
 " Git support
@@ -582,7 +585,6 @@ au BufNewFile,BufRead *.pgsql                   setf pgsql
 
 " Geeknote
 let g:GeeknoteFormat="markdown"
-let g:GeeknoteScratchDirectory="/home/dacre/.notes"
 
 " Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown

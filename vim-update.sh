@@ -11,9 +11,7 @@ cd vim-program
 
 ./configure --with-features=huge --prefix=/home/dacre/usr --enable-perlinterp=yes --enable-rubyinterp --enable-python3interp --enable-cscope --with-compiledby=Mike --enable-multibyte
 
-make
-
-make uninstall
+make && make install
 
 cd ..
 rm -rf vim-program
