@@ -10,6 +10,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
 " Plugin 'aperezdc/vim-template'
+Plugin 'reedes/vim-pencil'
 Plugin 'benmills/vimux'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
@@ -108,8 +109,8 @@ set ofu=syntaxcomplete#Complete
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files
 set viminfo='10,\"1000,:90,%,n~/.temp/viminfo"'
-set nofoldenable
 set foldmethod=syntax
+set foldlevelstart=20
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 set ttymouse=xterm2
