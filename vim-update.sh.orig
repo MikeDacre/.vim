@@ -1,0 +1,63 @@
+#!/bin/bash
+#===============================================================================
+#
+#   DESCRIPTION:  Update vim in /usr/local - no GUI
+#
+#===============================================================================
+
+<<<<<<< HEAD
+git clone https://github.com/vim/vim.git vim-program
+||||||| merged common ancestors
+VIMLOCATION=$HOME
+
+mkdir -p $VIMLOCATION
+
+hg clone https://vim.googlecode.com/hg/ vim-program
+=======
+VIMLOCATION=$HOME
+
+mkdir -p $VIMLOCATION
+
+git clone https://github.com/vim/vim.git vim-program
+>>>>>>> 5c1220f658966f8285c2224e1e889144a05bf19a
+
+cd vim-program
+
+<<<<<<< HEAD
+./configure --with-features=huge --prefix=/home/dacre/usr --enable-perlinterp=yes --enable-rubyinterp --enable-python3interp --enable-cscope --with-compiledby=Mike --enable-multibyte
+||||||| merged common ancestors
+./configure --with-features=huge --prefix=/usr/local --enable-perlinterp=yes --enable-rubyinterp --enable-python3interp --enable-cscope --with-compiledby=Mike --enable-multibyte
+=======
+./configure \
+  --prefix=$HOME/usr \
+  --with-features=huge \
+  --with-compiledby='Mike Dacre' \
+  --enable-gpm \
+  --enable-acl \
+  --with-x=no \
+  --disable-gui \
+  --enable-multibyte \
+  --enable-cscope \
+  --enable-netbeans \
+  --enable-perlinterp=dynamic \
+  --enable-pythoninterp=dynamic \
+  --enable-python3interp=dynamic \
+  --enable-rubyinterp=dynamic \
+  --enable-luainterp=dynamic \
+  --enable-tclinterp=dynamic
+>>>>>>> 5c1220f658966f8285c2224e1e889144a05bf19a
+
+make
+
+<<<<<<< HEAD
+make uninstall
+||||||| merged common ancestors
+#make install
+=======
+make install
+>>>>>>> 5c1220f658966f8285c2224e1e889144a05bf19a
+
+cd ..
+rm -rf vim-program
+
+echo "Done!"

@@ -11,6 +11,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugins
 " Plugin 'aperezdc/vim-template'
 Plugin 'reedes/vim-pencil'
+Plugin 'tpope/vim-obsession'
 Plugin 'benmills/vimux'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
