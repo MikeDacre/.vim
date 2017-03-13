@@ -11,6 +11,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugins
 " Plugin 'aperezdc/vim-template'
 Plugin 'reedes/vim-pencil'
+Plugin 'lifepillar/vim-solarized8'
 Plugin 'tpope/vim-obsession'
 Plugin 'benmills/vimux'
 Plugin 'godlygeek/tabular'
@@ -403,6 +404,26 @@ inoremap <leader>my Mike Dacre <C-R>=strftime("%y-%m-%d %H:%M:%S")<CR>
 
 nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
 inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
+
+" Writing Mode
+let g:pencil#autoformat = 0
+func! WordProcessorMode() 
+  setlocal formatoptions=1 
+  setlocal noexpandtab 
+  map j gj 
+  map k gk
+  setlocal spell spelllang=en_us 
+  set syntax=markdown
+  colorscheme solarized8_light
+  set thesaurus+=~/.vim/thesaurus/mthesaur.txt
+  set complete+=s
+  set formatprg=par
+  setlocal wrap 
+  setlocal linebreak        
+  let g:pencil#autoformat = 1
+  let g:pencil#wrapModeDefault = 'hard'
+endfu 
+com! WP call WordProcessorMode()
 
 " Pasting Mode
 map <leader>pp :set paste<CR>:set noexpandtab<CR>
