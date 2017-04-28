@@ -60,7 +60,7 @@ def search_imports(impt, frm='', end=True):
 		return -2
 
 def add_import(impt, frm='', asstr='',end=True):
-	""" Add an import if it does not already exist, default is to add to end """
+	"""Add an import if it does not already exist, default is to add to end."""
 	imp_loc = search_imports(impt, frm, end)
 	impt = impt.strip()
 	if imp_loc == -1:
@@ -76,12 +76,16 @@ def add_import(impt, frm='', asstr='',end=True):
 	snip.buffer.append(imp_string, imp_loc)
 
 def add_imports(impts, end=True):
-	""" Add a list of imports
-	    If you want to import as from ... import ..., then use a tuple for the import:
-	    [(import, from), import, (import, from), ...] """
+	"""Add a list of imports.
+
+	If you want to import as from ... import ..., then use a tuple for the import:
+	[(import, from), import, (import, from), ...]
+	"""
 	for impt in impts:
-		if type(impt) is tuple:
+		if isinstance(impt, tuple):
 			add_import(*impt, end=end)
+		elif isinstance(impt, dict):
+			add_import(**impt, end=end)
 		else:
 			add_import(impt, end=end)
 
@@ -122,23 +126,18 @@ snippet longdesc "Long Description" b
 """
 ${1:What am I?}
 
-============================================================================
-${2:
-          FILE: ${3:`!v expand('%:t')`}}${4:
-           DIR: ${5:`!v expand('%:p:h')`}}${6:
-        AUTHOR: Michael D Dacre, mike.dacre@gmail.com}${7:
-  ORGANIZATION: Stanford University}${8:
-       LICENSE: MIT License, property of Stanford, use as you wish}${9:
-       VERSION: ${10:0.1}}
-       CREATED: `date +"%Y-%M-%d %H:%m"`
- Last modified: ${11:
-
-   DESCRIPTION: ${12}}${13:
-
-         USAGE: ${14:Import as a module or run as a script}}
-
-============================================================================
+Info
+----
+File: ${2:`!v expand('%:t')`}}${3:
+Dir: ${4:`!v expand('%:p:h')`}}${5:
+Author: Michael D Dacre, mike.dacre@gmail.com}${6:
+Organization: Stanford University}${7:
+License: MIT License, property of Stanford, use as you wish}${8:
+Version: ${9:0.1.0a}}
+Created: `date +"%Y-%M-%d %H:%m"`
+Last modified: `date +"%Y-%M-%d %H:%m"`
 """
+__version__ = '$9'
 endsnippet
 
 snippet desc "Short Docstring" b
@@ -163,24 +162,30 @@ bamfile = subprocess.Popen('samtools view '+BAMFILE, stdout=subprocess.PIPE, she
 for line in bamfile.stdout:
 endsnippet
 
-pre_expand "add_imports(['gzip', 'bz2'])"
+pre_expand "add_imports([{'impt': 'bz2', 'asstr': '_bz2'}, {'impt': 'gzip', 'asstr': '_gzip'}])"
 snippet zipped
 def open_zipped(infile, mode='r'):
-	""" Return file handle of file regardless of zipped or not
-	    Text mode enforced for compatibility with python2 """
-	mode   = mode[0] + 't'
-	p2mode = mode
+	"""Return file handle of file regardless of compressed or not.
+	
+	Also returns already opened files unchanged, text mode automatic for
+	compatibility with python2.
+	"""
+	# Return already open files
 	if hasattr(infile, 'write'):
 		return infile
-	if isinstance(infile, str):
-		if infile.endswith('.gz'):
-			return gzip.open(infile, mode)
-		if infile.endswith('.bz2'):
-			if hasattr(bz2, 'open'):
-				return bz2.open(infile, mode)
-			else:
-				return bz2.BZ2File(infile, p2mode)
-		return open(infile, p2mode)
+	# Make text mode automatic
+	if len(mode) == 1:
+		mode = mode + 't'
+	if not isinstance(infile, str):
+		raise ValueError('I cannot open a filename that isn't a string.')
+	if infile.endswith('.gz'):
+		return _gzip.open(infile, mode)
+	if infile.endswith('.bz2'):
+		if hasattr(_bz2, 'open'):
+			return _bz2.open(infile, mode)
+		else:
+			return _bz2.BZ2File(infile, mode)
+	return open(infile, mode)
 $0
 endsnippet
 
@@ -270,15 +275,34 @@ if __name__ == '__main__' and '__file__' in globals():
 	sys.exit(main())
 endsnippet
 
-pre_expand "add_imports(['sys', 'argparse'])"
+pre_expand "add_imports([{'impt': 'argparse', 'asstr': '_argparse'}, {'impt': 'bz2', 'asstr': '_bz2'}, {'impt': 'gzip', 'asstr': '_gzip'}, {'impt': 'sys', 'asstr': '_sys'}])"
 snippet stdarg "Optional positional files" b
-def ${20/=[^,)]+|args.//g}:
-	""" ${23:Run everything} """
-	$0
+def open_zipped(infile, mode='r'):
+	"""Return file handle of file regardless of compressed or not.
+	
+	Also returns already opened files unchanged, text mode automatic for
+	compatibility with python2.
+	"""
+	# Return already open files
+	if hasattr(infile, 'write'):
+		return infile
+	# Make text mode automatic
+	if len(mode) == 1:
+		mode = mode + 't'
+	if not isinstance(infile, str):
+		raise ValueError('I cannot open a filename that isn't a string.')
+	if infile.endswith('.gz'):
+		return _gzip.open(infile, mode)
+	if infile.endswith('.bz2'):
+		if hasattr(_bz2, 'open'):
+			return _bz2.open(infile, mode)
+		else:
+			return _bz2.BZ2File(infile, mode)
+	return open(infile, mode)
 
 
 def main(argv=None):
-	""" ${1:Run as a script} """
+	"""${1:Run as a script}."""
 	if not argv:
 	    argv = sys.argv[1:]
 
@@ -291,20 +315,21 @@ def main(argv=None):
 	                    help='${6:A flag}')}
 
 	# Optional files${7:
-	parser.add_argument(${8:'-i', }'${8/.+/--/}${9:infile}'${10:, nargs='?'}, default=sys.stdin,
-	                    type=argparse.FileType('r'),
-	                    help="${11:Input file} (Default: STDIN)")}${12:
-	parser.add_argument(${13:'-o', }'${13/.+/--/}${14:outfile}'${15:, nargs='?'}, default=sys.stdout,
-	                    type=argparse.FileType('w'),
-	                    help="${16:Output file} (Default: STDOUT)")}${17:
-	parser.add_argument('-l', '--${18:logfile}', default=sys.stderr,
+	parser.add_argument('${8:infile}'${9:, nargs='?'}
+	                    help="${10:Input file} (Default: STDIN)")}${11:
+	parser.add_argument('${13:outfile}'${14:, nargs='?'},
+	                    help="${15:Output file} (Default: STDOUT)")}${16:
+	parser.add_argument('-l', '--${17:logfile}', default=sys.stderr,
 	                    type=argparse.FileType('a'),
-	                    help="${19:Log file} (Default: STDERR)")}
+	                    help="${18:Log file} (Default: STDERR)")}
 
 	args = parser.parse_args(argv)
 
-	${20:${21:`!v expand('%:r')`}(${7/.+/args./}$9${7/.+/, /}${12/.+/args./}$14${18/.+/, logfile=args./}$18${2/.+/,
-	 /}${22:${21/./ /g}}${2/.+/args./}$4)}
+	ifl = args.infile if args.infile else sys.stdin
+	ofl = args.outfile if args.outfile else sys.stdout
+  
+	with _open_zipped(ifl) as fin, _open_zipped(ofl) as fout:
+		$0
 
 if __name__ == '__main__' and '__file__' in globals():
 	sys.exit(main())
