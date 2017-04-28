@@ -15,7 +15,7 @@ Plugin 'benmills/vimux'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'bling/vim-airline'
-Plugin 'bling/vim-bufferline'
+" Plugin 'bling/vim-bufferline'
 Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'severin-lemaignan/vim-minimap'
 Plugin 'ervandew/screen'
@@ -120,6 +120,8 @@ endif
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
+
+let  g:powerline_pycmd = 'py3'
  
 autocmd BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
