@@ -458,7 +458,7 @@ func! WordProcessorMode()
     call ToggleWrap()
   endif
 endfu 
-com! WP call WordProcessorMode()
+com! PPW call WordProcessorMode()
 
 " Pasting Mode
 map <leader>pp :set paste<CR>:set noexpandtab<CR>
@@ -519,7 +519,7 @@ fun StartScreenTmux()
       let g:ScreenShellSendPrefix = '%cpaste'
       let g:ScreenShellSendSuffix = '--'
       let g:ScreenShellSendVarsRestore = 1
-      call screen#ScreenShell('ipython3', 'vertical')
+      call screen#ScreenShell('module load anaconda; clear && ipython', 'vertical')
       " call g:ScreenShellSend('%pylab')
     else
       call screen#ScreenShell('zsh', 'vertical')
@@ -554,7 +554,7 @@ endfunction
 
 fun SendCellPython()
   if g:ScreenShellActive
-    :?##\|\#^?;/##\|\#$/y b
+    :?#%%\|\#^?;/#%%\|\#$/y b
     call g:ScreenShellSend(@b)
   endif
 endfun

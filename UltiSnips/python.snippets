@@ -116,10 +116,53 @@ snippet plot "Import at top" b
 $1
 endsnippet
 
+pre_expand "add_import('subprocess', asstr='_sub')"
+snippet run
+def run(command, raise_on_error=False):
+	"""Run a command with subprocess the way it should be.
+
+	Parameters
+	----------
+	command : str
+		A command to execute, piping is fine.
+	raise_on_error : bool
+		Raise a subprocess.CalledProcessError on exit_code != 0
+	
+	Returns
+	-------
+	stdout : str
+	stderr : str
+	exit_code : int
+	"""
+	pp = _sub.Popen(command, shell=True, universal_newlines=True,
+	                stdout=_sub.PIPE, stderr=_sub.PIPE)
+	out, err = pp.communicate()
+	code = pp.returncode
+	if raise_on_error and code != 0:
+		raise _sub.CalledProcessError(
+			returncode=code, cmd=command, output=out, stderr=err
+		)
+	return out.decode(), err.decode(), code
+endsnippet
+
 snippet ffile "For i in file, split" b
 for i in ${1:infile}:
 	f = i.rstrip().split('${2:\t}')
 	$0
+endsnippet
+
+snippet tqdm "Import tqdm" b
+try:
+	from tqdm import tqdm, tqdm_notebook
+	try:
+		if str(type(get_ipython())) == "<class 'ipykernel.zmqshell.ZMQInteractiveShell'>":
+			pb = tqdm_notebook
+		else:
+			pb = tqdm
+	except NameError:
+		pb = tqdm
+except ImportError:
+	pb = None
 endsnippet
 
 snippet longdesc "Long Description" b
