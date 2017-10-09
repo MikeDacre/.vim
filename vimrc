@@ -409,6 +409,35 @@ nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
 inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
 
 " Writing Mode
+function ToggleWrap()
+  if &wrap
+    echo "Wrap OFF"
+    setlocal nowrap
+    set virtualedit=all
+    silent! nunmap <buffer> <Up>
+    silent! nunmap <buffer> <Down>
+    silent! nunmap <buffer> <Home>
+    silent! nunmap <buffer> <End>
+    silent! iunmap <buffer> <Up>
+    silent! iunmap <buffer> <Down>
+    silent! iunmap <buffer> <Home>
+    silent! iunmap <buffer> <End>
+  else
+    echo "Wrap ON"
+    setlocal wrap linebreak nolist
+    set virtualedit=
+    setlocal display+=lastline
+    noremap  <buffer> <silent> <Up>   gk
+    noremap  <buffer> <silent> <Down> gj
+    noremap  <buffer> <silent> <Home> g<Home>
+    noremap  <buffer> <silent> <End>  g<End>
+    inoremap <buffer> <silent> <Up>   <C-o>gk
+    inoremap <buffer> <silent> <Down> <C-o>gj
+    inoremap <buffer> <silent> <Home> <C-o>g<Home>
+    inoremap <buffer> <silent> <End>  <C-o>g<End>
+  endif
+endfunction
+noremap <silent> <Leader>w :call ToggleWrap()<CR>
 let g:pencil#autoformat = 0
 func! WordProcessorMode() 
   setlocal formatoptions=1 
@@ -421,10 +450,14 @@ func! WordProcessorMode()
   set thesaurus+=~/.vim/thesaurus/mthesaur.txt
   set complete+=s
   set formatprg=par
-  setlocal wrap 
-  setlocal linebreak        
+  set number
+  setlocal foldcolumn=12
+  setlocal wm=20
   let g:pencil#autoformat = 1
-  let g:pencil#wrapModeDefault = 'hard'
+  let g:pencil#wrapModeDefault = 'soft'
+  if ! &wrap
+    call ToggleWrap()
+  endif
 endfu 
 com! PPW call WordProcessorMode()
 
@@ -810,6 +843,7 @@ nmap <silent> <LocalLeader>vs vip<LocalLeader>vs<CR>
 noremap <F6> :TlistToggle<CR>
 map <leader>to :TlistSessionLoad .tlist<cr>
 map <leader>ts :TlistSessionSave .tlist<cr>y<cr>
+let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
 let Tlist_GainFocus_On_ToggleOpen = 0
 let Tlist_Use_Right_Window = 0
 let Tlist_Process_file_Always = 1
