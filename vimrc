@@ -375,6 +375,7 @@ endfun
 
 au BufRead,BufNewFile *.cmdlst set filetype=sh
 au BufRead,BufNewFile *.pbs set filetype=sh
+au BufRead,BufNewFile Snakefile set filetype=python
 noremap <leader>il :call CaptureLine()<CR>
 noremap <leader>el :call ExecLine()<CR>
 
