@@ -11,6 +11,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugins
 " Plugin 'aperezdc/vim-template'
 Plugin 'reedes/vim-pencil'
+Plugin 'junegunn/goyo.vim'
 Plugin 'lifepillar/vim-solarized8'
 Plugin 'tpope/vim-obsession'
 Plugin 'benmills/vimux'
@@ -36,6 +37,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'sjl/gundo.vim'
 Plugin 'Spaceghost/vim-matchit'
 Plugin 'tpope/vim-surround'
+Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
@@ -58,9 +60,8 @@ Plugin 'honza/vim-snippets'
 Plugin 'ervandew/supertab'
 Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
-Plugin 'Valloric/YouCompleteMe'
 if has( 'python' )
-  Plugin 'neilagabriel/vim-geeknote'
+  Plugin 'Valloric/YouCompleteMe'
 else
   Plugin 'Shougo/neocomplete.vim'
 " Plugin 'davidhalter/jedi-vim'
@@ -436,27 +437,31 @@ function ToggleWrap()
     inoremap <buffer> <silent> <End>  <C-o>g<End>
   endif
 endfunction
-noremap <silent> <Leader>w :call ToggleWrap()<CR>
+noremap <silent> <Leader>ww :call ToggleWrap()<CR>
 let g:pencil#autoformat = 0
+" let g:pencil#conceallevel = 0
+" let g:vim_markdown_conceal = 1
+let g:vim_markdown_frontmatter = 1
 func! WordProcessorMode() 
   setlocal formatoptions=1 
   setlocal noexpandtab 
   map j gj 
   map k gk
   setlocal spell spelllang=en_us 
-  set syntax=markdown
-  colorscheme solarized8_light
+  " colorscheme solarized8_light
   set thesaurus+=~/.vim/thesaurus/mthesaur.txt
   set complete+=s
   set formatprg=par
   set number
-  setlocal foldcolumn=12
-  setlocal wm=20
-  let g:pencil#autoformat = 1
-  let g:pencil#wrapModeDefault = 'soft'
+  " setlocal foldcolumn=12
+  " setlocal wm=20
+  " let g:pencil#autoformat = 1
+  " let g:pencil#wrapModeDefault = 'soft'
   if ! &wrap
     call ToggleWrap()
   endif
+  :Goyo
+  :PencilSoft
 endfu 
 com! PPW call WordProcessorMode()
 
@@ -620,7 +625,7 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkgrey
 au BufNewFile  *Process.txt 0r ~/.vim/templates/process_TEMPLATE
 "au BufRead,BufNewFile *.txt set filetype=pandoc
 au FileType pandoc setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
-au BufRead,BufNewFile *.md set filetype=mmd
+au FileType rst setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 au BufRead,BufNewFile *.rst set filetype=rst
 au BufNewFile * silent! 0r ~/.vim/templates/tmpl.%:e
 
@@ -640,11 +645,9 @@ let php_folding=1
 " PgSQL
 au BufNewFile,BufRead *.pgsql                   setf pgsql
 
-" Geeknote
-let g:GeeknoteFormat="markdown"
-
 " Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+au FileType markdown setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 let g:vim_markdown_folding_disabled = 1
 
 " Syntastic
