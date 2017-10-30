@@ -136,9 +136,9 @@ autocmd BufReadPost *
   let g:miniBufExplMapCTabSwitchBufs = 1
   let g:miniBufExplModSelTarget = 1
 
-set tabstop=2
-set shiftwidth=2
-set cindent shiftwidth=2
+set tabstop=4
+set shiftwidth=4
+set cindent shiftwidth=4
 
 " Enable CTRL-A/CTRL-X to work on octal and hex numbers, as well as characters
 set nrformats=octal,hex,alpha
@@ -377,6 +377,10 @@ au BufRead,BufNewFile *.cmdlst set filetype=sh
 au BufRead,BufNewFile *.pbs set filetype=sh
 au BufNewFile,BufRead Snakefile set syntax=snakemake
 au BufNewFile,BufRead *.smk set syntax=snakemake
+" au BufNewFile,BufRead Snakefile set syntax=python
+" au BufNewFile,BufRead *.smk set syntax=python
+au FileType snakemake let Comment="#"
+au FileType snakemake setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 noremap <leader>il :call CaptureLine()<CR>
 noremap <leader>el :call ExecLine()<CR>
 
@@ -868,15 +872,6 @@ let g:ex_comment_lable_keyword = 'DELME TEMP MODIFY ADD KEEPME DISABLE TEST ' " 
 let g:ex_comment_lable_keyword .= 'ERROR DEBUG CRASH DUMMY UNUSED TESTME ' " for testing
 let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUPLICATE REDUNDANCY PATCH ' " for refactoring
 
-" Comment plugin
-let NERDSpaceDelims=1
-let g:NERDCustomDelimiters = {
-      \ 'py' : { 'left': '#' },
-      \ 'sshconfig' : { 'left': '#' },
-      \ 'sshdconfig': { 'left': '#' }
-      \ }
-map <Leader>cv <plug>NERDCommenterToggle
-
 " Buffer Explorer
 let g:bufExplorerFindActive=1
 map <leader>be :BufExplorer<CR>
@@ -894,4 +889,15 @@ nmap <LocalLeader>ll <Plug>RSendLine
 " autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 " autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 " autocmd BufWinLeave * call clearmatches()
-
+ 
+" Comment plugin
+let NERDSpaceDelims=1
+let NERDCustomDelimiters = { 'py': { 'left': '#' }, 'snakemake' : { 'left': '#' , 'leftAlt': '#' } }
+let g:NERDCustomDelimiters = { 'py': { 'left': '#' }, 'snakemake' : { 'left': '#' , 'leftAlt': '#' } }
+" let g:NERDCustomDelimiters = {
+      " \ 'py' : { 'left': '#' },
+      " \ 'snakemake' : { 'left': '#', 'leftAlt': '#' },
+      " \ 'sshconfig' : { 'left': '#' },
+      " \ 'sshdconfig': { 'left': '#' }
+      " \ }
+map <Leader>cv <plug>NERDCommenterToggle

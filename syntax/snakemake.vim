@@ -47,6 +47,7 @@ syn keyword pythonStatement	touch protected temp wrapper
 syn keyword pythonStatement	input output params message threads resources
 syn keyword pythonStatement	version run shell benchmark snakefile log script
 syn keyword pythonStatement	rule subworkflow nextgroup=pythonFunction skipwhite
+syn match   pythonComment	"#.*$" display contains=pythonTodo,@Spell
 
 " similar to special def and class treatment from python.vim, except
 " parenthetical part of def and class
@@ -57,5 +58,5 @@ syn sync match pythonSync grouphere NONE "^\s*\%(rule\|subworkflow\)\s\+\h\w*\s*
 
 let b:current_syntax = "snakemake"
 
-" vim:set sw=2 sts=2 ts=8 noet:
+" vim:set sw=4 sts=4 ts=4 noet:
 
