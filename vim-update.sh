@@ -5,7 +5,7 @@
 #
 #===============================================================================
 
-VIMLOCATION=$HOME
+VIMLOCATION=$HOME/usr
 
 mkdir -p $VIMLOCATION
 
@@ -14,7 +14,7 @@ git clone https://github.com/vim/vim.git vim-program
 cd vim-program
 
 ./configure \
-  --prefix=$HOME/usr \
+  --prefix=$VIMLOCATION \
   --with-features=huge \
   --with-compiledby='Mike Dacre' \
   --enable-gpm \
@@ -24,18 +24,18 @@ cd vim-program
   --enable-multibyte \
   --enable-cscope \
   --enable-netbeans \
-  --enable-perlinterp=dynamic \
-  --enable-pythoninterp=dynamic \
-  --enable-python3interp=dynamic \
-  --enable-rubyinterp=dynamic \
-  --enable-luainterp=dynamic \
-  --enable-tclinterp=dynamic
+  --enable-perlinterp \
+  # --enable-pythoninterp=dynamic \
+  --enable-python3interp \
+  --enable-rubyinterp \
+  --enable-luainterp \
+  --enable-tclinterp
 
 make
 
 make install
 
 cd ..
-#rm -rf vim-program
+rm -rf vim-program
 
 echo "Done!"
