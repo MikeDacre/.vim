@@ -10,12 +10,15 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
 " Plugin 'aperezdc/vim-template'
+Plugin 'reedes/vim-pencil'
+Plugin 'junegunn/goyo.vim'
+Plugin 'lifepillar/vim-solarized8'
 Plugin 'tpope/vim-obsession'
 Plugin 'benmills/vimux'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'bling/vim-airline'
-Plugin 'bling/vim-bufferline'
+" Plugin 'bling/vim-bufferline'
 Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'severin-lemaignan/vim-minimap'
 Plugin 'ervandew/screen'
@@ -34,6 +37,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'sjl/gundo.vim'
 Plugin 'Spaceghost/vim-matchit'
 Plugin 'tpope/vim-surround'
+Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
@@ -56,9 +60,8 @@ Plugin 'honza/vim-snippets'
 Plugin 'ervandew/supertab'
 Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
-Plugin 'Valloric/YouCompleteMe'
 if has( 'python' )
-  Plugin 'neilagabriel/vim-geeknote'
+  Plugin 'Valloric/YouCompleteMe'
 else
   Plugin 'Shougo/neocomplete.vim'
 " Plugin 'davidhalter/jedi-vim'
@@ -109,8 +112,8 @@ set ofu=syntaxcomplete#Complete
 "  %    :  saves and restores the buffer list
 "  n... :  where to save the viminfo files
 set viminfo='10,\"1000,:90,%,n~/.temp/viminfo"'
-set nofoldenable
 set foldmethod=syntax
+set foldlevelstart=20
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 set ttymouse=xterm2
@@ -120,6 +123,8 @@ endif
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
+
+let  g:powerline_pycmd = 'py3'
  
 autocmd BufReadPost *
   \ if line("'\"") > 1 && line("'\"") <= line("$") |
@@ -131,9 +136,9 @@ autocmd BufReadPost *
   let g:miniBufExplMapCTabSwitchBufs = 1
   let g:miniBufExplModSelTarget = 1
 
-set tabstop=2
-set shiftwidth=2
-set cindent shiftwidth=2
+set tabstop=4
+set shiftwidth=4
+set cindent shiftwidth=4
 
 " Enable CTRL-A/CTRL-X to work on octal and hex numbers, as well as characters
 set nrformats=octal,hex,alpha
@@ -370,6 +375,12 @@ endfun
 
 au BufRead,BufNewFile *.cmdlst set filetype=sh
 au BufRead,BufNewFile *.pbs set filetype=sh
+au BufNewFile,BufRead Snakefile set syntax=snakemake
+au BufNewFile,BufRead *.smk set syntax=snakemake
+" au BufNewFile,BufRead Snakefile set syntax=python
+" au BufNewFile,BufRead *.smk set syntax=python
+au FileType snakemake let Comment="#"
+au FileType snakemake setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 noremap <leader>il :call CaptureLine()<CR>
 noremap <leader>el :call ExecLine()<CR>
 
@@ -402,6 +413,63 @@ inoremap <leader>my Mike Dacre <C-R>=strftime("%y-%m-%d %H:%M:%S")<CR>
 
 nnoremap <leader>mh :call InsertCmd( 'hostname' )<CR><RIGHT>
 inoremap <leader>mh <C-O>:call InsertCmd( 'hostname' )<CR><RIGHT>
+
+" Writing Mode
+function ToggleWrap()
+  if &wrap
+    echo "Wrap OFF"
+    setlocal nowrap
+    set virtualedit=all
+    silent! nunmap <buffer> <Up>
+    silent! nunmap <buffer> <Down>
+    silent! nunmap <buffer> <Home>
+    silent! nunmap <buffer> <End>
+    silent! iunmap <buffer> <Up>
+    silent! iunmap <buffer> <Down>
+    silent! iunmap <buffer> <Home>
+    silent! iunmap <buffer> <End>
+  else
+    echo "Wrap ON"
+    setlocal wrap linebreak nolist
+    set virtualedit=
+    setlocal display+=lastline
+    noremap  <buffer> <silent> <Up>   gk
+    noremap  <buffer> <silent> <Down> gj
+    noremap  <buffer> <silent> <Home> g<Home>
+    noremap  <buffer> <silent> <End>  g<End>
+    inoremap <buffer> <silent> <Up>   <C-o>gk
+    inoremap <buffer> <silent> <Down> <C-o>gj
+    inoremap <buffer> <silent> <Home> <C-o>g<Home>
+    inoremap <buffer> <silent> <End>  <C-o>g<End>
+  endif
+endfunction
+noremap <silent> <Leader>ww :call ToggleWrap()<CR>
+let g:pencil#autoformat = 0
+" let g:pencil#conceallevel = 0
+" let g:vim_markdown_conceal = 1
+let g:vim_markdown_frontmatter = 1
+func! WordProcessorMode() 
+  setlocal formatoptions=1 
+  setlocal noexpandtab 
+  map j gj 
+  map k gk
+  setlocal spell spelllang=en_us 
+  " colorscheme solarized8_light
+  set thesaurus+=~/.vim/thesaurus/mthesaur.txt
+  set complete+=s
+  set formatprg=par
+  set number
+  " setlocal foldcolumn=12
+  " setlocal wm=20
+  " let g:pencil#autoformat = 1
+  " let g:pencil#wrapModeDefault = 'soft'
+  if ! &wrap
+    call ToggleWrap()
+  endif
+  :Goyo
+  :PencilSoft
+endfu 
+com! PPW call WordProcessorMode()
 
 " Pasting Mode
 map <leader>pp :set paste<CR>:set noexpandtab<CR>
@@ -462,7 +530,7 @@ fun StartScreenTmux()
       let g:ScreenShellSendPrefix = '%cpaste'
       let g:ScreenShellSendSuffix = '--'
       let g:ScreenShellSendVarsRestore = 1
-      call screen#ScreenShell('ipython3', 'vertical')
+      call screen#ScreenShell('module load anaconda; clear && ipython', 'vertical')
       " call g:ScreenShellSend('%pylab')
     else
       call screen#ScreenShell('zsh', 'vertical')
@@ -497,7 +565,7 @@ endfunction
 
 fun SendCellPython()
   if g:ScreenShellActive
-    :?##\|\#^?;/##\|\#$/y b
+    :?#%%\|\#^?;/#%%\|\#$/y b
     call g:ScreenShellSend(@b)
   endif
 endfun
@@ -563,7 +631,7 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkgrey
 au BufNewFile  *Process.txt 0r ~/.vim/templates/process_TEMPLATE
 "au BufRead,BufNewFile *.txt set filetype=pandoc
 au FileType pandoc setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
-au BufRead,BufNewFile *.md set filetype=mmd
+au FileType rst setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 au BufRead,BufNewFile *.rst set filetype=rst
 au BufNewFile * silent! 0r ~/.vim/templates/tmpl.%:e
 
@@ -583,11 +651,9 @@ let php_folding=1
 " PgSQL
 au BufNewFile,BufRead *.pgsql                   setf pgsql
 
-" Geeknote
-let g:GeeknoteFormat="markdown"
-
 " Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+au FileType markdown setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 let g:vim_markdown_folding_disabled = 1
 
 " Syntastic
@@ -785,6 +851,7 @@ nmap <silent> <LocalLeader>vs vip<LocalLeader>vs<CR>
 noremap <F6> :TlistToggle<CR>
 map <leader>to :TlistSessionLoad .tlist<cr>
 map <leader>ts :TlistSessionSave .tlist<cr>y<cr>
+let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
 let Tlist_GainFocus_On_ToggleOpen = 0
 let Tlist_Use_Right_Window = 0
 let Tlist_Process_file_Always = 1
@@ -805,15 +872,6 @@ let g:ex_comment_lable_keyword = 'DELME TEMP MODIFY ADD KEEPME DISABLE TEST ' " 
 let g:ex_comment_lable_keyword .= 'ERROR DEBUG CRASH DUMMY UNUSED TESTME ' " for testing
 let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUPLICATE REDUNDANCY PATCH ' " for refactoring
 
-" Comment plugin
-let NERDSpaceDelims=1
-let g:NERDCustomDelimiters = {
-      \ 'py' : { 'left': '#' },
-      \ 'sshconfig' : { 'left': '#' },
-      \ 'sshdconfig': { 'left': '#' }
-      \ }
-map <Leader>cv <plug>NERDCommenterToggle
-
 " Buffer Explorer
 let g:bufExplorerFindActive=1
 map <leader>be :BufExplorer<CR>
@@ -831,4 +889,15 @@ nmap <LocalLeader>ll <Plug>RSendLine
 " autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 " autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 " autocmd BufWinLeave * call clearmatches()
-
+ 
+" Comment plugin
+let NERDSpaceDelims=1
+let NERDCustomDelimiters = { 'py': { 'left': '#' }, 'snakemake' : { 'left': '#' , 'leftAlt': '#' } }
+let g:NERDCustomDelimiters = { 'py': { 'left': '#' }, 'snakemake' : { 'left': '#' , 'leftAlt': '#' } }
+" let g:NERDCustomDelimiters = {
+      " \ 'py' : { 'left': '#' },
+      " \ 'snakemake' : { 'left': '#', 'leftAlt': '#' },
+      " \ 'sshconfig' : { 'left': '#' },
+      " \ 'sshdconfig': { 'left': '#' }
+      " \ }
+map <Leader>cv <plug>NERDCommenterToggle

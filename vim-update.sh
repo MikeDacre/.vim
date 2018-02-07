@@ -33,7 +33,7 @@ cd vim-program
 
 make
 
-make install
+make && make install
 
 cd ..
 rm -rf vim-program
