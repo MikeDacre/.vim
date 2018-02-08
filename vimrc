@@ -377,6 +377,7 @@ au BufRead,BufNewFile *.cmdlst set filetype=sh
 au BufRead,BufNewFile *.pbs set filetype=sh
 au BufNewFile,BufRead Snakefile set syntax=snakemake
 au BufNewFile,BufRead *.smk set syntax=snakemake
+au BufNewFile,BufRead *.snakefile set syntax=snakemake
 " au BufNewFile,BufRead Snakefile set syntax=python
 " au BufNewFile,BufRead *.smk set syntax=python
 au FileType snakemake let Comment="#"
