@@ -10,6 +10,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Plugins
 " Plugin 'aperezdc/vim-template'
+Plugin 'skwp/vim-html-escape'
 Plugin 'reedes/vim-pencil'
 Plugin 'lifepillar/vim-solarized8'
 Plugin 'tpope/vim-obsession'
