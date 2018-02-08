@@ -12,6 +12,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Plugin 'aperezdc/vim-template'
 Plugin 'skwp/vim-html-escape'
 Plugin 'reedes/vim-pencil'
+Plugin 'junegunn/goyo.vim'
 Plugin 'lifepillar/vim-solarized8'
 Plugin 'tpope/vim-obsession'
 Plugin 'benmills/vimux'
@@ -37,6 +38,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'sjl/gundo.vim'
 Plugin 'Spaceghost/vim-matchit'
 Plugin 'tpope/vim-surround'
+Plugin 'vim-pandoc/vim-pandoc'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
 Plugin 'vim-scripts/perl-support.vim'
 Plugin 'vim-scripts/sessionman.vim'
@@ -59,9 +61,8 @@ Plugin 'honza/vim-snippets'
 Plugin 'ervandew/supertab'
 Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
-Plugin 'Valloric/YouCompleteMe'
 if has( 'python' )
-  Plugin 'neilagabriel/vim-geeknote'
+  Plugin 'Valloric/YouCompleteMe'
 else
   Plugin 'Shougo/neocomplete.vim'
 " Plugin 'davidhalter/jedi-vim'
@@ -136,9 +137,9 @@ autocmd BufReadPost *
   let g:miniBufExplMapCTabSwitchBufs = 1
   let g:miniBufExplModSelTarget = 1
 
-set tabstop=2
-set shiftwidth=2
-set cindent shiftwidth=2
+set tabstop=4
+set shiftwidth=4
+set cindent shiftwidth=4
 
 " Enable CTRL-A/CTRL-X to work on octal and hex numbers, as well as characters
 set nrformats=octal,hex,alpha
@@ -375,6 +376,13 @@ endfun
 
 au BufRead,BufNewFile *.cmdlst set filetype=sh
 au BufRead,BufNewFile *.pbs set filetype=sh
+au BufNewFile,BufRead Snakefile set syntax=snakemake
+au BufNewFile,BufRead *.smk set syntax=snakemake
+au BufNewFile,BufRead *.snakefile set syntax=snakemake
+" au BufNewFile,BufRead Snakefile set syntax=python
+" au BufNewFile,BufRead *.smk set syntax=python
+au FileType snakemake let Comment="#"
+au FileType snakemake setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 noremap <leader>il :call CaptureLine()<CR>
 noremap <leader>el :call ExecLine()<CR>
 
@@ -437,27 +445,31 @@ function ToggleWrap()
     inoremap <buffer> <silent> <End>  <C-o>g<End>
   endif
 endfunction
-noremap <silent> <Leader>w :call ToggleWrap()<CR>
+noremap <silent> <Leader>ww :call ToggleWrap()<CR>
 let g:pencil#autoformat = 0
+" let g:pencil#conceallevel = 0
+" let g:vim_markdown_conceal = 1
+let g:vim_markdown_frontmatter = 1
 func! WordProcessorMode() 
   setlocal formatoptions=1 
   setlocal noexpandtab 
   map j gj 
   map k gk
   setlocal spell spelllang=en_us 
-  set syntax=markdown
-  colorscheme solarized8_light
+  " colorscheme solarized8_light
   set thesaurus+=~/.vim/thesaurus/mthesaur.txt
   set complete+=s
   set formatprg=par
   set number
-  setlocal foldcolumn=12
-  setlocal wm=20
-  let g:pencil#autoformat = 1
-  let g:pencil#wrapModeDefault = 'soft'
+  " setlocal foldcolumn=12
+  " setlocal wm=20
+  " let g:pencil#autoformat = 1
+  " let g:pencil#wrapModeDefault = 'soft'
   if ! &wrap
     call ToggleWrap()
   endif
+  :Goyo
+  :PencilSoft
 endfu 
 com! PPW call WordProcessorMode()
 
@@ -621,7 +633,7 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkgrey
 au BufNewFile  *Process.txt 0r ~/.vim/templates/process_TEMPLATE
 "au BufRead,BufNewFile *.txt set filetype=pandoc
 au FileType pandoc setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
-au BufRead,BufNewFile *.md set filetype=mmd
+au FileType rst setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 au BufRead,BufNewFile *.rst set filetype=rst
 au BufNewFile * silent! 0r ~/.vim/templates/tmpl.%:e
 
@@ -641,11 +653,9 @@ let php_folding=1
 " PgSQL
 au BufNewFile,BufRead *.pgsql                   setf pgsql
 
-" Geeknote
-let g:GeeknoteFormat="markdown"
-
 " Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+au FileType markdown setlocal tw=99 tabstop=4 shiftwidth=4 softtabstop=4
 let g:vim_markdown_folding_disabled = 1
 
 " Syntastic
@@ -864,15 +874,6 @@ let g:ex_comment_lable_keyword = 'DELME TEMP MODIFY ADD KEEPME DISABLE TEST ' " 
 let g:ex_comment_lable_keyword .= 'ERROR DEBUG CRASH DUMMY UNUSED TESTME ' " for testing
 let g:ex_comment_lable_keyword .= 'FIXME BUG HACK OPTME HARDCODE REFACTORING DUPLICATE REDUNDANCY PATCH ' " for refactoring
 
-" Comment plugin
-let NERDSpaceDelims=1
-let g:NERDCustomDelimiters = {
-      \ 'py' : { 'left': '#' },
-      \ 'sshconfig' : { 'left': '#' },
-      \ 'sshdconfig': { 'left': '#' }
-      \ }
-map <Leader>cv <plug>NERDCommenterToggle
-
 " Buffer Explorer
 let g:bufExplorerFindActive=1
 map <leader>be :BufExplorer<CR>
@@ -890,4 +891,15 @@ nmap <LocalLeader>ll <Plug>RSendLine
 " autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 " autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 " autocmd BufWinLeave * call clearmatches()
-
+ 
+" Comment plugin
+let NERDSpaceDelims=1
+let NERDCustomDelimiters = { 'py': { 'left': '#' }, 'snakemake' : { 'left': '#' , 'leftAlt': '#' } }
+let g:NERDCustomDelimiters = { 'py': { 'left': '#' }, 'snakemake' : { 'left': '#' , 'leftAlt': '#' } }
+" let g:NERDCustomDelimiters = {
+      " \ 'py' : { 'left': '#' },
+      " \ 'snakemake' : { 'left': '#', 'leftAlt': '#' },
+      " \ 'sshconfig' : { 'left': '#' },
+      " \ 'sshdconfig': { 'left': '#' }
+      " \ }
+map <Leader>cv <plug>NERDCommenterToggle
